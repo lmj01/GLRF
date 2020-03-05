@@ -1,2 +1,2 @@
-# Game
+# GLRF - OpenGL Realtime Framework
  
