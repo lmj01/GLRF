@@ -121,7 +121,7 @@ void main() {
 
   vec3 ambient = vec3(0.03) * albedo * ao;
   vec3 color = ambient + Lo;
-	//color = 1.0;
+	//color = vec3(1.0);
   frag_color = vec4(color, 1.0);
 
 	float brightness = dot(frag_color.rgb, vec3(0.2126, 0.7152, 0.0722));

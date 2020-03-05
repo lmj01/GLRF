@@ -6,8 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stdexcept>
 
-#include "VertexFormat.h"
-#include "Material.h"
+#include "VertexFormat.hpp"
+#include "Material.hpp"
 
 class SceneMesh {
 public:

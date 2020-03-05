@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Scene.hpp"
 
 Scene::Scene(SceneCamera * camera) {
 	addObject(camera);
@@ -37,7 +37,7 @@ void Scene::draw(Shader shader) {
 	//shader.setVec3("camera_position", this->activeCamera->getPosition());
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
-		glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.0f);
+		glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.f);
 		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", dehomogenizeVec4(P));
 		shader.setVec3("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
 		shader.setFloat("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
@@ -45,7 +45,8 @@ void Scene::draw(Shader shader) {
 	shader.setUInt("pointLight_count", this->pointLights.size());
 
 	if (this->directionalLight) {
-		glm::vec3 dir = this->directionalLight->getDirection();
+		glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
+		//glm::vec3 dir = view * glm::vec4(0.0, -1.0, 0.0, 0.f);
 		shader.setVec3("directionalLight_direction", dir);
 		shader.setFloat("directionalLight_power", this->directionalLight->getPower());
 		shader.setBool("useDirectionalLight", true);

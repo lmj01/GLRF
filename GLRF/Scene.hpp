@@ -5,11 +5,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Shader.h"
-#include "SceneCamera.h"
-#include "SceneObject.h"
-#include "SceneLight.h"
-#include "VectorMath.h"
+#include "Shader.hpp"
+#include "SceneCamera.hpp"
+#include "SceneObject.hpp"
+#include "SceneLight.hpp"
+#include "VectorMath.hpp"
 
 class Scene {
 public:

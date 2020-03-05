@@ -1,4 +1,4 @@
-#include "Material.h"
+#include "Material.hpp"
 
 void Material::loadTextures(std::string name, std::string separator, std::string fileType) {
 	this->textureAlbedo = Texture(name + separator + "albedo." + fileType);

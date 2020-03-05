@@ -1,4 +1,4 @@
-#include "VectorMath.h"
+#include "VectorMath.hpp"
 
 glm::vec3 calculateTangent(VertexFormat p1, VertexFormat p2, VertexFormat p3) {
 	glm::vec3 edge1 = p2.position - p1.position;

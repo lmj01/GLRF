@@ -1,4 +1,4 @@
-#include "SceneLight.h"
+#include "SceneLight.hpp"
 #include <iostream>
 
 PointLight::PointLight(glm::vec3 position, glm::vec3 color, float power) {
@@ -37,7 +37,7 @@ void DirectionalLight::rotate(float xDegree, float yDegree) {
 }
 
 glm::vec3 DirectionalLight::getDirection() {
-	glm::vec4 direction(0.0f, -1.0f, 0.0f, 1.0f);
+	glm::vec4 direction(0.0f, -1.0f, 0.0f, 0.0f);
 	direction = this->rotationMatrix * direction;
 	glm::vec3 dirDehom = dehomogenizeVec4(direction);
 	return glm::normalize(dirDehom);

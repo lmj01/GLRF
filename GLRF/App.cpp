@@ -1,4 +1,4 @@
-#include "App.h"
+#include "App.hpp"
 
 static const std::string shaderLib = "../shaders/";
 static const std::string seperator = "_";
@@ -57,7 +57,7 @@ int main()
 
 	//create scene
 	PlaneGenerator planeGen = PlaneGenerator();
-	SceneCamera camera = SceneCamera(glm::vec3(0.0f, 1.0f, 3.0f), upVector, glm::vec3(0.0f, -1.0f, -2.0f));
+	SceneCamera camera = SceneCamera(glm::vec3(0.0f, 4.0f, 10.0f), upVector, origin);
 
 	SceneMesh floor = SceneMesh(planeGen.create(origin, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 64.0f, 10, 5.0f), GL_STATIC_DRAW, GL_TRIANGLES);
 	PointLight pointLight_white = PointLight(glm::vec3(0.0f, 0.5f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);

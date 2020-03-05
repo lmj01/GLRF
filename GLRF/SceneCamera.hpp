@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "VectorMath.h"
+#include "VectorMath.hpp"
 
 class SceneCamera {
 public:

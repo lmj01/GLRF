@@ -10,10 +10,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Scene.h"
-#include "SceneCamera.h"
-#include "SceneObject.h"
-#include "SceneLight.h"
-#include "Shader.h"
-#include "VertexFormat.h"
-#include "PlaneGenerator.h"
+#include "Scene.hpp"
+#include "SceneCamera.hpp"
+#include "SceneObject.hpp"
+#include "SceneLight.hpp"
+#include "Shader.hpp"
+#include "VertexFormat.hpp"
+#include "PlaneGenerator.hpp"

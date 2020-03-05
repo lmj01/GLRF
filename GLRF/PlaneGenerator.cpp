@@ -1,4 +1,4 @@
-#include "PlaneGenerator.h"
+#include "PlaneGenerator.hpp"
 #include <iostream>
 
 std::vector<VertexFormat> PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int  tesselation, float uvScaling) {
