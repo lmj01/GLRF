@@ -23,24 +23,25 @@ float PointLight::getPower() {
 	return this->power;
 }
 
-DirectionalLight::DirectionalLight(float xDegree, float yDegree, float power) {
-	this->xDegreeTotal = xDegree;
-	this->yDegreeTotal = yDegree;
+DirectionalLight::DirectionalLight(float phi, float theta, float power) {
+	this->phi = fmod(phi, phi_max);
+	this->theta = glm::clamp(theta, theta_min, theta_max);
 	this->power = power;
 }
 
-void DirectionalLight::rotate(float xDegree, float yDegree) {
-	this->xDegreeTotal += xDegree;
-	this->yDegreeTotal += yDegree;
-	glm::mat4 xRot = glm::rotate(this->rotationMatrix, glm::radians(xDegree), glm::vec3(1.0f, 0.0f, 0.0f));
-	this->rotationMatrix = glm::rotate(xRot, glm::radians(yDegree), glm::vec3(0.0f, 1.0f, 0.0f));
+void DirectionalLight::rotate(float d_phi, float d_theta) {
+	this->phi = fmod(phi + d_phi, phi_max);
+	this->theta = glm::clamp(theta + d_theta, theta_min, theta_max);
 }
 
 glm::vec3 DirectionalLight::getDirection() {
-	glm::vec4 direction(0.0f, -1.0f, 0.0f, 0.0f);
-	direction = this->rotationMatrix * direction;
-	glm::vec3 dirDehom = dehomogenizeVec4(direction);
-	return glm::normalize(dirDehom);
+	const float phi_rad = glm::radians(phi);
+	const float theta_rad = glm::radians(theta);
+	return glm::vec3(
+		cos(phi_rad) * sin(theta_rad),
+		cos(theta_rad),
+		sin(phi_rad) * sin(theta_rad)
+	);
 }
 
 float DirectionalLight::getPower() {

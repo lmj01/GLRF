@@ -34,20 +34,21 @@ void Scene::setActiveCamera(SceneCamera * camera) {
 void Scene::draw(Shader shader) {
 	glm::mat4 view = this->activeCamera->getViewMatrix();
 	shader.setMat4("view", view);
-	//shader.setVec3("camera_position", this->activeCamera->getPosition());
+	shader.setVec3("camera_position", glm::vec4(this->activeCamera->getPosition(), 1.0));
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
-		glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.f);
-		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", dehomogenizeVec4(P));
+		//glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.f);
+		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
 		shader.setVec3("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
 		shader.setFloat("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
 	}
 	shader.setUInt("pointLight_count", this->pointLights.size());
 
 	if (this->directionalLight) {
-		glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
+		//glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
+		//std::cout << "(" << dir.x << ", " << dir.y << ", " << dir.z << ")" << std::endl;
 		//glm::vec3 dir = view * glm::vec4(0.0, -1.0, 0.0, 0.f);
-		shader.setVec3("directionalLight_direction", dir);
+		shader.setVec3("directionalLight_direction", this->directionalLight->getDirection());
 		shader.setFloat("directionalLight_power", this->directionalLight->getPower());
 		shader.setBool("useDirectionalLight", true);
 	} else {
@@ -56,7 +57,7 @@ void Scene::draw(Shader shader) {
 
 	for (unsigned int i = 0; i < this->meshNodes.size(); i++) {
 		glm::mat4 modelMat = this->meshNodes[i].getModelMatrix();
-		glm::mat3 modelNormalMat = glm::mat3(view * glm::transpose(glm::inverse(modelMat)));
+		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
 		shader.setMat4("model", modelMat);
 		shader.setMat3("model_normal", modelNormalMat);
 		shader.setMaterial("material", this->meshNodes[i].getMesh()->getMaterial());

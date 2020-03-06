@@ -11,8 +11,7 @@ SceneCamera::SceneCamera(glm::vec3 position, glm::vec3 upVector, glm::vec3 targe
 void SceneCamera::rotate(float yaw_offset, float pitch_offset, float sensitivity) {
 	float modified_yaw_offset = yaw_offset * sensitivity;
 	float modified_pitch_offset = pitch_offset * sensitivity;
-	float pitch_current = this->pitch + modified_pitch_offset;
-	if (pitch_current > 85.0 || pitch_current < -85.0) modified_pitch_offset = 0.0f;
+	float pitch_current = glm::clamp(this->pitch + modified_pitch_offset, -85.f, 85.f);
 	float cos_pitch = cos(glm::radians(-modified_pitch_offset));
 	float sin_pitch = sin(glm::radians(-modified_pitch_offset));
 

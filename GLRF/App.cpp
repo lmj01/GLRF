@@ -57,15 +57,15 @@ int main()
 
 	//create scene
 	PlaneGenerator planeGen = PlaneGenerator();
-	SceneCamera camera = SceneCamera(glm::vec3(0.0f, 4.0f, 10.0f), upVector, origin);
+	SceneCamera camera = SceneCamera(glm::vec3(0.f, 4.f, 10.f), upVector, origin);
 
-	SceneMesh floor = SceneMesh(planeGen.create(origin, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 64.0f, 10, 5.0f), GL_STATIC_DRAW, GL_TRIANGLES);
-	PointLight pointLight_white = PointLight(glm::vec3(0.0f, 0.5f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-	PointLight pointLight_red = PointLight(glm::vec3(2.0f, 0.5f, 1.0f), glm::vec3(1.0f, 0.1f, 0.1f), 0.5f);
-	PointLight pointLight_blue = PointLight(glm::vec3(2.0f, 0.5f, 1.4f), glm::vec3(0.1f, 0.1f, 1.0f), 0.5f);
-	PointLight pointLight_green = PointLight(glm::vec3(-2.0f, 0.5f, 1.0f), glm::vec3(0.1f, 1.0f, 0.1f), 2.0f);
-	DirectionalLight dirLight = DirectionalLight(180, 0.0f, 5.0f);
-	PointLight powerPointLight = PointLight(glm::vec3(0.0, 2.0, 0.0), glm::vec3(1.0, 1.0, 0.9), 2.0);
+	SceneMesh floor = SceneMesh(planeGen.create(origin, glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f, 0.f, 0.f), 64.f, 10, 5.f), GL_STATIC_DRAW, GL_TRIANGLES);
+	PointLight pointLight_white = PointLight(glm::vec3(0.f, 0.5f, 1.f), glm::vec3(1.0f, 1.0f, 1.0f), 1.f);
+	PointLight pointLight_red = PointLight(glm::vec3(2.f, 0.5f, 1.f), glm::vec3(1.f, 0.1f, 0.1f), 0.5f);
+	PointLight pointLight_blue = PointLight(glm::vec3(2.f, 0.5f, 1.4f), glm::vec3(0.1f, 0.1f, 1.f), 0.5f);
+	PointLight pointLight_green = PointLight(glm::vec3(-2.f, 0.5f, 1.f), glm::vec3(0.1f, 1.f, 0.1f), 2.f);
+	PointLight powerPointLight = PointLight(glm::vec3(0.f, 2.f, 0.f), glm::vec3(1.f, 1.f, 0.9f), 5.f);
+	DirectionalLight dirLight = DirectionalLight(0.f, 180.f, 1.f);
 
 	Material mat;
 	mat.albedo = glm::vec3(1.0f);
@@ -152,9 +152,9 @@ int main()
 		sceneShader.use();
 		scene.draw(sceneShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+		
 		bool horizontal = true, first_iteration = true;
-		unsigned int amount = 4;
+		unsigned int amount = 0;
 		postBlurShader.use();
 		for (unsigned int i = 0; i < amount; i++) {
 			unsigned int bufferOne = horizontal ? 0 : 1;
@@ -179,7 +179,7 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, postBlurShader.getColorBuffer(horizontal ? 1 : 0));
 		postHDRShader.setFloat("exposure", exposure);
 		renderPostFxNDC();
-
+		
 		//handle events and swap buffers
 		glfwPollEvents();
 		glfwSwapBuffers(window);

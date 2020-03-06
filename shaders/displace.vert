@@ -20,8 +20,8 @@ struct VS_OUT {
 out VS_OUT VS;
 
 void main() {
-  vec4 P_World_homogenous = view * model * vec4(in_position, 1.0);
-  gl_Position = projection * P_World_homogenous;
+  vec4 P_World_homogenous = model * vec4(in_position, 1.0);
+  gl_Position = projection * view * P_World_homogenous;
   VS.P = P_World_homogenous.xyz / P_World_homogenous.w;
   VS.N = model_normal * in_normal;
   VS.texcoord = in_uv;

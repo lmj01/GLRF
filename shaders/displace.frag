@@ -16,7 +16,7 @@ struct Material {
 	vec3 albedo;
 	float roughness;
 	float metallic;
-  float ao;
+  	float ao;
 	bool useTextureAlbedo;
 	bool useTextureNormal;
 	bool useTextureRoughness;
@@ -40,7 +40,7 @@ uniform vec3 camera_position;
 uniform sampler2D heightMap;
 
 struct VS_OUT {
-  	vec2 texcoord;
+	vec2 texcoord;
 	vec3 P;
 	vec3 N;
 	mat3 TBN;
@@ -60,11 +60,11 @@ vec2 ParallaxMapping(vec2 uv, vec3 V, int minSamples, int maxSamples);
 void main() {
 	vec3 pL[MAX_POINT_LIGHTS];
 	for (uint i = 0; i < pointLight_count; i++) {
-	  pL[i] = VS.TBN * (pointLight_position[i] - VS.P);
+		pL[i] = VS.TBN * (pointLight_position[i] - VS.P);
 	}
-	vec3 dL = normalize(directionalLight_direction);
+	vec3 dL = VS.TBN * normalize(directionalLight_direction);
 	vec3 N = VS.TBN * normalize(VS.N);
-	vec3 V = VS.TBN * normalize(- VS.P);
+	vec3 V = VS.TBN * normalize(camera_position - VS.P);
 
 	vec2 uv_parallax = ParallaxMapping(VS.texcoord, V, 8, 32);
 	//vec2 uv_parallax = VS.texcoord;
@@ -79,13 +79,13 @@ void main() {
 	if (material.useTextureAo) ao = texture(material.textureAo, uv_parallax).r;
 
 	if (material.useTextureNormal) {
-		//N = normalize(texture(material.textureNormal, uv_parallax).rgb);
+		N = normalize(texture(material.textureNormal, uv_parallax).rgb * 2.0 - 1.0);
 	}
 
 	vec3 F0 = vec3(0.04);
 	F0 = mix(F0, albedo, metallic);
 
-  vec3 Lo = vec3(0.0);
+  	vec3 Lo = vec3(0.0);
 
 	for (uint i = 0; i < pointLight_count; i++) {
 		float L_dist = length(pL[i]);
@@ -119,13 +119,17 @@ void main() {
 		Lo += renderLightInfluence(light);
 	}
 
-  vec3 ambient = vec3(0.03) * albedo * ao;
-  vec3 color = ambient + Lo;
-	//color = vec3(1.0);
-  frag_color = vec4(color, 1.0);
+  	vec3 ambient = vec3(0.03) * albedo * ao;
+  	vec3 color = ambient + Lo;
+	//color = vec3(uv_parallax, 0.0);
+	//color = texture(material.textureRoughness, uv_parallax).rgb;
+	//color = pointLight_position[0] - VS.P;
+	//color = vec3(GeometrySmith(N, V, pL[0], roughness));
+	//color = vec3(dot(V, normalize(V + pL[0])));
+  	frag_color = vec4(color, 1.0);
 
 	float brightness = dot(frag_color.rgb, vec3(0.2126, 0.7152, 0.0722));
-  if (brightness > 1.0) {
+	if (brightness > 1.0) {
 		bright_color = vec4(frag_color.rgb, 1.0);
 	} else {
 		bright_color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -178,7 +182,8 @@ vec3 renderLightInfluence(Light light) {
 	vec3 F = fresnelSchlick(max(dot(H, light.V), 0.0), light.F0);
 	float NDF = DistributionGGX(light.N, H, light.roughness);
 	float G   = GeometrySmith(light.N, light.V, light.L, light.roughness);
-	float denominator = 4.0 * max(dot(light.N, light.V), 0.0) * max(dot(light.N, light.L), 0.0);
+	float denominator = 4.0 * max(dot(light.N, light.V), 0.0)
+		* max(dot(light.N, light.L), 0.0);
 	vec3 specular     = NDF * G * F / max(denominator, 0.001);
 	vec3 kS = F;
 	vec3 kD = vec3(1.0) - kS;
@@ -193,32 +198,28 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
 }
 
 float DistributionGGX(vec3 N, vec3 H, float roughness) {
-    float a      = roughness*roughness;
-    float a2     = a*a;
+    float alpha  = roughness * roughness;
+    float alpha2 = alpha * alpha;
     float NdotH  = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
+    float NdotH2 = NdotH * NdotH;
 
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
+    float denom = NdotH2 * (alpha2 - 1.0) + 1.0;
 
-    return a2 / denom;
+    return alpha2 / (PI * denom * denom);
 }
 
-float GeometrySchlickGGX(float NdotV, float roughness) {
-    float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
-
-    float num   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return num / denom;
+float GeometrySchlickGGX(float cos_theta, float k) {
+    return cos_theta / (cos_theta * (1.0 - k) + k);
 }
 
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
-    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+	float alpha = roughness * roughness;
+    float k = sqrt(2 * alpha * alpha / PI);
+    float ggx2  = GeometrySchlickGGX(NdotV, k);
+    float ggx1  = GeometrySchlickGGX(NdotL, k);
 
+	return ggx1;
     return ggx1 * ggx2;
 }
