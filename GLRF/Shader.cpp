@@ -114,17 +114,23 @@ void Shader::setMaterial(const std::string & name, Material material) {
 	setFloat(name + ".roughness", material.roughness);
 	setFloat(name + ".metallic", material.metallic);
 	setFloat(name + ".ao", material.ao);
+	setFloat(name + ".height", material.height);
 	setBool(name + ".useTextureAlbedo", material.useTextureAlbedo);
 	setBool(name + ".useTextureNormal", material.useTextureNormal);
 	setBool(name + ".useTextureRoughness", material.useTextureRoughness);
 	setBool(name + ".useTextureMetallic", material.useTextureMetallic);
 	setBool(name + ".useTextureAo", material.useTextureAo);
+	setBool(name + ".useTextureHeight", material.useTextureHeight);
+
+	setFloat(name + ".height_scale", material.height_scale);
+
 	material.bindTextures(0);
 	setInt(name + ".textureAlbedo", 0);
 	setInt(name + ".textureNormal", 1);
 	setInt(name + ".textureRoughness", 2);
 	setInt(name + ".textureMetallic", 3);
 	setInt(name + ".textureAo", 4);
+	setInt(name + ".textureHeight", 5);
 }
 
 GLuint Shader::getFrameBuffer(unsigned int index) {

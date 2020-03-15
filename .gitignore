@@ -6,6 +6,7 @@ GLRF/Release/
 GLRF/x64/
 *.sln
 *.vcxproj*
+textures/imported/
 
 # Prerequisites
 *.d

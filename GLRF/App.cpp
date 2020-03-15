@@ -65,17 +65,17 @@ int main()
 	PointLight pointLight_blue = PointLight(glm::vec3(2.f, 0.5f, 1.4f), glm::vec3(0.1f, 0.1f, 1.f), 0.5f);
 	PointLight pointLight_green = PointLight(glm::vec3(-2.f, 0.5f, 1.f), glm::vec3(0.1f, 1.f, 0.1f), 2.f);
 	PointLight powerPointLight = PointLight(glm::vec3(0.f, 2.f, 0.f), glm::vec3(1.f, 1.f, 0.9f), 5.f);
-	DirectionalLight dirLight = DirectionalLight(0.f, 180.f, 1.f);
+	DirectionalLight dirLight = DirectionalLight(0.f, 170.f, 1.f);
 
 	Material mat;
 	mat.albedo = glm::vec3(1.0f);
 	mat.roughness = 0.5f;
 	mat.metallic = 0.0f;
 	mat.ao = 0.0f;
-	mat.loadTextures("tiles", seperator, "jpeg");
+	mat.height_scale = 1.0f;
+	//mat.loadTextures("tiles", seperator, "jpeg");
+	mat.loadTextures("imported/PavingStones053_4K", seperator, "jpg");
 	floor.setMaterial(mat);
-
-	Texture heightMap = Texture("tiles_height.jpeg");
 
 	Scene scene = Scene(&camera);
 	scene.addObject(&floor, glm::vec3(0.0f, 0.0f, 0.0f), noRotation);
@@ -92,7 +92,7 @@ int main()
 	sceneShaderOptions.texColorBufferAmount = 2;
 	sceneShaderOptions.screenResolution = screenResolution;
 	//Shader sceneShader(shaderLib, "base.vert", "base.frag", sceneShaderOptions);
-	Shader sceneShader(shaderLib, "displace.vert", "displace.frag", sceneShaderOptions);
+	Shader sceneShader(shaderLib, "parallax.vert", "parallax.frag", sceneShaderOptions);
 
 	ShaderOptions postBlurShaderOptions;
 	postBlurShaderOptions.useDepthBuffer = false;
@@ -114,8 +114,6 @@ int main()
 	//glEnable(GL_CULL_FACE);
 
 	sceneShader.use();
-	heightMap.bind(GL_TEXTURE0 + 8);
-	sceneShader.setInt("heightMap", 8);
 
 	postBlurShader.use();
 	postBlurShader.setInt("image", 0);
