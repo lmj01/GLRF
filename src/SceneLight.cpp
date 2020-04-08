@@ -1,4 +1,4 @@
-#include "SceneLight.hpp"
+#include <GLRF/SceneLight.hpp>
 #include <iostream>
 
 PointLight::PointLight(glm::vec3 position, glm::vec3 color, float power) {

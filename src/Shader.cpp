@@ -1,4 +1,4 @@
-#include "Shader.hpp"
+#include <GLRF/Shader.hpp>
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource);
 

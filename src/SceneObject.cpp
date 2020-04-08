@@ -1,4 +1,4 @@
-#include "SceneObject.hpp"
+#include <GLRF/SceneObject.hpp>
 
 SceneMesh::SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material) {
 	setUp(vertices, drawType, geometryType, material);

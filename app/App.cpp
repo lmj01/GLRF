@@ -1,4 +1,4 @@
-#include "App.hpp"
+#include <GLRF/App.hpp>
 
 static const std::string shaderLib = "../shaders/";
 static const std::string seperator = "_";

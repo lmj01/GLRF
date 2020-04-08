@@ -3,7 +3,7 @@
 #include <map>
 #include <variant>
 #include <glm/glm.hpp>
-#include "Texture.hpp"
+#include <GLRF/Material.hpp>
 
 template <typename T>
 class MaterialProperty {
