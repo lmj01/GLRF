@@ -1,6 +1,5 @@
 .vs/
 out/
-external/
 
 *.sln
 *.vcxproj*
