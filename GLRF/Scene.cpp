@@ -33,33 +33,33 @@ void Scene::setActiveCamera(SceneCamera * camera) {
 
 void Scene::draw(Shader shader) {
 	glm::mat4 view = this->activeCamera->getViewMatrix();
-	shader.setMat4("view", view);
-	shader.setVec3("camera_position", glm::vec4(this->activeCamera->getPosition(), 1.0));
+	shader.setValue("view", view);
+	shader.setValue("camera_position", this->activeCamera->getPosition());
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
 		//glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.f);
-		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
-		shader.setVec3("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
-		shader.setFloat("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
+		shader.setValue("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
+		shader.setValue("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
+		shader.setValue("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
 	}
-	shader.setUInt("pointLight_count", this->pointLights.size());
+	shader.setValue("pointLight_count", this->pointLights.size());
 
 	if (this->directionalLight) {
 		//glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
 		//std::cout << "(" << dir.x << ", " << dir.y << ", " << dir.z << ")" << std::endl;
 		//glm::vec3 dir = view * glm::vec4(0.0, -1.0, 0.0, 0.f);
-		shader.setVec3("directionalLight_direction", this->directionalLight->getDirection());
-		shader.setFloat("directionalLight_power", this->directionalLight->getPower());
-		shader.setBool("useDirectionalLight", true);
+		shader.setValue("directionalLight_direction", this->directionalLight->getDirection());
+		shader.setValue("directionalLight_power", this->directionalLight->getPower());
+		shader.setValue("useDirectionalLight", true);
 	} else {
-		shader.setBool("useDirectionalLight", false);
+		shader.setValue("useDirectionalLight", false);
 	}
 
 	for (unsigned int i = 0; i < this->meshNodes.size(); i++) {
 		glm::mat4 modelMat = this->meshNodes[i].getModelMatrix();
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-		shader.setMat4("model", modelMat);
-		shader.setMat3("model_normal", modelNormalMat);
+		shader.setValue("model", modelMat);
+		shader.setValue("model_normal", modelNormalMat);
 		shader.setMaterial("material", this->meshNodes[i].getMesh()->getMaterial());
 
 		this->meshNodes[i].getMesh()->draw();

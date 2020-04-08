@@ -77,60 +77,60 @@ unsigned int Shader::getProgramID() {
 	return ID;
 }
 
-void Shader::setBool(const std::string & name, bool value) const {
+void Shader::setValue(const std::string & name, bool value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::setInt(const std::string & name, int value) const {
+void Shader::setValue(const std::string & name, int value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setUInt(const std::string & name, unsigned int value) const {
+void Shader::setValue(const std::string & name, unsigned int value) const {
 	glUniform1ui(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setFloat(const std::string & name, float value) const {
+void Shader::setValue(const std::string & name, float value) const {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setMat4(const std::string & name, glm::mat4 value) const {
+void Shader::setValue(const std::string & name, glm::mat4 value) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::setMat3(const std::string & name, glm::mat3 value) const {
+void Shader::setValue(const std::string & name, glm::mat3 value) const {
 	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::setVec4(const std::string & name, glm::vec4 value) const {
+void Shader::setValue(const std::string & name, glm::vec4 value) const {
 	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
-void Shader::setVec3(const std::string & name, glm::vec3 value) const {
+void Shader::setValue(const std::string & name, glm::vec3 value) const {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
 void Shader::setMaterial(const std::string & name, Material material) {
-	setVec3(name + ".albedo", material.albedo);
-	setFloat(name + ".roughness", material.roughness);
-	setFloat(name + ".metallic", material.metallic);
-	setFloat(name + ".ao", material.ao);
-	setFloat(name + ".height", material.height);
-	setBool(name + ".useTextureAlbedo", material.useTextureAlbedo);
-	setBool(name + ".useTextureNormal", material.useTextureNormal);
-	setBool(name + ".useTextureRoughness", material.useTextureRoughness);
-	setBool(name + ".useTextureMetallic", material.useTextureMetallic);
-	setBool(name + ".useTextureAo", material.useTextureAo);
-	setBool(name + ".useTextureHeight", material.useTextureHeight);
+	setValue(name + period + "albedo", material.albedo.value_default);
+	setValue(name + period + "roughness", material.roughness.value_default);
+	setValue(name + period + "metallic", material.metallic.value_default);
+	setValue(name + period + "ao", material.ao.value_default);
+	setValue(name + period + "height", material.height.value_default);
+	setValue(name + period + "useTextureAlbedo", material.albedo.use_texture);
+	setValue(name + period + "useTextureNormal", material.normal.use_texture);
+	setValue(name + period + "useTextureRoughness", material.roughness.use_texture);
+	setValue(name + period + "useTextureMetallic", material.metallic.use_texture);
+	setValue(name + period + "useTextureAo", material.ao.use_texture);
+	setValue(name + period + "useTextureHeight", material.height.use_texture);
 
-	setFloat(name + ".height_scale", material.height_scale);
+	setValue(name + period + "height_scale", material.height_scale);
 
 	material.bindTextures(0);
-	setInt(name + ".textureAlbedo", 0);
-	setInt(name + ".textureNormal", 1);
-	setInt(name + ".textureRoughness", 2);
-	setInt(name + ".textureMetallic", 3);
-	setInt(name + ".textureAo", 4);
-	setInt(name + ".textureHeight", 5);
+	setValue(name + period + "textureAlbedo", 0);
+	setValue(name + period + "textureNormal", 1);
+	setValue(name + period + "textureRoughness", 2);
+	setValue(name + period + "textureMetallic", 3);
+	setValue(name + period + "textureAo", 4);
+	setValue(name + period + "textureHeight", 5);
 }
 
 GLuint Shader::getFrameBuffer(unsigned int index) {

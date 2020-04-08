@@ -15,13 +15,14 @@ public:
 	void translate(glm::vec3 direction);
 	glm::mat4 getViewMatrix();
 	glm::vec3 getPosition();
-	glm::vec3 UpVector();
+	glm::vec3 getUpVector();
 	glm::vec3 getW();
 	glm::vec3 getU();
 	glm::vec3 getV();
 private:
 	glm::vec3 position, upVector, w;
-	float pitch = 0.0f, yaw = 0.0f;
+	float pitch = 0.f;
+	float yaw = 0.f;
 	float sensitivity_rotation = 0.05f;
 	float sensitivity_translation = 0.1f;
 };

@@ -9,20 +9,18 @@ SceneCamera::SceneCamera(glm::vec3 position, glm::vec3 upVector, glm::vec3 targe
 }
 
 void SceneCamera::rotate(float yaw_offset, float pitch_offset, float sensitivity) {
-	float modified_yaw_offset = yaw_offset * sensitivity;
-	float modified_pitch_offset = pitch_offset * sensitivity;
-	float pitch_current = glm::clamp(this->pitch + modified_pitch_offset, -85.f, 85.f);
-	float cos_pitch = cos(glm::radians(-modified_pitch_offset));
-	float sin_pitch = sin(glm::radians(-modified_pitch_offset));
+	yaw_offset *= sensitivity;
+	pitch_offset *= sensitivity;
+	this->pitch = glm::clamp(this->pitch + pitch_offset, -80.f, 80.f);
+	this->yaw += yaw_offset;
+	float cos_pitch = cos(glm::radians(-this->pitch));
+	float sin_pitch = sin(glm::radians(-this->pitch));
 
-	glm::mat3 rotationCamToWorld = glm::mat3(w, getV(), getU());
 	glm::vec3 direction = glm::vec3(0.0f);
-	direction.x = cos_pitch * cos(glm::radians(-modified_yaw_offset));
+	direction.x = cos_pitch * cos(glm::radians(this->yaw));
 	direction.y = sin_pitch;
-	direction.z = cos_pitch * sin(glm::radians(-modified_yaw_offset));
-	this->w = glm::normalize(rotationCamToWorld * direction);
-	this->yaw += modified_yaw_offset;
-	this->pitch += modified_pitch_offset;
+	direction.z = cos_pitch * sin(glm::radians(this->yaw));
+	this->w = glm::normalize(direction);
 }
 
 void SceneCamera::rotate(float yaw_offset, float pitch_offset) {
@@ -45,7 +43,7 @@ glm::vec3 SceneCamera::getPosition() {
 	return this->position;
 }
 
-glm::vec3 SceneCamera::UpVector() {
+glm::vec3 SceneCamera::getUpVector() {
   return this->upVector;
 }
 
@@ -54,9 +52,9 @@ glm::vec3 SceneCamera::getW() {
 }
 
 glm::vec3 SceneCamera::getU() {
-	return glm::cross(this->upVector, this->w);
+	return glm::normalize(glm::cross(getUpVector(), getW()));
 }
 
 glm::vec3 SceneCamera::getV() {
-	return glm::cross(this->w, getU());
+	return glm::normalize(glm::cross(getW(), getU()));
 }

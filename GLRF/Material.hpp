@@ -1,29 +1,35 @@
 #pragma once
+#include <iterator>
+#include <map>
+#include <variant>
 #include <glm/glm.hpp>
 #include "Texture.hpp"
 
+template <typename T>
+class MaterialProperty {
+public:
+	bool use_texture;
+	T value_default;
+	Texture texture;
+
+	MaterialProperty();
+	void loadTexture(std::string texture_name, std::string separator, std::string value_name, std::string fileType);
+private:
+	static const char period = '.';
+};
+
 class Material {
 public:
-	glm::vec3 albedo = glm::vec3(1.0f);
-	glm::vec3 normal = glm::vec3();
-	float roughness = 0.0f;
-	float metallic = 0.0f;
-	float ao = 0.0f;
-	float height = 1.0f;
-	bool useTextureAlbedo = false;
-	bool useTextureNormal = false;
-	bool useTextureRoughness = false;
-	bool useTextureMetallic = false;
-	bool useTextureAo = false;
-	bool useTextureHeight = false;
-	Texture textureAlbedo;
-	Texture textureNormal;
-	Texture textureRoughness;
-	Texture textureMetallic;
-	Texture textureAo;
-	Texture textureHeight;
+	MaterialProperty<glm::vec3> albedo;
+	MaterialProperty<glm::vec3> normal;
+	MaterialProperty<float> roughness;
+	MaterialProperty<float> metallic;
+	MaterialProperty<float> ao;
+	MaterialProperty<float> height;
 
-	float height_scale = 1.0f;
+	float height_scale;
+
+	Material();
 
 	void loadTextures(std::string name, std::string separator, std::string fileType);
 	void bindTextures(unsigned int textureUnitsBegin);

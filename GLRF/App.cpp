@@ -4,7 +4,6 @@ static const std::string shaderLib = "../shaders/";
 static const std::string seperator = "_";
 
 unsigned int tesselation = 0;
-unsigned int next_tesselation = tesselation;
 float lastX, lastY, currentX, currentY;
 float xOffset, yOffset;
 const glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -18,7 +17,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void calculateMouseOffset();
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void retesselatePlane(SceneMesh * obj, PlaneGenerator planeGen, unsigned int new_tesselation, glm::vec3 plane_position, glm::vec3 plane_normal, glm::vec3 plane_direction);
 
 void renderPostFxNDC();
@@ -67,13 +65,8 @@ int main()
 	PointLight powerPointLight = PointLight(glm::vec3(0.f, 2.f, 0.f), glm::vec3(1.f, 1.f, 0.9f), 5.f);
 	DirectionalLight dirLight = DirectionalLight(0.f, 170.f, 1.f);
 
-	Material mat;
-	mat.albedo = glm::vec3(1.0f);
-	mat.roughness = 0.5f;
-	mat.metallic = 0.0f;
-	mat.ao = 0.0f;
-	mat.height_scale = 1.0f;
-	//mat.loadTextures("tiles", seperator, "jpeg");
+	Material mat = Material();
+	mat.height_scale = 1.f;
 	mat.loadTextures("imported/PavingStones053_4K", seperator, "jpg");
 	floor.setMaterial(mat);
 
@@ -111,16 +104,16 @@ int main()
 	//pre-render updates
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	sceneShader.use();
 
 	postBlurShader.use();
-	postBlurShader.setInt("image", 0);
+	postBlurShader.setValue("image", 0);
 
 	postHDRShader.use();
-	postHDRShader.setInt("scene", 0);
-	postHDRShader.setInt("bloomBlur", 1);
+	postHDRShader.setValue("scene", 0);
+	postHDRShader.setValue("bloomBlur", 1);
 
 	sceneShader.use();
 
@@ -135,11 +128,11 @@ int main()
 		scene.processMouse(xOffset, yOffset);
 		scene.processInput(window);
 
-		glfwSetScrollCallback(window, scroll_callback);
+		//glfwSetScrollCallback(window, scroll_callback);
 		//retesselatePlane(&obj, planeGen, next_tesselation, plane_position, plane_normal, plane_direction
 
 		//updates
-		sceneShader.setMat4("projection", projection);
+		sceneShader.setValue("projection", projection);
 
 		//rendering
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -158,8 +151,8 @@ int main()
 			unsigned int bufferOne = horizontal ? 0 : 1;
 			unsigned int bufferTwo = horizontal ? 1 : 0;
 			glBindFramebuffer(GL_FRAMEBUFFER, postBlurShader.getFrameBuffer(bufferOne));
-			postBlurShader.setBool("horizontal", horizontal);
-			postBlurShader.setBool("first_iteration", first_iteration);
+			postBlurShader.setValue("horizontal", horizontal);
+			postBlurShader.setValue("first_iteration", first_iteration);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, first_iteration ? sceneShader.getColorBuffer(1) : postBlurShader.getColorBuffer(bufferTwo));  // bind texture of other framebuffer (or scene if first iteration)
 			renderPostFxNDC();
@@ -175,7 +168,7 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, sceneShader.getColorBuffer(0));
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, postBlurShader.getColorBuffer(horizontal ? 1 : 0));
-		postHDRShader.setFloat("exposure", exposure);
+		postHDRShader.setValue("exposure", exposure);
 		renderPostFxNDC();
 		
 		//handle events and swap buffers
@@ -206,13 +199,6 @@ void calculateMouseOffset() {
 	yOffset = lastY - currentY;
 	lastX = currentX;
 	lastY = currentY;
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-	if (yoffset > 0.0)
-		next_tesselation += (unsigned int) yoffset;
-	if (yoffset < 0.0 && next_tesselation + yoffset >= 0)
-		next_tesselation += (unsigned int) yoffset;
 }
 
 void retesselatePlane(SceneMesh * obj, PlaneGenerator planeGen, unsigned int new_tesselation, glm::vec3 plane_position, glm::vec3 plane_normal, glm::vec3 plane_direction) {
