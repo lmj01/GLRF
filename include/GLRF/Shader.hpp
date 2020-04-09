@@ -11,7 +11,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Material.hpp"
+#include <GLRF/Material.hpp>
 
 struct ScreenResolution {
 	unsigned int width = 800;

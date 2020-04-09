@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
-#include "VertexFormat.hpp"
+#include <GLRF/VertexFormat.hpp>
 
 glm::vec3 calculateTangent(VertexFormat p1, VertexFormat p2, VertexFormat p3);
 void calculateAndSetTangents_GL_TRIANGLES(std::vector<VertexFormat> * vertices);

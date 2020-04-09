@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "VectorMath.hpp"
+#include <GLRF/VectorMath.hpp>
 
 /**
 	A point lightsource. Light is emitted in all directions away from the specified origin.

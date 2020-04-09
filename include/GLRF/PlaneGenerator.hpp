@@ -2,8 +2,8 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "VertexFormat.hpp"
-#include "VectorMath.hpp"
+#include <GLRF/VertexFormat.hpp>
+#include <GLRF/VectorMath.hpp>
 
 class PlaneGenerator {
 public:
