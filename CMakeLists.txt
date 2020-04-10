@@ -48,8 +48,18 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/external/glfw")
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/glm")
 
 # Include sub-projects.
-add_library(glrf STATIC "Library.cpp")
-target_include_directories(glrf PUBLIC "${PROJECT_SOURCE_DIR}/include")
-target_include_directories(glrf PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(glrf glfw)
-target_link_libraries(glrf glm)
+add_library(${PROJECT_NAME} SHARED "Library.cpp")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+	VERSION ${PROJECT_VERSION}
+)
+
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+	PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} glm)
