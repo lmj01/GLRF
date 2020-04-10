@@ -18,6 +18,8 @@ find_package(Python)
 if (PYHTON_FOUND)
 	message(STATUS "Python found!")
 	# TODO - add python script execution to generate files for 'glad'
+	# execute_process(COMMAND pip install glad)
+	# execute_process(COMMAND glad --profile core --out-path "${CMAKE_CURRENT_SOURCE_DIR}/external/glad" --generator c --no-loader)
 endif()
 
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glad/CMakeLists.txt")
