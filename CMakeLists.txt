@@ -13,13 +13,18 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 			message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
 		endif()
 	endif()
+else()
+	message(FATAL_ERROR "Package 'Git' could not be found!")
 endif()
+
 find_package(Python)
-if (PYHTON_FOUND)
+if (Python_FOUND)
 	message(STATUS "Python found!")
 	# TODO - add python script execution to generate files for 'glad'
-	# execute_process(COMMAND pip install glad)
-	# execute_process(COMMAND glad --profile core --out-path "${CMAKE_CURRENT_SOURCE_DIR}/external/glad" --generator c --no-loader)
+	execute_process(COMMAND pip install glad)
+	execute_process(COMMAND glad --profile core --out-path "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad" --generator c --no-loader)
+else()
+	message(FATAL_ERROR "Package 'Python' could not be found!")
 endif()
 
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glad/CMakeLists.txt")
@@ -39,9 +44,9 @@ endif()
 message(STATUS "All submodules found and updated!")
 
 # Load libraries
-# set(GLAD_SOURCES "${PROJECT_SOURCE_DIR}/external/glad/src")
-# set(GLAD_HEADERS "${PROJECT_SOURCE_DIR}/external/glad/include")
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/glad")
+set(GLAD_SOURCES "${PROJECT_SOURCE_DIR}/lib/glad/src")
+set(GLAD_HEADERS "${PROJECT_SOURCE_DIR}/lib/glad/include")
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
