@@ -1,9 +1,7 @@
 .vs/
-Debug/
-Release/
-GLRF/Debug/
-GLRF/Release/
-GLRF/x64/
+out/
+external/glad/
+
 *.sln
 *.vcxproj*
 textures/imported/
