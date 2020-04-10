@@ -20,7 +20,7 @@ if (PYHTON_FOUND)
 	# TODO - add python script execution to generate files for 'glad'
 endif()
 
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glad/src/glad.c")
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glad/CMakeLists.txt")
     message(FATAL_ERROR "Submodule 'glad' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
@@ -37,8 +37,9 @@ endif()
 message(STATUS "All submodules found and updated!")
 
 # Load libraries
-set(GLAD_SOURCES "${PROJECT_SOURCE_DIR}/external/glad/src")
-set(GLAD_HEADERS "${PROJECT_SOURCE_DIR}/external/glad/include")
+# set(GLAD_SOURCES "${PROJECT_SOURCE_DIR}/external/glad/src")
+# set(GLAD_HEADERS "${PROJECT_SOURCE_DIR}/external/glad/include")
+add_subdirectory("${PROJECT_SOURCE_DIR}/external/glad")
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -61,5 +62,6 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} glfw)
 target_link_libraries(${PROJECT_NAME} glm)
