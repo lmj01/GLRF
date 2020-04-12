@@ -3,6 +3,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
+void Texture::setLibraryPath(std::string libraryPath) {
+	Texture::library = libraryPath;
+}
+
 Texture::Texture(std::string library, std::string relativePath) {
 	create(library, relativePath);
 }
