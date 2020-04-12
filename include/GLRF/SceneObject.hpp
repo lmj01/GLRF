@@ -1,10 +1,12 @@
 #pragma once
-#include <glad/glad.h>
 #include <vector>
+#include <memory>
+#include <stdexcept>
+
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <stdexcept>
 
 #include <GLRF/VertexFormat.hpp>
 #include <GLRF/Material.hpp>
@@ -29,8 +31,8 @@ private:
 
 class SceneMeshNode {
 public:
-	SceneMeshNode(SceneMesh * mesh);
-	SceneMesh * getMesh();
+	SceneMeshNode(std::shared_ptr<SceneMesh> mesh);
+	std::shared_ptr<SceneMesh> getMesh();
 	void setPosition(glm::vec3 position);
 	void setRotation(glm::mat4 rotation);
 	void setPositionAndRotation(glm::vec3 position, glm::mat4 rotation);
@@ -42,7 +44,7 @@ public:
 	glm::mat4 getRotation();
 	glm::mat4 getModelMatrix();
 private:
-	SceneMesh * mesh = nullptr;
+	std::shared_ptr<SceneMesh> mesh = nullptr;
 	glm::vec3 position = glm::vec3(0.0f);
 	glm::mat4 modelMatrix = glm::mat4(1.0f), rotation = glm::mat4(1.0f);
 };

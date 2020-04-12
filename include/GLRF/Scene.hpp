@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
+#include <algorithm>
+#include <memory>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -13,20 +16,20 @@
 
 class Scene {
 public:
-	Scene(SceneCamera * camera);
+	Scene(std::shared_ptr<SceneCamera> camera);
 	Scene();
-	void addObject(SceneMesh * mesh, glm::vec3 position, glm::mat4 rotation);
-	void addObject(PointLight * light);
-	void addObject(DirectionalLight * light);
-	void addObject(SceneCamera * camera);
-	void setActiveCamera(SceneCamera * camera);
-	void draw(Shader shader);
+	void addObject(std::shared_ptr<SceneMesh> mesh, glm::vec3 position, glm::mat4 rotation);
+	void addObject(std::shared_ptr<PointLight> light);
+	void addObject(std::shared_ptr<DirectionalLight> light);
+	void addObject(std::shared_ptr<SceneCamera> camera);
+	void setActiveCamera(std::shared_ptr<SceneCamera> camera);
+	void draw(Shader & shader);
 	void processInput(GLFWwindow * window);
 	void processMouse(float xOffset, float yOffset);
 private:
 	std::vector<SceneMeshNode> meshNodes;
-	std::vector<PointLight*> pointLights;
-	DirectionalLight * directionalLight = nullptr;
-	std::vector<SceneCamera*> cameras;
-	SceneCamera * activeCamera = nullptr;
+	std::vector<std::shared_ptr<PointLight>> pointLights;
+	std::shared_ptr<DirectionalLight> directionalLight = nullptr;
+	std::vector<std::shared_ptr<SceneCamera>> cameras;
+	std::shared_ptr<SceneCamera> activeCamera;
 };

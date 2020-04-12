@@ -62,11 +62,11 @@ void SceneMesh::update(std::vector<VertexFormat> vertices) {
 	SceneMesh::update(vertices, drawType);
 }
 
-SceneMeshNode::SceneMeshNode(SceneMesh * mesh) {
+SceneMeshNode::SceneMeshNode(std::shared_ptr<SceneMesh> mesh) {
 	this->mesh = mesh;
 }
 
-SceneMesh * SceneMeshNode::getMesh() {
+std::shared_ptr<SceneMesh> SceneMeshNode::getMesh() {
 	return this->mesh;
 }
 

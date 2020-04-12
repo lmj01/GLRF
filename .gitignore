@@ -1,6 +1,7 @@
 .vs/
 out/
 generated/
+build/
 
 *.sln
 *.vcxproj*
