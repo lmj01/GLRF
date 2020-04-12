@@ -39,7 +39,7 @@ void Texture::load() {
 		glGenerateMipmap(GL_TEXTURE_2D);
 		this->successfullyLoaded = true;
 	} else {
-		std::cout << "Failed to load texture \"" << this->relativePath << "\"" << std::endl;
+		std::cout << "Failed to load texture \"" << fullPath_string << "\"" << std::endl;
 		this->successfullyLoaded = false;
 	}
 
