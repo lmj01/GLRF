@@ -3,12 +3,11 @@
 #include <string>
 #include <iostream>
 
-static const char * defaultLibrary = "../textures/";
-static const char * defaultRelativePath = "missingTexture.png";
+static std::string defaultLibrary = "./textures/";
+static std::string defaultRelativePath = "missingTexture.png";
 
 class Texture {
 public:
-	static void setLibraryPath(std::string libraryPath);
 	Texture(std::string library, std::string relativePath);
 	Texture(std::string relativePath);
 	Texture();
@@ -16,11 +15,10 @@ public:
 	void bind(GLenum textureUnit);
 	bool isSuccessfullyLoaded();
 private:
-	static std::string library;
 	GLuint ID;
 	int width, height, nrChannels;
 	unsigned char * data;
-	std::string relativePath;
+	std::string library, relativePath;
 	bool successfullyLoaded = false;
 	void create(std::string library, std::string relativePath);
 };

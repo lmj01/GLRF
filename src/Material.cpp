@@ -8,6 +8,13 @@ MaterialProperty<T>::MaterialProperty() {
 }
 
 template<typename T>
+void MaterialProperty<T>::loadTexture(std::string library, std::string texture_name, std::string separator, std::string value_name, std::string fileType)
+{
+	this->texture = Texture(library, texture_name + separator + value_name + period + fileType);
+	this->use_texture = this->texture.isSuccessfullyLoaded();
+}
+
+template<typename T>
 void MaterialProperty<T>::loadTexture(std::string texture_name, std::string separator, std::string value_name, std::string fileType)
 {
 	this->texture = Texture(texture_name + separator + value_name + period + fileType);
@@ -28,6 +35,16 @@ Material::Material() {
 	this->ao.value_default = 1.f;
 	this->height.value_default = 1.f;
 	this->height_scale = 1.0f;
+}
+
+void Material::loadTextures(std::string library, std::string name, std::string separator, std::string fileType)
+{
+	this->albedo.loadTexture(library, name, separator, "albedo", fileType);
+	this->normal.loadTexture(library, name, separator, "normal", fileType);
+	this->roughness.loadTexture(library, name, separator, "roughness", fileType);
+	this->metallic.loadTexture(library, name, separator, "metallic", fileType);
+	this->ao.loadTexture(library, name, separator, "ao", fileType);
+	this->height.loadTexture(library, name, separator, "height", fileType);
 }
 
 void Material::loadTextures(std::string name, std::string separator, std::string fileType)
