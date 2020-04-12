@@ -34,7 +34,7 @@ endif()
 if(NOT EXISTS "${SUBMODULE_DIR}/glm/CMakeLists.txt")
     message(FATAL_ERROR "Submodule 'glm' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${SUBMODULE_DIR}/stb/stb_image.h")
+if(NOT EXISTS "${SUBMODULE_DIR}/stb/stb/stb_image.h")
     message(FATAL_ERROR "Submodule 'stb' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
@@ -77,11 +77,16 @@ add_library(${PROJECT_NAME} STATIC
 	${GLRF_SOURCES}
 )
 
-#target_include_directories(${PROJECT_NAME}
-#	PUBLIC
-#		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-#		$<INSTALL_INTERFACE:include/GLRF>
-#)
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include/GLRF>
+)
+
+target_include_directories(${PROJECT_NAME}
+	PRIVATE
+		${SUBMODULE_DIR}/stb
+)
 
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)

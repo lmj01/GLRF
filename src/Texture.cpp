@@ -1,7 +1,7 @@
 #include <GLRF/Texture.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb/stb_image.h>
 
 Texture::Texture(std::string library, std::string relativePath) {
 	create(library, relativePath);
