@@ -1,6 +1,7 @@
 .vs/
 out/
-lib/
+generated/
+build/
 
 *.sln
 *.vcxproj*

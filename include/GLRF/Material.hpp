@@ -14,6 +14,7 @@ public:
 	Texture texture;
 
 	MaterialProperty();
+	void loadTexture(std::string library, std::string texture_name, std::string separator, std::string value_name, std::string fileType);
 	void loadTexture(std::string texture_name, std::string separator, std::string value_name, std::string fileType);
 private:
 	static const char period = '.';
@@ -32,6 +33,7 @@ public:
 
 	Material();
 
+	void loadTextures(std::string library, std::string name, std::string separator, std::string fileType);
 	void loadTextures(std::string name, std::string separator, std::string fileType);
 	void bindTextures(unsigned int textureUnitsBegin);
 };

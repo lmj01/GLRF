@@ -1,37 +1,45 @@
 #include <GLRF/Scene.hpp>
 
-Scene::Scene(SceneCamera * camera) {
+Scene::Scene(std::shared_ptr<SceneCamera> camera) {
 	addObject(camera);
 	setActiveCamera(camera);
 }
 
 Scene::Scene() {
-	this->activeCamera = &SceneCamera(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+	setActiveCamera(std::shared_ptr<SceneCamera>(
+		new SceneCamera(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)))
+	);
 }
 
-void Scene::addObject(SceneMesh * mesh, glm::vec3 position, glm::mat4 rotation) {
+void Scene::addObject(std::shared_ptr<SceneMesh> mesh, glm::vec3 position, glm::mat4 rotation) {
 	SceneMeshNode node = SceneMeshNode(mesh);
 	node.setPositionAndRotation(position, rotation);
 	this->meshNodes.push_back(node);
 }
 
-void Scene::addObject(PointLight * light) {
-	this->pointLights.push_back(light);
+void Scene::addObject(std::shared_ptr<PointLight> light) {
+	if (std::find(this->pointLights.begin(), this->pointLights.end(), light) != this->pointLights.end()) {
+		this->pointLights.push_back(light);
+	}
 }
 
-void Scene::addObject(DirectionalLight * light) {
+void Scene::addObject(std::shared_ptr<DirectionalLight> light) {
 	this->directionalLight = light;
 }
 
-void Scene::addObject(SceneCamera * camera) {
+void Scene::addObject(std::shared_ptr<SceneCamera> camera) {
 	this->cameras.push_back(camera);
 }
 
-void Scene::setActiveCamera(SceneCamera * camera) {
+void Scene::setActiveCamera(std::shared_ptr<SceneCamera> camera) {
+	auto it = std::find(this->cameras.begin(), this->cameras.end(), camera);
+	if (it == this->cameras.end()) {
+		this->cameras.push_back(camera);
+	}
 	this->activeCamera = camera;
 }
 
-void Scene::draw(Shader shader) {
+void Scene::draw(Shader & shader) {
 	glm::mat4 view = this->activeCamera->getViewMatrix();
 	shader.setValue("view", view);
 	shader.setValue("camera_position", this->activeCamera->getPosition());
@@ -42,7 +50,7 @@ void Scene::draw(Shader shader) {
 		shader.setValue("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
 		shader.setValue("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
 	}
-	shader.setValue("pointLight_count", this->pointLights.size());
+	shader.setValue("pointLight_count", (int)this->pointLights.size());
 
 	if (this->directionalLight) {
 		//glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
@@ -68,13 +76,13 @@ void Scene::draw(Shader shader) {
 
 void Scene::processInput(GLFWwindow * window) {
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		activeCamera->translate(- activeCamera->getU());
+		activeCamera->translate(	-	activeCamera->getU());
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		activeCamera->translate(activeCamera->getU());
+		activeCamera->translate(		activeCamera->getU());
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		activeCamera->translate(- activeCamera->getW());
+		activeCamera->translate(	-	activeCamera->getW());
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		activeCamera->translate(activeCamera->getW());
+		activeCamera->translate(		activeCamera->getW());
 }
 
 void Scene::processMouse(float xOffset, float yOffset) {

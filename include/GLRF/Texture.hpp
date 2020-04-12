@@ -3,8 +3,8 @@
 #include <string>
 #include <iostream>
 
-static const char * defaultLibrary = "../textures/";
-static const char * defaultRelativePath = "missingTexture.png";
+static std::string defaultLibrary = "./textures/";
+static std::string defaultRelativePath = "missingTexture.png";
 
 class Texture {
 public:

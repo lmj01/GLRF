@@ -1,7 +1,7 @@
 #include <GLRF/Texture.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb/stb_image.h>
 
 Texture::Texture(std::string library, std::string relativePath) {
 	create(library, relativePath);
@@ -39,7 +39,7 @@ void Texture::load() {
 		glGenerateMipmap(GL_TEXTURE_2D);
 		this->successfullyLoaded = true;
 	} else {
-		std::cout << "Failed to load texture \"" << this->relativePath << "\"" << std::endl;
+		std::cout << "Failed to load texture \"" << fullPath_string << "\"" << std::endl;
 		this->successfullyLoaded = false;
 	}
 

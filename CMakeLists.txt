@@ -1,14 +1,36 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
+# Set variables PROJECT_NAME and _VERSION
 project("glrf" VERSION 1.0 LANGUAGES C CXX)
 
+# ==== settings ====
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 11)
+
+# Enable linking of this library on windows
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
+
+# Setting of directory variables for convenience
+set(SUBMODULE_DIR "${PROJECT_SOURCE_DIR}/external")
+set(GLAD_DIR "${PROJECT_SOURCE_DIR}/generated/glad")
+set(GLRF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
+set(GLRF_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
+
+# Check if the project is built by itself and not as a subdirectory
+set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR}")
+
+# ==== integrity checks ====
+
+# Try to find Git
 find_package(Git)
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	message(STATUS "Git found!")
 	option(GIT_SUBMODULE "Check submodules during build" ON)
+	# Update submodules
 	if (GIT_SUBMODULE)
 		message(STATUS "Updating submodules..")
-		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} RESULT_VARIABLE GIT_SUBMODULE_RESULT)
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} RESULT_VARIABLE GIT_SUBMODULE_RESULT)
 		if(NOT GIT_SUBMODULE_RESULT EQUAL "0")
 			message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
 		endif()
@@ -17,58 +39,90 @@ else()
 	message(FATAL_ERROR "Package 'Git' could not be found!")
 endif()
 
-find_package(Python)
-if (Python_FOUND)
-	message(STATUS "Python found!")
-	# TODO - add python script execution to generate files for 'glad'
-	execute_process(COMMAND pip install glad)
-	execute_process(COMMAND glad --profile core --out-path "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad" --generator c --no-loader)
-else()
-	message(FATAL_ERROR "Package 'Python' could not be found!")
+# Check if all dependencies exist that the library needs to link to
+if(NOT EXISTS "${SUBMODULE_DIR}")
+	message(FATAL_ERROR "No submodules were downloaded! Please update submodules and try again.")
 endif()
-
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glad/CMakeLists.txt")
-    message(FATAL_ERROR "Submodule 'glad' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+if(NOT EXISTS "${SUBMODULE_DIR}/glad/CMakeLists.txt")
+    message(FATAL_ERROR "Submodule 'glad' was not downloaded! Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
-    message(FATAL_ERROR "Submodule 'GLFW' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+if(NOT EXISTS "${SUBMODULE_DIR}/glfw/CMakeLists.txt")
+    message(FATAL_ERROR "Submodule 'GLFW' was not downloaded! Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glm/CMakeLists.txt")
-    message(FATAL_ERROR "Submodule 'glm' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+if(NOT EXISTS "${SUBMODULE_DIR}/glm/CMakeLists.txt")
+    message(FATAL_ERROR "Submodule 'glm' was not downloaded! Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/stb/stb_image.h")
-    message(FATAL_ERROR "Submodule 'stb' was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+if(NOT EXISTS "${SUBMODULE_DIR}/stb/stb/stb_image.h")
+    message(FATAL_ERROR "Submodule 'stb' was not downloaded! Please update submodules and try again.")
 endif()
-
-
 message(STATUS "All submodules found and updated!")
 
-# Load libraries
-add_subdirectory("${PROJECT_SOURCE_DIR}/external/glad")
-set(GLAD_SOURCES "${PROJECT_SOURCE_DIR}/lib/glad/src")
-set(GLAD_HEADERS "${PROJECT_SOURCE_DIR}/lib/glad/include")
+# Check if files from glad have not been created yet.
+# If they were created previously, skip this step.
+if(NOT EXISTS "${GLAD_DIR}/include/glad/glad.h")
+	# Try to find Python
+	find_package(Python)
+	if (Python_FOUND)
+		message(STATUS "Python found!")
+		message(STATUS "Generating files with 'glad'..")
+		# Create glad files (just like in https://github.com/Dav1dde/glad/blob/master/README.md#usage)
+		execute_process(COMMAND pip install glad)
+		execute_process(COMMAND glad --profile core --out-path ${GLAD_DIR} --generator c --no-loader)
+		message(STATUS "Generated files with 'glad' in '${GLAD_DIR}'.")
+	else()
+		message(FATAL_ERROR "Package 'Python' could not be found!")
+	endif()
+else()
+	message(STATUS "Previous files of 'glad' are still available. Skipping recreation..")
+endif()
 
+# ==== load libraries / dependencies ====
+# -- glad --
+add_subdirectory("${SUBMODULE_DIR}/glad")
+
+# Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
+# [recommendation] --> Include the two variables in your target, in order to link glad correctly.
+if(${IS_STANDALONE})
+	set(GLAD_SOURCES "${GLAD_DIR}/src" PARENT_SCOPE)
+	set(GLAD_HEADERS "${GLAD_DIR}/include" PARENT_SCOPE)
+endif()
+
+# -- GLFW --
+# Disable targets that are not needed
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory("${PROJECT_SOURCE_DIR}/external/glfw")
+add_subdirectory("${SUBMODULE_DIR}/glfw")
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/external/glm")
+# -- glm --
+add_subdirectory("${SUBMODULE_DIR}/glm")
 
-# Include sub-projects.
-add_library(${PROJECT_NAME} SHARED "Library.cpp")
+# ==== build library ====
+# Get source files directly from directories without linking individual files
+aux_source_directory(${GLRF_INCLUDE_DIR} GLRF_HEADERS)
+aux_source_directory(${GLRF_SOURCE_DIR} GLRF_SOURCES)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-	VERSION ${PROJECT_VERSION}
+# Build as STATIC library
+add_library(${PROJECT_NAME} STATIC
+	${GLRF_SOURCES}
 )
 
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
-		${CMAKE_CURRENT_SOURCE_DIR}/include
-	PRIVATE
-		${CMAKE_CURRENT_SOURCE_DIR}/src
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include/GLRF>
 )
 
-target_link_libraries(${PROJECT_NAME} glad)
-target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} glm)
+# Include the non-CMake submodule 'stb' (headers only).
+# Note that there is another 'stb' folder inside the specified directory.
+# This allows to access stb-internal files with #include <stb/?>,
+# where ? is replaced with the filename.
+target_include_directories(${PROJECT_NAME}
+	PRIVATE
+		${SUBMODULE_DIR}/stb
+)
+
+# Link library to all dependencies
+target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
+target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
+target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
