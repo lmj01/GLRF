@@ -83,7 +83,7 @@ add_subdirectory("${SUBMODULE_DIR}/glad")
 
 # Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
 # [recommendation] --> Include the two variables in your target, in order to link glad correctly.
-if(NOT ${IS_STANDALONE})
+if(NOT IS_STANDALONE)
 	set(GLAD_SOURCES "${GLAD_DIR}/src" PARENT_SCOPE)
 	set(GLAD_HEADERS "${GLAD_DIR}/include" PARENT_SCOPE)
 endif()
