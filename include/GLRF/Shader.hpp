@@ -1,6 +1,4 @@
 #pragma once
-#ifndef SHADER_H
-#define SHADER_H
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -14,7 +12,8 @@
 #include <GLRF/Material.hpp>
 
 /**
- * A screen resolution consisting of width and height parameters.
+ * @brief A screen resolution consisting of width and height parameters.
+ * 
  */
 struct ScreenResolution {
 	unsigned int width = 800;
@@ -22,7 +21,8 @@ struct ScreenResolution {
 };
 
 /**
- * Options for a Shader that specify its behaviour.
+ * @brief Options for a Shader that specify its behaviour.
+ * 
  * Core aspects are screen resolution, buffers, HDR and post-processing effects.
  */
 struct ShaderOptions {
@@ -36,7 +36,8 @@ struct ShaderOptions {
 };
 
 /**
- * The shader that is used by OpenGL to render a Scene.
+ * @brief The shader that is used by OpenGL to render a Scene.
+ * 
  */
 class Shader
 {
@@ -45,75 +46,117 @@ public:
 	ShaderOptions shaderOptions;
 
 	/**
+	 * @brief Construct a new Shader object.
+	 * 
+	 * @param shaderLib the relative path to a collection of shaders
+	 * @param vertexPath the relative path to the GLSL vertex shader
+	 * @param fragmentPath the relative path to the GLSL fragment shader
+	 * @param shaderOptions the options that modify the behaviour of the shader
+	 * 
 	 * Creates a new Shader from the specified library path and sub-paths to the vertex and fragment shader files.
 	 * Takes shader options as input to configure itself.
 	 */
 	Shader(const std::string shaderLib, const std::string vertexPath, const std::string fragmentPath, ShaderOptions shaderOptions);
 
 	/**
-	 * Activates the shader for rendering.
+	 * @brief Activates the shader for rendering.
+	 * 
 	 */
 	void use();
 
 	/**
-	 * Returns the shader-program identifier.
+	 * @brief Returns the shader-program identifier.
+	 * 
 	 */
 	unsigned int getProgramID();
 
-	// utility uniform functions
+	// === utility uniform functions ===
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, bool value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, int value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, unsigned int value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, float value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, glm::mat4 value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, glm::mat3 value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, glm::vec4 value) const;
 
 	/**
-	 * Sets the specified value for the specified, named variable in this Shader.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setValue(const std::string& name, glm::vec3 value) const;
 
 	/**
-	 * Sets a complete material in the shader as a struct with the specified name.
+	 * @brief Sets the specified value for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the variable that will be set
+	 * @param value the new value for the variable
 	 */
 	void setMaterial(const std::string &name, Material material);
 
 	/**
-	 * Returns the FrameBuffer at the specified index.
+	 * @brief Get the FrameBuffer object at the specified index.
+	 * 
+	 * @param index the position of the FrameBuffer
+	 * @return GLuint the number that refers to the OpenGL unit associated with the FrameBuffer
 	 */
 	GLuint getFrameBuffer(unsigned int index);
 
 	/**
-	 * Returns the ColorBuffer at the specified index.
+	 * @brief Get the ColorBuffer object at the specified index.
+	 * 
+	 * @param index the position of the ColorBuffer
+	 * @return GLuint the number that refers to the OpenGL unit associated with the ColorBuffer
 	 */
 	GLuint getColorBuffer(unsigned int index);
 private:
@@ -124,5 +167,3 @@ private:
 
 	void setUpFrameBuffer();
 };
-
-#endif
