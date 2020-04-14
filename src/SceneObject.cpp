@@ -91,14 +91,25 @@ void SceneMeshNode::move(glm::vec3 offset) {
 	recalculateMatrices();
 }
 
-void SceneMeshNode::rotate(glm::vec3 axis, float degrees) {
-	this->rotation = glm::rotate(this->rotation, glm::radians(degrees), axis);
+void SceneMeshNode::rotateDeg(glm::vec3 axis, float angle) {
+	this->rotation = glm::rotate(this->rotation, glm::radians(angle), axis);
 	recalculateMatrices();
 }
 
-void SceneMeshNode::moveAndRotate(glm::vec3 offset, glm::vec3 rotationAxis, float degrees) {
+void SceneMeshNode::rotateRad(glm::vec3 axis, float angle) {
+	this->rotation = glm::rotate(this->rotation, angle, axis);
+	recalculateMatrices();
+}
+
+void SceneMeshNode::moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
 	this->position += offset;
-	this->rotation = glm::rotate(this->rotation, glm::radians(degrees), rotationAxis);
+	this->rotation = glm::rotate(this->rotation, glm::radians(angle), rotationAxis);
+	recalculateMatrices();
+}
+
+void SceneMeshNode::moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
+	this->position += offset;
+	this->rotation = glm::rotate(this->rotation, angle, rotationAxis);
 	recalculateMatrices();
 }
 

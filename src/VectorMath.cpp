@@ -35,16 +35,16 @@ glm::vec3 dehomogenizeVec4(glm::vec4 homogeneous_input) {
 	return glm::vec3(homogeneous_input) / homogeneous_input.w;
 }
 
-glm::vec3 getRandomNormalizedVector() {
-	return glm::normalize(glm::vec3(getRandomFloat(), getRandomFloat(), getRandomFloat()));
+glm::vec3 generateRandomNormalizedVector() {
+	return glm::normalize(glm::vec3(generateRandomFloat(), generateRandomFloat(), generateRandomFloat()));
 }
 
 glm::vec3 findNonLinearNormalizedVector(glm::vec3 v) {
-	glm::vec3 w = getRandomNormalizedVector();
+	glm::vec3 w = generateRandomNormalizedVector();
 	glm::vec3 result = w - (glm::dot(v, w) / glm::dot(v, v)) * v;
 	return (glm::length(result) == 0.0f) ? findNonLinearNormalizedVector(v) : glm::normalize(result);
 }
 
-float getRandomFloat() {
+float generateRandomFloat() {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 }
