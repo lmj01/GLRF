@@ -1,5 +1,7 @@
 #include <iostream>
-#include <GLRF/PlaneGenerator.hpp>
+#include <PlaneGenerator.hpp>
+
+using namespace GLRF;
 
 std::vector<VertexFormat> PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int  tesselation, float uvScaling) {
 	std::vector<VertexFormat> result;

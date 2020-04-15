@@ -1,11 +1,15 @@
 #pragma once
 #include <glm/glm.hpp>
 
+namespace GLRF {
+	struct VertexFormat;
+}
+
 /**
  * @brief The format of a vertex with all related information
  * 
  */
-struct VertexFormat {
+struct GLRF::VertexFormat {
 	glm::vec3 position;
 	glm::vec3 normal;
 	glm::vec2 uv;

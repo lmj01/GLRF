@@ -8,8 +8,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <GLRF/VertexFormat.hpp>
-#include <GLRF/Material.hpp>
+#include <VertexFormat.hpp>
+#include <Material.hpp>
+
+namespace GLRF {
+	class SceneMesh;
+	class SceneMeshNode;
+}
 
 /**
  * @brief A mesh of vertices that resembles a 3d object.
@@ -17,7 +22,7 @@
  * The data is stored here and should not be copied.
  * Instead, a new SceneMeshNode should be created that only points to the mesh, thus reducing memory usage.
  */
-class SceneMesh {
+class GLRF::SceneMesh {
 public:
 	/**
 	 * @brief Construct a new SceneMesh object.
@@ -85,7 +90,7 @@ private:
  * @brief A lightweight reference / instance of a specific mesh that buffers changes to the meshs local coordinate system.
  * 
  */
-class SceneMeshNode {
+class GLRF::SceneMeshNode {
 public:
 	/**
 	 * @brief Construct a new SceneMeshNode object.

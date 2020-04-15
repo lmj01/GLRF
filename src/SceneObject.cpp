@@ -1,4 +1,6 @@
-#include <GLRF/SceneObject.hpp>
+#include <SceneObject.hpp>
+
+using namespace GLRF;
 
 SceneMesh::SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material) {
 	setUp(vertices, drawType, geometryType, material);
@@ -107,7 +109,7 @@ void SceneMeshNode::moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, f
 	recalculateMatrices();
 }
 
-void SceneMeshNode::moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
+void SceneMeshNode::moveAndRotateRad(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
 	this->position += offset;
 	this->rotation = glm::rotate(this->rotation, angle, rotationAxis);
 	recalculateMatrices();

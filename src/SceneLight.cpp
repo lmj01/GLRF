@@ -1,5 +1,7 @@
-#include <GLRF/SceneLight.hpp>
+#include <SceneLight.hpp>
 #include <iostream>
+
+using namespace GLRF;
 
 PointLight::PointLight(glm::vec3 position, glm::vec3 color, float power) {
 	this->position = position;

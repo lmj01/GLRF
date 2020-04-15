@@ -4,7 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
-#include <GLRF/VertexFormat.hpp>
+#include <VertexFormat.hpp>
+
+namespace GLRF {
 
 /**
  * @brief Calculates the tangent vector by using 3 points.
@@ -60,3 +62,5 @@ glm::vec3 findNonLinearNormalizedVector(glm::vec3 v);
  * @return float the randomly generated value
  */
 float generateRandomFloat();
+
+}

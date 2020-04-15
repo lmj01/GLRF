@@ -1,4 +1,6 @@
-#include <GLRF/Material.hpp>
+#include <Material.hpp>
+
+using namespace GLRF;
 
 template<typename T>
 MaterialProperty<T>::MaterialProperty() {

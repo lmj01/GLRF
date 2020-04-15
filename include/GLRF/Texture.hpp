@@ -3,14 +3,18 @@
 #include <string>
 #include <iostream>
 
-static std::string defaultLibrary = "./textures/";
-static std::string defaultRelativePath = "missingTexture.png";
+namespace GLRF {
+	static std::string defaultLibrary = "./textures/";
+	static std::string defaultRelativePath = "missingTexture.png";
+
+	class Texture;
+}
 
 /**
  * @brief An image that can be bound to an OpenGL texture unit.
  * 
  */
-class Texture {
+class GLRF::Texture {
 public:
 	/**
 	 * @brief Construct a new Texture object.

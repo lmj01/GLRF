@@ -4,7 +4,12 @@
 #include <variant>
 #include <glm/glm.hpp>
 
-#include <GLRF/Texture.hpp>
+#include <Texture.hpp>
+
+namespace GLRF {
+	template <typename T> class MaterialProperty;
+	class Material;
+}
 
 /**
  * @brief A single property (like color or roughness) of a material.
@@ -12,7 +17,7 @@
  * @tparam T defines the value type of the property (int, float, glm::vec3)
  */
 template <typename T>
-class MaterialProperty {
+class GLRF::MaterialProperty {
 public:
 
 	/**
@@ -75,7 +80,7 @@ private:
  * @brief A collection of properties that define the characteristics of the corresponding objects inside the Scene.
  * 
  */
-class Material {
+class GLRF::Material {
 public:
 	MaterialProperty<glm::vec3> albedo;
 	MaterialProperty<glm::vec3> normal;

@@ -3,13 +3,18 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <GLRF/VectorMath.hpp>
+#include <VectorMath.hpp>
+
+namespace GLRF {
+	class PointLight;
+	class DirectionalLight;
+}
 
 /**
  * @brief A point lightsource. Light is emitted in all directions away from the specified origin.
  * 
  */
-class PointLight {
+class GLRF::PointLight {
 public:
 	/**
 	 * @brief Construct a new PointLight object.
@@ -58,7 +63,7 @@ private:
  * The direction of the lightsource is expressed with two angles, theta and phi
  * that correspond to the rotation of the direction of the light in spherecoordinates.
  */
-class DirectionalLight {
+class GLRF::DirectionalLight {
 public:
 	/**
 	 * @brief Construct a new DirectionalLight object.

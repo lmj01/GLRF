@@ -4,13 +4,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <GLRF/VectorMath.hpp>
+#include <VectorMath.hpp>
+
+namespace GLRF {
+	class SceneCamera;
+}
 
 /**
  * @brief A camera that presents its view of a scene to the user when active and rendering.
  * 
  */
-class SceneCamera {
+class GLRF::SceneCamera {
 public:
 	/**
 	 * @brief Construct a new SceneCamera object.

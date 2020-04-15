@@ -9,13 +9,19 @@
 #include <sstream>
 #include <iostream>
 
-#include <GLRF/Material.hpp>
+#include <Material.hpp>
+
+namespace GLRF {
+	struct ScreenResolution;
+	struct ShaderOptions;
+	class Shader;
+}
 
 /**
  * @brief A screen resolution consisting of width and height parameters.
  * 
  */
-struct ScreenResolution {
+struct GLRF::ScreenResolution {
 	unsigned int width = 800;
 	unsigned int height = 600;
 };
@@ -25,7 +31,7 @@ struct ScreenResolution {
  * 
  * Core aspects are screen resolution, buffers, HDR and post-processing effects.
  */
-struct ShaderOptions {
+struct GLRF::ShaderOptions {
 	bool isOneDimensionalFilterKernel = false;
 	bool useDepthBuffer = true;
 	bool useFrameBuffer = false;
@@ -39,8 +45,7 @@ struct ShaderOptions {
  * @brief The shader that is used by OpenGL to render a Scene.
  * 
  */
-class Shader
-{
+class GLRF::Shader {
 public:
 	GLuint ID;
 	ShaderOptions shaderOptions;

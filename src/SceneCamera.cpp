@@ -1,4 +1,6 @@
-#include <GLRF/SceneCamera.hpp>
+#include <SceneCamera.hpp>
+
+using namespace GLRF;
 
 SceneCamera::SceneCamera(glm::vec3 position, glm::vec3 upVector, glm::vec3 target) {
 	this->position = position;

@@ -1,6 +1,8 @@
-#include <GLRF/VectorMath.hpp>
+#include <VectorMath.hpp>
 
-glm::vec3 calculateTangent(VertexFormat p1, VertexFormat p2, VertexFormat p3) {
+using namespace GLRF;
+
+glm::vec3 GLRF::calculateTangent(VertexFormat p1, VertexFormat p2, VertexFormat p3) {
 	glm::vec3 edge1 = p2.position - p1.position;
 	glm::vec3 edge2 = p3.position - p1.position;
 	glm::vec2 deltaUV1 = p2.uv - p1.uv;
@@ -17,11 +19,11 @@ glm::vec3 calculateTangent(VertexFormat p1, VertexFormat p2, VertexFormat p3) {
 	return glm::vec3(tangent);
 }
 
-void calculateAndSetTangents(std::vector<VertexFormat> * vertices, GLenum drawType) {
+void GLRF::calculateAndSetTangents(std::vector<VertexFormat> * vertices, GLenum drawType) {
 	if (drawType == GL_TRIANGLES) calculateAndSetTangents_GL_TRIANGLES(vertices);
 }
 
-void calculateAndSetTangents_GL_TRIANGLES(std::vector<VertexFormat> * vertices) {
+void GLRF::calculateAndSetTangents_GL_TRIANGLES(std::vector<VertexFormat> * vertices) {
 	for (unsigned int i = 0; i < vertices->size(); i += 3) {
 		glm::vec3 tangent = calculateTangent(vertices->at(i), vertices->at(i + 1), vertices->at(i + 2));
 
@@ -31,20 +33,20 @@ void calculateAndSetTangents_GL_TRIANGLES(std::vector<VertexFormat> * vertices) 
 	}
 }
 
-glm::vec3 dehomogenizeVec4(glm::vec4 homogeneous_input) {
+glm::vec3 GLRF::dehomogenizeVec4(glm::vec4 homogeneous_input) {
 	return glm::vec3(homogeneous_input) / homogeneous_input.w;
 }
 
-glm::vec3 generateRandomNormalizedVector() {
+glm::vec3 GLRF::generateRandomNormalizedVector() {
 	return glm::normalize(glm::vec3(generateRandomFloat(), generateRandomFloat(), generateRandomFloat()));
 }
 
-glm::vec3 findNonLinearNormalizedVector(glm::vec3 v) {
+glm::vec3 GLRF::findNonLinearNormalizedVector(glm::vec3 v) {
 	glm::vec3 w = generateRandomNormalizedVector();
 	glm::vec3 result = w - (glm::dot(v, w) / glm::dot(v, v)) * v;
 	return (glm::length(result) == 0.0f) ? findNonLinearNormalizedVector(v) : glm::normalize(result);
 }
 
-float generateRandomFloat() {
+float GLRF::generateRandomFloat() {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 }

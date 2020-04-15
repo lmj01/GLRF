@@ -8,17 +8,21 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <GLRF/Shader.hpp>
-#include <GLRF/SceneCamera.hpp>
-#include <GLRF/SceneObject.hpp>
-#include <GLRF/SceneLight.hpp>
-#include <GLRF/VectorMath.hpp>
+#include <Shader.hpp>
+#include <SceneCamera.hpp>
+#include <SceneObject.hpp>
+#include <SceneLight.hpp>
+#include <VectorMath.hpp>
+
+namespace GLRF {
+	class Scene;
+}
 
 /**
  * @brief A 3d space can contain objects, lights and cameras.
  * 
  */
-class Scene {
+class GLRF::Scene {
 public:
 	/**
 	 * @brief Construct a new Scene object.

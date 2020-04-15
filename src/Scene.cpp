@@ -1,4 +1,6 @@
-#include <GLRF/Scene.hpp>
+#include <Scene.hpp>
+
+using namespace GLRF;
 
 Scene::Scene(std::shared_ptr<SceneCamera> camera) {
 	addObject(camera);

@@ -2,14 +2,18 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include <GLRF/VertexFormat.hpp>
-#include <GLRF/VectorMath.hpp>
+#include <VertexFormat.hpp>
+#include <VectorMath.hpp>
+
+namespace GLRF {
+	class PlaneGenerator;
+}
 
 /**
  * @brief A generator for 3d planes as in flat surfaces.
  * 
  */
-class PlaneGenerator {
+class GLRF::PlaneGenerator {
 public:
 	/**
 	 * @brief Creates a new plane. The form is that of a square.
