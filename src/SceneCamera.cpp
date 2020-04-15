@@ -9,8 +9,8 @@ SceneCamera::SceneCamera(glm::vec3 position, glm::vec3 upVector, glm::vec3 targe
 }
 
 void SceneCamera::rotate(float yaw_offset, float pitch_offset, float sensitivity) {
-	yaw_offset *= sensitivity;
-	pitch_offset *= sensitivity;
+	yaw_offset *= sensitivity * sensitivity_factor_rotation;
+	pitch_offset *= sensitivity * sensitivity_factor_rotation;
 	this->pitch = glm::clamp(this->pitch + pitch_offset, -80.f, 80.f);
 	this->yaw += yaw_offset;
 	float cos_pitch = cos(glm::radians(-this->pitch));
@@ -23,16 +23,8 @@ void SceneCamera::rotate(float yaw_offset, float pitch_offset, float sensitivity
 	this->w = glm::normalize(direction);
 }
 
-void SceneCamera::rotate(float yaw_offset, float pitch_offset) {
-	rotate(yaw_offset, pitch_offset, this->sensitivity_rotation);
-}
-
 void SceneCamera::translate(glm::vec3 direction, float sensitivity) {
-	this->position += direction * sensitivity;
-}
-
-void SceneCamera::translate(glm::vec3 direction) {
-	translate(direction, this->sensitivity_translation);
+	this->position += direction * sensitivity * sensitivity_factor_translation;
 }
 
 glm::mat4 SceneCamera::getViewMatrix() {
