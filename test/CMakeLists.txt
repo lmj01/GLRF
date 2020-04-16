@@ -6,4 +6,4 @@ macro(google_add_test TESTNAME)
     add_test(NAME ${TESTNAME} COMMAND ${TESTNAME})
 endmacro()
 
-google_add_test(${PROJECT_NAME}_test "SimpleTest.cpp")
+google_add_test(${PROJECT_NAME}_test_PlaneGenerator "PlaneGeneratorTest.cpp")
