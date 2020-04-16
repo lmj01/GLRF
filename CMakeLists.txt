@@ -16,6 +16,7 @@ set(SUBMODULE_DIR "${PROJECT_SOURCE_DIR}/external")
 set(GLAD_DIR "${PROJECT_SOURCE_DIR}/generated/glad")
 set(GLRF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(GLRF_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
+set(GLRF_TEST_DIR "${PROJECT_SOURCE_DIR}/test")
 
 # Check if the project is built by itself and not as a subdirectory
 set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR}")
@@ -56,7 +57,7 @@ endif()
 if(NOT EXISTS "${SUBMODULE_DIR}/stb/stb/stb_image.h")
     message(FATAL_ERROR "Submodule 'stb' was not downloaded! Please update submodules and try again.")
 endif()
-message(STATUS "All submodules found and updated!")
+message(STATUS "All submodules needed to build the project found and updated!")
 
 # Check if files from glad have not been created yet.
 # If they were created previously, skip this step.
@@ -98,7 +99,7 @@ add_subdirectory("${SUBMODULE_DIR}/glfw")
 # -- glm --
 add_subdirectory("${SUBMODULE_DIR}/glm")
 
-# ==== build library ====
+# ==== build project ====
 # Get source files directly from directories without linking individual files
 aux_source_directory(${GLRF_INCLUDE_DIR} GLRF_HEADERS)
 aux_source_directory(${GLRF_SOURCE_DIR} GLRF_SOURCES)
@@ -127,3 +128,21 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
+
+if(IS_STANDALONE)
+	include(CTest)
+	if(BUILD_TESTING)
+		# ==== integrity checks ====
+		if(NOT EXISTS "${SUBMODULE_DIR}/googletest/CMakeLists.txt")
+			message(FATAL_ERROR "Submodule 'googletest' was not downloaded! Please update submodules and try again.")
+		endif()
+		message(STATUS "All submodules needed to test the project found and updated!")
+
+		# ==== load libraries / dependencies ====
+		add_subdirectory("${SUBMODULE_DIR}/googletest")
+
+		# ==== test project ====
+		message(STATUS "Setting up tests..")
+		add_subdirectory(${GLRF_TEST_DIR})
+	endif()
+endif()
