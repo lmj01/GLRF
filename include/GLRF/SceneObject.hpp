@@ -10,6 +10,7 @@
 
 #include <VertexFormat.hpp>
 #include <Material.hpp>
+#include <IdManager.hpp>
 
 namespace GLRF {
 	class SceneObject;
@@ -110,12 +111,14 @@ private:
 template <typename T>
 class GLRF::SceneNode {
 public:
+	const IdSpaceSize id;
+
 	/**
 	 * @brief Construct a new SceneNode object.
 	 * 
 	 * @param object the object that will be referenced
 	 */
-	SceneNode(T object) {
+	SceneNode(T object) : id(IdManager::getInstance().getNodeId()) {
 		this->object = new std::shared_ptr<T>(object);
 	}
 
@@ -126,6 +129,14 @@ public:
 	 */
 	std::shared_ptr<T> getObject() {
 		return this->object;
+	}
+
+	friend bool operator==(const SceneNode &n1, const SceneNode &n2) {
+		return n1.id == n2.id;
+	}
+
+	friend bool operator!=(const SceneNode &n1, const SceneNode &n2) {
+		return !(n1 == n2);
 	}
 
 	/**

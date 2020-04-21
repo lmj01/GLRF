@@ -17,14 +17,16 @@ void Scene::addObject(SceneNode<SceneMesh> node) {
 	this->meshNodes.push_back(node);
 }
 
-void Scene::addObject(std::shared_ptr<PointLight> light) {
-	if (std::find(this->pointLights.begin(), this->pointLights.end(), light) != this->pointLights.end()) {
+void Scene::addObject(SceneNode<PointLight> light) {
+	if (*(std::find(this->pointLights.begin(), this->pointLights.end(), light)) != *(this->pointLights.end())) {
 		this->pointLights.push_back(light);
 	}
 }
 
-void Scene::addObject(std::shared_ptr<DirectionalLight> light) {
-	this->directionalLight = light;
+void Scene::addObject(SceneNode<DirectionalLight> light) {
+	if (*(std::find(this->directionalLights.begin(), this->directionalLights.end(), light)) != *(this->directionalLights.end())) {
+		this->directionalLights.push_back(light);
+	}
 }
 
 void Scene::addObject(std::shared_ptr<SceneCamera> camera) {
@@ -45,19 +47,15 @@ void Scene::draw(Shader & shader) {
 	shader.setValue("camera_position", this->activeCamera->getPosition());
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
-		//glm::vec4 P = view * glm::vec4(pointLights[i]->getPosition(), 1.f);
-		shader.setValue("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
-		shader.setValue("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getColor());
-		shader.setValue("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getPower());
+		shader.setValue("pointLight_position[" + std::to_string(i) + "]", pointLights[i].getPosition());
+		shader.setValue("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i].getObject()->getColor());
+		shader.setValue("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i].getObject()->getPower());
 	}
 	shader.setValue("pointLight_count", (int)this->pointLights.size());
 
-	if (this->directionalLight) {
-		//glm::vec3 dir = view * glm::vec4(this->directionalLight->getDirection(), 0.f);
-		//std::cout << "(" << dir.x << ", " << dir.y << ", " << dir.z << ")" << std::endl;
-		//glm::vec3 dir = view * glm::vec4(0.0, -1.0, 0.0, 0.f);
-		shader.setValue("directionalLight_direction", this->directionalLight->getDirection());
-		shader.setValue("directionalLight_power", this->directionalLight->getPower());
+	if (this->directionalLights.size() > 0) {
+		shader.setValue("directionalLight_direction", this->directionalLights[0].getObject()->getDirection());
+		shader.setValue("directionalLight_power", this->directionalLights[0].getObject()->getPower());
 		shader.setValue("useDirectionalLight", true);
 	} else {
 		shader.setValue("useDirectionalLight", false);

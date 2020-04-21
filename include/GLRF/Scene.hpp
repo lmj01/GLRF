@@ -50,14 +50,14 @@ public:
 	 * 
 	 * @param light the point lightsource that will be added to the scene
 	 */
-	void addObject(std::shared_ptr<PointLight> light);
+	void addObject(SceneNode<PointLight> light);
 
 	/**
 	 * @brief Adds a directional lightsource to the scene.
 	 * 
 	 * @param light the directional lightsource that will be added to the scene
 	 */
-	void addObject(std::shared_ptr<DirectionalLight> light);
+	void addObject(SceneNode<DirectionalLight> light);
 
 	/**
 	 * @brief Adds a camera to the scene. The camera will not become active.
@@ -98,8 +98,8 @@ public:
 	void processMouse(float xOffset, float yOffset);
 private:
 	std::vector<SceneNode<SceneMesh>> meshNodes;
-	std::vector<std::shared_ptr<PointLight>> pointLights;
-	std::shared_ptr<DirectionalLight> directionalLight = nullptr;
+	std::vector<SceneNode<PointLight>> pointLights;
+	std::vector<SceneNode<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<SceneCamera>> cameras;
 	std::shared_ptr<SceneCamera> activeCamera;
 };
