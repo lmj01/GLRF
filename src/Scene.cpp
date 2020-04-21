@@ -13,9 +13,7 @@ Scene::Scene() {
 	);
 }
 
-void Scene::addObject(std::shared_ptr<SceneMesh> mesh, glm::vec3 position, glm::mat4 rotation) {
-	SceneMeshNode node = SceneMeshNode(mesh);
-	node.setPositionAndRotation(position, rotation);
+void Scene::addObject(SceneNode<SceneMesh> node) {
 	this->meshNodes.push_back(node);
 }
 
@@ -70,9 +68,9 @@ void Scene::draw(Shader & shader) {
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
 		shader.setValue("model", modelMat);
 		shader.setValue("model_normal", modelNormalMat);
-		shader.setMaterial("material", this->meshNodes[i].getMesh()->getMaterial());
+		shader.setMaterial("material", this->meshNodes[i].getObject()->getMaterial());
 
-		this->meshNodes[i].getMesh()->draw();
+		this->meshNodes[i].getObject()->draw();
 	}
 }
 

@@ -41,11 +41,9 @@ public:
 	/**
 	 * @brief Adds a mesh object at the given position with the given rotation to the scene.
 	 * 
-	 * @param mesh the mesh that will be added to the scene
-	 * @param position the position of the mesh in the scene
-	 * @param rotation the rotation of the mesh in the scene
+	 * @param node the node of the mesh that will be added to the scene
 	 */
-	void addObject(std::shared_ptr<SceneMesh> mesh, glm::vec3 position, glm::mat4 rotation);
+	void addObject(SceneNode<SceneMesh> node);
 
 	/**
 	 * @brief Adds a point lightsource to the scene.
@@ -99,7 +97,7 @@ public:
 	 */
 	void processMouse(float xOffset, float yOffset);
 private:
-	std::vector<SceneMeshNode> meshNodes;
+	std::vector<SceneNode<SceneMesh>> meshNodes;
 	std::vector<std::shared_ptr<PointLight>> pointLights;
 	std::shared_ptr<DirectionalLight> directionalLight = nullptr;
 	std::vector<std::shared_ptr<SceneCamera>> cameras;

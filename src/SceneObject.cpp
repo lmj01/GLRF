@@ -19,14 +19,6 @@ void SceneMesh::draw() {
 	glBindVertexArray(0);
 }
 
-Material SceneMesh::getMaterial() {
-	return this->material;
-}
-
-void SceneMesh::setMaterial(Material material) {
-	this->material = material;
-}
-
 void SceneMesh::setUp(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material) {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -34,7 +26,7 @@ void SceneMesh::setUp(std::vector<VertexFormat> vertices, GLenum drawType, GLenu
 	this->drawType = drawType;
 	this->geometryType = geometryType;
 	this->vertices = vertices;
-	this->material = material;
+	setMaterial(material);
 
 	glBindVertexArray(VAO);
 
@@ -62,71 +54,4 @@ void SceneMesh::update(std::vector<VertexFormat> vertices, GLenum drawType) {
 
 void SceneMesh::update(std::vector<VertexFormat> vertices) {
 	SceneMesh::update(vertices, drawType);
-}
-
-SceneMeshNode::SceneMeshNode(std::shared_ptr<SceneMesh> mesh) {
-	this->mesh = mesh;
-}
-
-std::shared_ptr<SceneMesh> SceneMeshNode::getMesh() {
-	return this->mesh;
-}
-
-void SceneMeshNode::setPosition(glm::vec3 position) {
-	this->position = position;
-	recalculateMatrices();
-}
-
-void SceneMeshNode::setRotation(glm::mat4 rotation) {
-	this->rotation = rotation;
-	recalculateMatrices();
-}
-
-void SceneMeshNode::setPositionAndRotation(glm::vec3 position, glm::mat4 rotation) {
-	this->position = position;
-	this->rotation = rotation;
-	recalculateMatrices();
-}
-
-void SceneMeshNode::move(glm::vec3 offset) {
-	this->position += offset;
-	recalculateMatrices();
-}
-
-void SceneMeshNode::rotateDeg(glm::vec3 axis, float angle) {
-	this->rotation = glm::rotate(this->rotation, glm::radians(angle), axis);
-	recalculateMatrices();
-}
-
-void SceneMeshNode::rotateRad(glm::vec3 axis, float angle) {
-	this->rotation = glm::rotate(this->rotation, angle, axis);
-	recalculateMatrices();
-}
-
-void SceneMeshNode::moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
-	this->position += offset;
-	this->rotation = glm::rotate(this->rotation, glm::radians(angle), rotationAxis);
-	recalculateMatrices();
-}
-
-void SceneMeshNode::moveAndRotateRad(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
-	this->position += offset;
-	this->rotation = glm::rotate(this->rotation, angle, rotationAxis);
-	recalculateMatrices();
-}
-
-void SceneMeshNode::recalculateMatrices() {
-	this->modelMatrix = glm::translate(this->rotation, this->position);
-}
-
-glm::vec3 SceneMeshNode::getPosition() {
-	return this->position;
-}
-
-glm::mat4 SceneMeshNode::getRotation() {
-	return this->rotation;
-}
-
-glm::mat4 SceneMeshNode::getModelMatrix() {
-	return this->modelMatrix;
 }
