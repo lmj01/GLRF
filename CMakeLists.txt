@@ -19,7 +19,7 @@ set(GLRF_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(GLRF_TEST_DIR "${PROJECT_SOURCE_DIR}/test")
 
 # Check if the project is built by itself and not as a subdirectory
-set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR}")
+set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR}")
 if (IS_STANDALONE)
 	message(STATUS "IS_STANDALONE = TRUE")
 else()
