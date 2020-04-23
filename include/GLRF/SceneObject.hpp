@@ -146,7 +146,6 @@ public:
 	 */
 	void setPosition(glm::vec3 position)  {
 		this->position = position;
-		recalculateMatrices();
 	}
 
 	/**
@@ -156,19 +155,6 @@ public:
 	 */
 	void setRotation(glm::mat4 rotation)  {
 		this->rotation = rotation;
-		recalculateMatrices();
-	}
-
-	/**
-	 * @brief Sets the position and rotation of this node.
-	 * 
-	 * @param position the position to be set
-	 * @param rotation the rotation to be set
-	 */
-	void setPositionAndRotation(glm::vec3 position, glm::mat4 rotation) {
-		this->position = position;
-		this->rotation = rotation;
-		recalculateMatrices();
 	}
 
 	/**
@@ -178,7 +164,6 @@ public:
 	 */
 	void move(glm::vec3 offset)  {
 		this->position += offset;
-		recalculateMatrices();
 	}
 
 	/**
@@ -189,7 +174,6 @@ public:
 	 */
 	void rotateDeg(glm::vec3 axis, float angle) {
 		this->rotation = glm::rotate(this->rotation, glm::radians(angle), axis);
-		recalculateMatrices();
 	}
 
 	/**
@@ -199,33 +183,6 @@ public:
 	 * @param angle the angle in radians
 	 */
 	void rotateRad(glm::vec3 axis, float angle) {
-		this->rotation = glm::rotate(this->rotation, angle, axis);
-		recalculateMatrices();
-	}
-
-	/**
-	 * @brief Moves and rotates the node.
-	 * 
-	 * @param offset the vector to move along at
-	 * @param rotationAxis the axis to rotate around
-	 * @param angle the angle in degrees
-	 */
-	void moveAndRotateDeg(glm::vec3 offset, glm::vec3 rotationAxis, float angle)  {
-		this->position += offset;
-		this->rotation = glm::rotate(this->rotation, glm::radians(angle), rotationAxis);
-		recalculateMatrices();
-	}
-	/**
-	 * @brief Moves and rotates the node.
-	 * 
-	 * @param offset the vector to move along at
-	 * @param rotationAxis the axis to rotate around
-	 * @param angle the angle in radians
-	 */
-	void moveAndRotateRad(glm::vec3 offset, glm::vec3 rotationAxis, float angle) {
-		this->position += offset;
-		this->rotation = glm::rotate(this->rotation, angle, rotationAxis);
-		recalculateMatrices();
 	}
 
 	/**
@@ -243,21 +200,15 @@ public:
 	glm::mat4 getRotation() { return this->rotation; }
 
 	/**
-	 * @brief Returns the model matrix.
+	 * @brief Calculates and returns the model matrix.
 	 * 
 	 * @return glm::vec3 the model matrix
 	 */
-	glm::mat4 getModelMatrix() { return this->modelMatrix; }
-private:
-	/**
-	 * @brief Recalculates the matrices that define the instances local coordinate system.
-	 * 
-	 */
-	void recalculateMatrices() {
-		this->modelMatrix = glm::translate(this->rotation, this->position);
+	glm::mat4 calculateModelMatrix() {
+		return glm::translate(this->rotation, this->position);
 	}
-
+private:
 	std::shared_ptr<T> object = nullptr;
 	glm::vec3 position = glm::vec3(0.0f);
-	glm::mat4 modelMatrix = glm::mat4(1.0f), rotation = glm::mat4(1.0f);
+	glm::mat4 rotation = glm::mat4(1.0f);
 };

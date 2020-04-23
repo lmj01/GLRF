@@ -62,7 +62,7 @@ void Scene::draw(Shader & shader) {
 	}
 
 	for (unsigned int i = 0; i < this->meshNodes.size(); i++) {
-		glm::mat4 modelMat = this->meshNodes[i].getModelMatrix();
+		glm::mat4 modelMat = this->meshNodes[i].calculateModelMatrix();
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
 		shader.setValue("model", modelMat);
 		shader.setValue("model_normal", modelNormalMat);
