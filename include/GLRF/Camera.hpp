@@ -7,23 +7,23 @@
 #include <VectorMath.hpp>
 
 namespace GLRF {
-	class SceneCamera;
+	class Camera;
 }
 
 /**
  * @brief A camera that presents its view of a scene to the user when active and rendering.
  * 
  */
-class GLRF::SceneCamera {
+class GLRF::Camera {
 public:
 	/**
-	 * @brief Construct a new SceneCamera object.
+	 * @brief Construct a new Camera object.
 	 * 
 	 * @param position the position of the camera
 	 * @param upVector the constant vector that points upwards
 	 * @param target a given position that the camera will be looking at
 	 */
-	SceneCamera(glm::vec3 position, glm::vec3 upVector, glm::vec3 target);
+	Camera(glm::vec3 position, glm::vec3 upVector, glm::vec3 target);
 
 	/**
 	 * @brief Rotates the camera by a given angle offset.

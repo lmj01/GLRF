@@ -2,14 +2,14 @@
 
 using namespace GLRF;
 
-Scene::Scene(std::shared_ptr<SceneCamera> camera) {
+Scene::Scene(std::shared_ptr<Camera> camera) {
 	addObject(camera);
 	setActiveCamera(camera);
 }
 
 Scene::Scene() {
-	setActiveCamera(std::shared_ptr<SceneCamera>(
-		new SceneCamera(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)))
+	setActiveCamera(std::shared_ptr<Camera>(
+		new Camera(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)))
 	);
 }
 
@@ -29,11 +29,11 @@ void Scene::addObject(SceneNode<DirectionalLight> light) {
 	}
 }
 
-void Scene::addObject(std::shared_ptr<SceneCamera> camera) {
+void Scene::addObject(std::shared_ptr<Camera> camera) {
 	this->cameras.push_back(camera);
 }
 
-void Scene::setActiveCamera(std::shared_ptr<SceneCamera> camera) {
+void Scene::setActiveCamera(std::shared_ptr<Camera> camera) {
 	auto it = std::find(this->cameras.begin(), this->cameras.end(), camera);
 	if (it == this->cameras.end()) {
 		this->cameras.push_back(camera);

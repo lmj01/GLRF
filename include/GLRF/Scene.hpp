@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Shader.hpp>
-#include <SceneCamera.hpp>
+#include <Camera.hpp>
 #include <SceneObject.hpp>
 #include <SceneLight.hpp>
 #include <VectorMath.hpp>
@@ -29,7 +29,7 @@ public:
 	 * 
 	 * @param camera the new active camera
 	 */
-	Scene(std::shared_ptr<SceneCamera> camera);
+	Scene(std::shared_ptr<Camera> camera);
 
 	/**
 	 * @brief Construct a new Scene object.
@@ -64,7 +64,7 @@ public:
 	 * 
 	 * @param camera the camera the will be added to the scene
 	 */
-	void addObject(std::shared_ptr<SceneCamera> camera);
+	void addObject(std::shared_ptr<Camera> camera);
 
 	/**
 	 * @brief Sets the given camera as the active camera.
@@ -73,7 +73,7 @@ public:
 	 * 
 	 * If the camera is new, it will also be added to the scene.
 	 */
-	void setActiveCamera(std::shared_ptr<SceneCamera> camera);
+	void setActiveCamera(std::shared_ptr<Camera> camera);
 
 	/**
 	 * @brief Draws all objects of the scene with the given shader.
@@ -100,6 +100,6 @@ private:
 	std::vector<SceneNode<SceneMesh>> meshNodes;
 	std::vector<SceneNode<PointLight>> pointLights;
 	std::vector<SceneNode<DirectionalLight>> directionalLights;
-	std::vector<std::shared_ptr<SceneCamera>> cameras;
-	std::shared_ptr<SceneCamera> activeCamera;
+	std::vector<std::shared_ptr<Camera>> cameras;
+	std::shared_ptr<Camera> activeCamera;
 };
