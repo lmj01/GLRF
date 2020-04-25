@@ -18,13 +18,13 @@ void Scene::addObject(SceneNode<SceneMesh> node) {
 }
 
 void Scene::addObject(SceneNode<PointLight> light) {
-	if (*(std::find(this->pointLights.begin(), this->pointLights.end(), light)) != *(this->pointLights.end())) {
+	if (std::find(this->pointLights.begin(), this->pointLights.end(), light) != this->pointLights.end()) {
 		this->pointLights.push_back(light);
 	}
 }
 
 void Scene::addObject(SceneNode<DirectionalLight> light) {
-	if (*(std::find(this->directionalLights.begin(), this->directionalLights.end(), light)) != *(this->directionalLights.end())) {
+	if (std::find(this->directionalLights.begin(), this->directionalLights.end(), light) != this->directionalLights.end()) {
 		this->directionalLights.push_back(light);
 	}
 }
