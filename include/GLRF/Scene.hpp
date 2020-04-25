@@ -8,11 +8,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Shader.hpp>
-#include <Camera.hpp>
-#include <SceneObject.hpp>
-#include <SceneLight.hpp>
-#include <VectorMath.hpp>
+#include <GLRF/Shader.hpp>
+#include <GLRF/Camera.hpp>
+#include <GLRF/SceneObject.hpp>
+#include <GLRF/SceneLight.hpp>
+#include <GLRF/VectorMath.hpp>
 
 namespace GLRF {
 	class Scene;

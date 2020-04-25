@@ -9,7 +9,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <Material.hpp>
+#include <GLRF/Material.hpp>
 
 namespace GLRF {
 	struct ScreenResolution;

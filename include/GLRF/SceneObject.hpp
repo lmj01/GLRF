@@ -8,9 +8,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <VertexFormat.hpp>
-#include <Material.hpp>
-#include <IdManager.hpp>
+#include <GLRF/VertexFormat.hpp>
+#include <GLRF/Material.hpp>
+#include <GLRF/IdManager.hpp>
 
 namespace GLRF {
 	class SceneObject;

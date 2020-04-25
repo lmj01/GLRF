@@ -1,4 +1,4 @@
-#include <Camera.hpp>
+#include <GLRF/Camera.hpp>
 
 using namespace GLRF;
 

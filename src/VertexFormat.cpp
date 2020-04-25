@@ -1,4 +1,4 @@
-#include <VertexFormat.hpp>
+#include <GLRF/VertexFormat.hpp>
 
 using namespace GLRF;
 

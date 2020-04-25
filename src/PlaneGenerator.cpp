@@ -1,5 +1,5 @@
 #include <iostream>
-#include <PlaneGenerator.hpp>
+#include <GLRF/PlaneGenerator.hpp>
 
 using namespace GLRF;
 

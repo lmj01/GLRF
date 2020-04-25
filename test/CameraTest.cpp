@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include <Camera.hpp>
+#include <GLRF/Camera.hpp>
 
 using namespace GLRF;
 

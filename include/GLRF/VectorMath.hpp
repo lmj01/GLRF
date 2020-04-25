@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
-#include <VertexFormat.hpp>
+#include <GLRF/VertexFormat.hpp>
 
 namespace GLRF {
 

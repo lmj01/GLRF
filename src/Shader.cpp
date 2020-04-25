@@ -1,4 +1,4 @@
-#include <Shader.hpp>
+#include <GLRF/Shader.hpp>
 
 using namespace GLRF;
 

@@ -1,5 +1,5 @@
-#include <SceneLight.hpp>
 #include <iostream>
+#include <GLRF/SceneLight.hpp>
 
 using namespace GLRF;
 

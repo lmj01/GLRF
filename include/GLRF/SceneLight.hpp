@@ -3,8 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <VectorMath.hpp>
-#include <SceneObject.hpp>
+#include <GLRF/VectorMath.hpp>
+#include <GLRF/SceneObject.hpp>
 
 namespace GLRF {
 	class PointLight;

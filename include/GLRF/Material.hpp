@@ -4,7 +4,7 @@
 #include <variant>
 #include <glm/glm.hpp>
 
-#include <Texture.hpp>
+#include <GLRF/Texture.hpp>
 
 namespace GLRF {
 	template <typename T> class MaterialProperty;

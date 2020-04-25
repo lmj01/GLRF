@@ -1,4 +1,4 @@
-#include <Scene.hpp>
+#include <GLRF/Scene.hpp>
 
 using namespace GLRF;
 
