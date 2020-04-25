@@ -183,6 +183,7 @@ public:
 	 * @param angle the angle in radians
 	 */
 	void rotateRad(glm::vec3 axis, float angle) {
+		this->rotation = glm::rotate(this->rotation, angle, axis);
 	}
 
 	/**
