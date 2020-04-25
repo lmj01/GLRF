@@ -118,8 +118,8 @@ public:
 	 * 
 	 * @param object the object that will be referenced
 	 */
-	SceneNode(T object) : id(IdManager::getInstance().getNodeId()) {
-		this->object = new std::shared_ptr<T>(object);
+	SceneNode(std::shared_ptr<T> object) : id(IdManager::getInstance().getNodeId()) {
+		this->object = object;
 	}
 
 	/**
