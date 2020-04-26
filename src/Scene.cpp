@@ -47,7 +47,7 @@ void Scene::draw(Shader & shader) {
 		shader.setValue("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i].getObject()->getColor());
 		shader.setValue("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i].getObject()->getPower());
 	}
-	shader.setValue("pointLight_count", (int)this->pointLights.size());
+	shader.setValue("pointLight_count", static_cast<unsigned int>(this->pointLights.size()));
 
 	if (this->directionalLights.size() > 0) {
 		shader.setValue("directionalLight_direction", this->directionalLights[0].getObject()->getDirection());
