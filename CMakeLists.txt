@@ -6,7 +6,7 @@ project("glrf" VERSION 1.0 LANGUAGES C CXX)
 # ==== settings ====
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 # Enable linking of this library on windows
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)

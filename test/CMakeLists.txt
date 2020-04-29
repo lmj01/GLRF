@@ -2,7 +2,7 @@ include(GoogleTest)
 
 macro(google_add_test TESTNAME)
     add_executable(${TESTNAME} ${ARGN})
-    target_link_libraries(${TESTNAME} gtest gmock gtest_main ${PROJECT_NAME})
+    target_link_libraries(${TESTNAME} gtest gmock gtest_main stdc++fs ${PROJECT_NAME})
     add_test(NAME ${TESTNAME} COMMAND ${TESTNAME})
 endmacro()
 

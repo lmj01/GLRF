@@ -30,7 +30,7 @@ public:
 	 * @brief Draws the object with the current shader.
 	 * 
 	 */
-	virtual void draw() { std::cout << "Drawing this object has not been implemented yet!" << std::endl; };
+	virtual void draw() = 0;
 
 	/**
 	 * @brief Returns the Material object.
