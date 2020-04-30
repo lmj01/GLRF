@@ -36,14 +36,14 @@ private:
     static Mouse mouse;
     App * app;
 
-    static void framebufferSizeCallback(GLFWwindow * window, int width, int height);
     void processInput(GLFWwindow * window);
-    static void mouse_callback(GLFWwindow * window, double x, double y);
 public:
     AppFrame(ScreenResolution resolution, App * app);
     ~AppFrame();
 
     bool render();
+    static void framebufferSizeCallback(GLFWwindow * window, int width, int height);
+    static void mouse_callback(GLFWwindow * window, double x, double y);
 };
 
 class GLRF::App
