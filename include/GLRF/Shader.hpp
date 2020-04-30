@@ -24,6 +24,13 @@ namespace GLRF {
 struct GLRF::ScreenResolution {
 	unsigned int width = 800;
 	unsigned int height = 600;
+	ScreenResolution(unsigned int width, unsigned int height) {
+		this->width = width;
+		this->height = height;
+	}
+	ScreenResolution() {
+		ScreenResolution(800, 600);
+	}
 };
 
 /**
