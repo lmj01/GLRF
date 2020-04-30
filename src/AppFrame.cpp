@@ -72,6 +72,7 @@ bool AppFrame::render() {
         this->app->processUserInput(this->window, this->mouse.getOffset());
         this->app->updateScene();
         this->app->render();
+        glfwSwapBuffers(this->window);
     }
     glfwTerminate();
     return 0;
