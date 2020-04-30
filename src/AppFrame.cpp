@@ -28,7 +28,7 @@ glm::vec2 Mouse::getOffset() {
     return glm::vec2(this->pos  - this->pos_old);
 }
 
-AppFrame::AppFrame(ScreenResolution resolution) {
+AppFrame::AppFrame(ScreenResolution resolution, App& app) {
     this->resolution = resolution;
     this->mouse = Mouse(static_cast<double>(resolution.width) / 2.0, static_cast<double>(resolution.height) / 2.0);
     this->window = glfwCreateWindow(resolution.width, resolution.height, "OpenGL", NULL, NULL);
@@ -39,13 +39,16 @@ AppFrame::AppFrame(ScreenResolution resolution) {
     glfwMakeContextCurrent(this->window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        glfwTerminate();
         throw std::runtime_error("Failed to initialize GLAD!");
     }
     glfwSetFramebufferSizeCallback(this->window, &AppFrame::framebufferSizeCallback);
+
+    this->app = app;
 }
 
 AppFrame::~AppFrame() {
-
+    delete &mouse;
 }
 
 void AppFrame::framebufferSizeCallback(GLFWwindow * window, int width, int height) {
@@ -60,4 +63,15 @@ void AppFrame::processInput(GLFWwindow * window) {
 
 void AppFrame::mouse_callback(GLFWwindow * window, double x, double y) {
     this->mouse.setPosition(x, y);
+}
+
+bool AppFrame::render() {
+    this->app.configure(this->window);
+    while(!glfwWindowShouldClose(this->window)) {
+        this->app.processUserInput(this->window, this->mouse.getOffset());
+        this->app.updateScene();
+        this->app.render();
+    }
+    glfwTerminate();
+    return 0;
 }

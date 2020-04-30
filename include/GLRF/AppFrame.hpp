@@ -9,9 +9,11 @@
 namespace GLRF {
     class Mouse;
     class AppFrame;
+    class App;
 }
 
-class GLRF::Mouse {
+class GLRF::Mouse
+{
 private:
     glm::vec2 pos;
     glm::vec2 pos_old;
@@ -29,15 +31,26 @@ class GLRF::AppFrame
 {
 private:
     ScreenResolution resolution;
-    double xpos_prev = 0.0;
-    double ypos_prev = 0.0;
     GLFWwindow * window;
     Mouse mouse;
-public:
-    AppFrame(ScreenResolution resolution);
-    ~AppFrame();
+    App& app;
 
     static void framebufferSizeCallback(GLFWwindow * window, int width, int height);
     void processInput(GLFWwindow * window);
     void mouse_callback(GLFWwindow * window, double x, double y);
+public:
+    AppFrame(ScreenResolution resolution, App& app);
+    ~AppFrame();
+
+    bool render();
+};
+
+class GLRF::App
+{
+private:
+public:
+    virtual void configure(GLFWwindow * window);
+    virtual void processUserInput(GLFWwindow * window, glm::vec2 mouse_offset);
+    virtual void updateScene();
+    virtual void render();
 };
