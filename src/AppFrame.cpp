@@ -62,12 +62,13 @@ void AppFrame::processInput(GLFWwindow * window) {
 }
 
 void AppFrame::mouse_callback(GLFWwindow * window, double x, double y) {
-    this->mouse.setPosition(x, y);
+    AppFrame::mouse.setPosition(x, y);
 }
 
 bool AppFrame::render() {
     this->app->configure(this->window);
     while(!glfwWindowShouldClose(this->window)) {
+        glfwSetCursorPosCallback(this->window, mouse_callback);
         this->app->processUserInput(this->window, this->mouse.getOffset());
         this->app->updateScene();
         this->app->render();

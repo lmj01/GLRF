@@ -33,12 +33,12 @@ class GLRF::AppFrame
 private:
     ScreenResolution resolution;
     GLFWwindow * window;
-    Mouse mouse;
+    static Mouse mouse;
     App * app;
 
     static void framebufferSizeCallback(GLFWwindow * window, int width, int height);
     void processInput(GLFWwindow * window);
-    void mouse_callback(GLFWwindow * window, double x, double y);
+    static void mouse_callback(GLFWwindow * window, double x, double y);
 public:
     AppFrame(ScreenResolution resolution, App * app);
     ~AppFrame();
@@ -59,5 +59,9 @@ public:
     virtual void render() = 0;
     virtual void setActiveScene(Scene * scene) {
         this->activeScene = scene;
+    }
+    virtual void forwardUserInputToScene(GLFWwindow * window, glm::vec2 mouse_offset) {
+        this->activeScene->processMouse(mouse_offset.x, mouse_offset.y);
+        this->activeScene->processInput(window);
     }
 };
