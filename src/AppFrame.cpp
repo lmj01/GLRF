@@ -30,7 +30,7 @@ glm::vec2 Mouse::getOffset() {
 
 AppFrame::AppFrame(ScreenResolution resolution, App * app) {
     this->resolution = resolution;
-    AppFrame::mouse.setPosition(static_cast<double>(resolution.width) / 2.0, static_cast<double>(resolution.height) / 2.0);
+    Mouse::getInstance().setPosition(static_cast<double>(resolution.width) / 2.0, static_cast<double>(resolution.height) / 2.0);
     this->window = glfwCreateWindow(resolution.width, resolution.height, "OpenGL", NULL, NULL);
     if (!this->window) {
         glfwTerminate();
@@ -62,14 +62,14 @@ void AppFrame::processInput(GLFWwindow * window) {
 }
 
 void AppFrame::mouse_callback(GLFWwindow * window, double x, double y) {
-    AppFrame::mouse.setPosition(x, y);
+    Mouse::getInstance().setPosition(x, y);
 }
 
 bool AppFrame::render() {
     this->app->configure(this->window);
     while(!glfwWindowShouldClose(this->window)) {
         glfwSetCursorPosCallback(this->window, mouse_callback);
-        this->app->processUserInput(this->window, AppFrame::mouse.getOffset());
+        this->app->processUserInput(this->window, Mouse::getInstance().getOffset());
         this->app->updateScene();
         this->app->render();
         glfwSwapBuffers(this->window);
