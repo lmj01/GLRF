@@ -5,6 +5,7 @@
 #include <glm/common.hpp>
 
 #include <GLRF/Shader.hpp>
+#include <GLRF/Scene.hpp>
 
 namespace GLRF {
     class Mouse;
@@ -33,13 +34,13 @@ private:
     ScreenResolution resolution;
     GLFWwindow * window;
     Mouse mouse;
-    App& app;
+    App * app;
 
     static void framebufferSizeCallback(GLFWwindow * window, int width, int height);
     void processInput(GLFWwindow * window);
     void mouse_callback(GLFWwindow * window, double x, double y);
 public:
-    AppFrame(ScreenResolution resolution, App& app);
+    AppFrame(ScreenResolution resolution, App * app);
     ~AppFrame();
 
     bool render();
@@ -48,9 +49,15 @@ public:
 class GLRF::App
 {
 private:
+protected:
+    Scene * activeScene;
 public:
-    virtual void configure(GLFWwindow * window);
-    virtual void processUserInput(GLFWwindow * window, glm::vec2 mouse_offset);
-    virtual void updateScene();
-    virtual void render();
+    virtual ~App() {};
+    virtual void configure(GLFWwindow * window) = 0;
+    virtual void processUserInput(GLFWwindow * window, glm::vec2 mouse_offset) = 0;
+    virtual void updateScene() = 0;
+    virtual void render() = 0;
+    virtual void setActiveScene(Scene * scene) {
+        this->activeScene = scene;
+    }
 };
