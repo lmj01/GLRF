@@ -12,7 +12,7 @@ void TextureManager::registerSource(fs::path path) {
 fs::path TextureManager::findTexturePath(std::string filename) {
     fs::path file = fs::path(filename);
     // use cached path if possible to reduce search time
-    auto it = this->cached_paths.find(file);
+    auto it = this->cached_paths.find(filename);
     if (it != this->cached_paths.end()) {
         return it->second;
     }
