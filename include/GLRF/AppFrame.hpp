@@ -51,6 +51,7 @@ class GLRF::App
 private:
 protected:
     Scene * activeScene;
+    std::map<std::string, Shader> shaders;
 public:
     virtual ~App() {};
     virtual void configure(GLFWwindow * window) = 0;
