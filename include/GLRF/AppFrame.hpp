@@ -18,9 +18,16 @@ class GLRF::Mouse
 private:
     glm::vec2 pos;
     glm::vec2 pos_old;
-public:
     Mouse();
+    Mouse(const Mouse&);
     Mouse(double x, double y);
+    Mouse & operator = (const Mouse &);
+public:
+    static Mouse& getInstance() {
+        static Mouse instance;
+        return instance;
+    }
+
     ~Mouse();
 
     glm::vec2 getPosition();
@@ -33,7 +40,6 @@ class GLRF::AppFrame
 private:
     ScreenResolution resolution;
     GLFWwindow * window;
-    static Mouse mouse;
     App * app;
 
     void processInput(GLFWwindow * window);
@@ -50,7 +56,7 @@ class GLRF::App
 {
 private:
 protected:
-    Scene * activeScene;
+    Scene * activeScene = nullptr;
     std::map<std::string, Shader> shaders;
 public:
     virtual ~App() {};

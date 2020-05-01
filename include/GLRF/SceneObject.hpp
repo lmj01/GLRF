@@ -65,16 +65,7 @@ public:
 	 * @param geometryType the type of primitive that will be drawn (e.g. triangles) for the meshs vertices
 	 * @param material the material that defines the appearance of the mesh
 	 */
-	SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material);
-
-	/**
-	 * @brief Construct a new SceneMesh object. A default material is used.
-	 * 
-	 * @param vertices the vertices that define the structure of the mesh
-	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered
-	 * @param geometryType the type of primitive that will be drawn (e.g. triangles) for the meshs vertices
-	 */
-	SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType);
+	SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material = Material());
 
 	/**
 	 * @brief Updates the vertex data and the draw type of the mesh.
@@ -101,7 +92,6 @@ private:
 	GLenum drawType;
 	GLenum geometryType;
 	std::vector<VertexFormat> vertices;
-	void setUp(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material);
 };
 
 /**

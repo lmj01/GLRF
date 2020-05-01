@@ -117,12 +117,12 @@ void Shader::setMaterial(const std::string & name, Material material) {
 	setValue(name + period + "metallic", material.metallic.value_default);
 	setValue(name + period + "ao", material.ao.value_default);
 	setValue(name + period + "height", material.height.value_default);
-	setValue(name + period + "useTextureAlbedo", material.albedo.use_texture);
-	setValue(name + period + "useTextureNormal", material.normal.use_texture);
-	setValue(name + period + "useTextureRoughness", material.roughness.use_texture);
-	setValue(name + period + "useTextureMetallic", material.metallic.use_texture);
-	setValue(name + period + "useTextureAo", material.ao.use_texture);
-	setValue(name + period + "useTextureHeight", material.height.use_texture);
+	setValue(name + period + "useTextureAlbedo", material.albedo.texture.has_value());
+	setValue(name + period + "useTextureNormal", material.normal.texture.has_value());
+	setValue(name + period + "useTextureRoughness", material.roughness.texture.has_value());
+	setValue(name + period + "useTextureMetallic", material.metallic.texture.has_value());
+	setValue(name + period + "useTextureAo", material.ao.texture.has_value());
+	setValue(name + period + "useTextureHeight", material.height.texture.has_value());
 
 	setValue(name + period + "height_scale", material.height_scale);
 
