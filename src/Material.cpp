@@ -4,23 +4,20 @@ using namespace GLRF;
 
 template<typename T>
 MaterialProperty<T>::MaterialProperty() {
-	this->use_texture = false;
 	this->value_default = (T)0.f;
-	this->texture = Texture();
+	this->texture = std::nullopt;
 }
 
 template<typename T>
 void MaterialProperty<T>::loadTexture(std::string library, std::string texture_name, std::string separator, std::string property_name, std::string fileType)
 {
-	this->texture = Texture(library, texture_name + separator + property_name + period + fileType);
-	this->use_texture = this->texture.isSuccessfullyLoaded();
+	this->texture = std::shared_ptr<Texture>(new Texture(library, texture_name + separator + property_name + period + fileType));
 }
 
 template<typename T>
 void MaterialProperty<T>::loadTexture(std::string texture_name, std::string separator, std::string property_name, std::string fileType)
 {
-	this->texture = Texture(texture_name + separator + property_name + period + fileType);
-	this->use_texture = this->texture.isSuccessfullyLoaded();
+	this->texture = std::shared_ptr<Texture>(new Texture(texture_name + separator + property_name + period + fileType));
 }
 
 Material::Material() {
@@ -61,10 +58,10 @@ void Material::loadTextures(std::string name, std::string separator, std::string
 
 void Material::bindTextures(unsigned int textureUnitsBegin)
 {
-	this->albedo.texture.bind(GL_TEXTURE0 + textureUnitsBegin);
-	this->normal.texture.bind(GL_TEXTURE0 + textureUnitsBegin + 1);
-	this->roughness.texture.bind(GL_TEXTURE0 + textureUnitsBegin + 2);
-	this->metallic.texture.bind(GL_TEXTURE0 + textureUnitsBegin + 3);
-	this->ao.texture.bind(GL_TEXTURE0 + textureUnitsBegin + 4);
-	this->height.texture.bind(GL_TEXTURE0 + textureUnitsBegin + 5);
+	if (this->albedo.texture.has_value())		this->albedo.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin);
+	if (this->normal.texture.has_value())		this->normal.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 1);
+	if (this->roughness.texture.has_value())	this->roughness.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 2);
+	if (this->metallic.texture.has_value())		this->metallic.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 3);
+	if (this->ao.texture.has_value())			this->ao.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 4);
+	if (this->height.texture.has_value())		this->height.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 5);
 }

@@ -14,7 +14,7 @@ SceneMesh::SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum
 void SceneMesh::draw() {
 	glBindVertexArray(VAO);
 
-	glDrawArrays(geometryType, 0, vertices.size());
+	glDrawArrays(geometryType, 0, static_cast<GLsizei>(vertices.size()));
 
 	glBindVertexArray(0);
 }
