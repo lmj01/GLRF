@@ -3,23 +3,6 @@
 using namespace GLRF;
 
 SceneMesh::SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material) {
-	setUp(vertices, drawType, geometryType, material);
-}
-
-SceneMesh::SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType) {
-	Material material;
-	setUp(vertices, drawType, geometryType, material);
-}
-
-void SceneMesh::draw() {
-	glBindVertexArray(VAO);
-
-	glDrawArrays(geometryType, 0, static_cast<GLsizei>(vertices.size()));
-
-	glBindVertexArray(0);
-}
-
-void SceneMesh::setUp(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material) {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -41,6 +24,14 @@ void SceneMesh::setUp(std::vector<VertexFormat> vertices, GLenum drawType, GLenu
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexFormat), (void*)(8 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(3);
+
+	glBindVertexArray(0);
+}
+
+void SceneMesh::draw() {
+	glBindVertexArray(VAO);
+
+	glDrawArrays(geometryType, 0, static_cast<GLsizei>(vertices.size()));
 
 	glBindVertexArray(0);
 }
