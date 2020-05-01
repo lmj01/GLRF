@@ -2,6 +2,7 @@
 #include <iterator>
 #include <map>
 #include <variant>
+#include <optional>
 #include <glm/glm.hpp>
 
 #include <GLRF/Texture.hpp>
@@ -19,15 +20,6 @@ namespace GLRF {
 template <typename T>
 class GLRF::MaterialProperty {
 public:
-
-	/**
-	 * @brief Defines whether to use the texture for the property.
-	 * 
-	 * When no texture is used, use the default value.
-	 * Will be set to true automatically when successfully loading a new Texture.
-	 */
-	bool use_texture;
-	
 	/**
 	 * @brief The default value of the property.
 	 * 
@@ -40,7 +32,7 @@ public:
 	 * 
 	 * Stores the image data that controls the property.
 	 */
-	Texture texture;
+	std::optional<std::shared_ptr<Texture>> texture;
 
 	/**
 	 * @brief Construct a new MaterialProperty object.

@@ -50,7 +50,7 @@ class GLRF::App
 {
 private:
 protected:
-    Scene * activeScene;
+    Scene * activeScene = nullptr;
     std::map<std::string, Shader> shaders;
 public:
     virtual ~App() {};
