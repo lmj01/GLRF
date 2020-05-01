@@ -13,8 +13,8 @@ Scene::Scene() {
 	);
 }
 
-void Scene::addObject(SceneNode<SceneMesh> node) {
-	this->meshNodes.push_back(node);
+void Scene::addObject(SceneNode<SceneObject> node) {
+	this->objectNodes.push_back(node);
 }
 
 void Scene::addObject(SceneNode<PointLight> light) {
@@ -57,14 +57,14 @@ void Scene::draw(Shader & shader) {
 		shader.setValue("useDirectionalLight", false);
 	}
 
-	for (unsigned int i = 0; i < this->meshNodes.size(); i++) {
-		glm::mat4 modelMat = this->meshNodes[i].calculateModelMatrix();
+	for (unsigned int i = 0; i < this->objectNodes.size(); i++) {
+		glm::mat4 modelMat = this->objectNodes[i].calculateModelMatrix();
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
 		shader.setValue("model", modelMat);
 		shader.setValue("model_normal", modelNormalMat);
-		shader.setMaterial("material", this->meshNodes[i].getObject()->getMaterial());
+		shader.setMaterial("material", this->objectNodes[i].getObject()->getMaterial());
 
-		this->meshNodes[i].getObject()->draw();
+		this->objectNodes[i].getObject()->draw();
 	}
 }
 

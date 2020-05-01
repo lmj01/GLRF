@@ -39,11 +39,11 @@ public:
 	Scene();
 
 	/**
-	 * @brief Adds a mesh object at the given position with the given rotation to the scene.
+	 * @brief Adds an object at the given position with the given rotation to the scene.
 	 * 
-	 * @param node the node of the mesh that will be added to the scene
+	 * @param node the node of the object that will be added to the scene
 	 */
-	void addObject(SceneNode<SceneMesh> node);
+	void addObject(SceneNode<SceneObject> node);
 
 	/**
 	 * @brief Adds a point lightsource to the scene.
@@ -97,7 +97,7 @@ public:
 	 */
 	void processMouse(float xOffset, float yOffset);
 private:
-	std::vector<SceneNode<SceneMesh>> meshNodes;
+	std::vector<SceneNode<SceneObject>> objectNodes;
 	std::vector<SceneNode<PointLight>> pointLights;
 	std::vector<SceneNode<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<Camera>> cameras;
