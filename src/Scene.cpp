@@ -13,10 +13,6 @@ Scene::Scene() {
 	);
 }
 
-void Scene::addObject(SceneNode<SceneObject> node) {
-	this->objectNodes.push_back(node);
-}
-
 void Scene::addObject(SceneNode<PointLight> light) {
 	this->pointLights.push_back(light);
 }

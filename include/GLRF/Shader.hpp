@@ -150,9 +150,49 @@ public:
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
-	 * 
+	 *
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
+	 */
+	void setValue(const std::string& name, glm::vec2 value) const;
+
+	/**
+	 * @brief Sets the specified material property for the specified, named variable in this Shader.
+	 *
+	 * @param name the name of the material property that will be set
+	 * @param material_property the new material property for the variable
+	 */
+	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, size_t texture_unit);
+
+	/**
+	 * @brief Sets the specified material property for the specified, named variable in this Shader.
+	 *
+	 * @param name the name of the material property that will be set
+	 * @param material_property the new material property for the variable
+	 */
+	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, size_t texture_unit);
+
+	/**
+	 * @brief Sets the specified material property for the specified, named variable in this Shader.
+	 *
+	 * @param name the name of the material property that will be set
+	 * @param material_property the new material property for the variable
+	 */
+	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, size_t texture_unit);
+
+	/**
+	 * @brief Sets the specified material property for the specified, named variable in this Shader.
+	 *
+	 * @param name the name of the material property that will be set
+	 * @param material_property the new material property for the variable
+	 */
+	void setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, size_t texture_unit);
+
+	/**
+	 * @brief Sets the specified material for the specified, named variable in this Shader.
+	 * 
+	 * @param name the name of the material that will be set
+	 * @param material the new material for the variable
 	 */
 	void setMaterial(const std::string &name, Material material);
 
@@ -173,6 +213,9 @@ public:
 	GLuint getColorBuffer(unsigned int index);
 private:
 	static const char period = '.';
+	const std::string value_default = "value_default";
+	const std::string use_texture = "use_texture";
+	const std::string texture = "texture";
 	static const unsigned int MAX_FRAMEBUFFERS = 16;
 	GLuint depthBuffer = 0;
 	std::vector<GLuint> frameBuffers, texColorBuffers;

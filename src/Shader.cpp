@@ -111,28 +111,44 @@ void Shader::setValue(const std::string & name, glm::vec3 value) const {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
+void Shader::setValue(const std::string& name, glm::vec2 value) const {
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, size_t texture_unit) {
+	setValue(name + period + value_default, material_property.value_default);
+	setValue(name + period + use_texture,	material_property.texture.has_value());
+	setValue(name + period + texture,		static_cast<unsigned int>(texture_unit));
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, size_t texture_unit) {
+	setValue(name + period + value_default, material_property.value_default);
+	setValue(name + period + use_texture, material_property.texture.has_value());
+	setValue(name + period + texture, static_cast<unsigned int>(texture_unit));
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, size_t texture_unit) {
+	setValue(name + period + value_default, material_property.value_default);
+	setValue(name + period + use_texture, material_property.texture.has_value());
+	setValue(name + period + texture, static_cast<unsigned int>(texture_unit));
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, size_t texture_unit) {
+	setValue(name + period + value_default, material_property.value_default);
+	setValue(name + period + use_texture, material_property.texture.has_value());
+	setValue(name + period + texture, static_cast<unsigned int>(texture_unit));
+}
+
 void Shader::setMaterial(const std::string & name, Material material) {
-	setValue(name + period + "albedo", material.albedo.value_default);
-	setValue(name + period + "roughness", material.roughness.value_default);
-	setValue(name + period + "metallic", material.metallic.value_default);
-	setValue(name + period + "ao", material.ao.value_default);
-	setValue(name + period + "height", material.height.value_default);
-	setValue(name + period + "useTextureAlbedo", material.albedo.texture.has_value());
-	setValue(name + period + "useTextureNormal", material.normal.texture.has_value());
-	setValue(name + period + "useTextureRoughness", material.roughness.texture.has_value());
-	setValue(name + period + "useTextureMetallic", material.metallic.texture.has_value());
-	setValue(name + period + "useTextureAo", material.ao.texture.has_value());
-	setValue(name + period + "useTextureHeight", material.height.texture.has_value());
+	material.bindTextures(0);
+	setMaterialProperty(name + period + "albedo",		material.albedo,	0);
+	setMaterialProperty(name + period + "normal",		material.normal,	1);
+	setMaterialProperty(name + period + "roughness",	material.roughness, 2);
+	setMaterialProperty(name + period + "metallic",		material.metallic,	3);
+	setMaterialProperty(name + period + "ao",			material.ao,		4);
+	setMaterialProperty(name + period + "height",		material.height,	5);
 
 	setValue(name + period + "height_scale", material.height_scale);
-
-	material.bindTextures(0);
-	setValue(name + period + "textureAlbedo", 0);
-	setValue(name + period + "textureNormal", 1);
-	setValue(name + period + "textureRoughness", 2);
-	setValue(name + period + "textureMetallic", 3);
-	setValue(name + period + "textureAo", 4);
-	setValue(name + period + "textureHeight", 5);
 }
 
 GLuint Shader::getFrameBuffer(unsigned int index) {

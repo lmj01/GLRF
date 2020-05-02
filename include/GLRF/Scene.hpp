@@ -43,7 +43,11 @@ public:
 	 * 
 	 * @param node the node of the object that will be added to the scene
 	 */
-	void addObject(SceneNode<SceneObject> node);
+	template <class T>
+	void addObject(SceneNode<T> node) {
+		static_assert(std::is_base_of<SceneObject, T>::value, "T must extend SceneObject");
+		this->objectNodes.push_back(node);
+	}
 
 	/**
 	 * @brief Adds a point lightsource to the scene.
