@@ -90,7 +90,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, bool value) const;
+	void setBool(const std::string& name, bool value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -98,7 +98,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, int value) const;
+	void setInt(const std::string& name, int value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -106,7 +106,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, unsigned int value) const;
+	void setUInt(const std::string& name, unsigned int value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -114,7 +114,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, float value) const;
+	void setFloat(const std::string& name, float value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -122,7 +122,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, glm::mat4 value) const;
+	void setMat4(const std::string& name, glm::mat4 value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -130,7 +130,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, glm::mat3 value) const;
+	void setMat3(const std::string& name, glm::mat3 value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -138,7 +138,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, glm::vec4 value) const;
+	void setVec4(const std::string& name, glm::vec4 value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -146,7 +146,7 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, glm::vec3 value) const;
+	void setVec3(const std::string& name, glm::vec3 value) const;
 
 	/**
 	 * @brief Sets the specified value for the specified, named variable in this Shader.
@@ -154,13 +154,15 @@ public:
 	 * @param name the name of the variable that will be set
 	 * @param value the new value for the variable
 	 */
-	void setValue(const std::string& name, glm::vec2 value) const;
+	void setVec2(const std::string& name, glm::vec2 value) const;
 
 	/**
 	 * @brief Sets the specified material property for the specified, named variable in this Shader.
 	 *
 	 * @param name the name of the material property that will be set
 	 * @param material_property the new material property for the variable
+	 * 
+	 * The 4-dimensional property will be set directly.
 	 */
 	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, size_t texture_unit);
 
@@ -169,6 +171,8 @@ public:
 	 *
 	 * @param name the name of the material property that will be set
 	 * @param material_property the new material property for the variable
+	 * 
+	 * The 3-dimensional property will be set as 4-dimensional with an additional value of 1 at the end.
 	 */
 	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, size_t texture_unit);
 
@@ -177,6 +181,8 @@ public:
 	 *
 	 * @param name the name of the material property that will be set
 	 * @param material_property the new material property for the variable
+	 * 
+	 * The 2-dimensional property will be set as 4-dimensional with two additional values of 1 at the end.
 	 */
 	void setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, size_t texture_unit);
 
@@ -185,6 +191,9 @@ public:
 	 *
 	 * @param name the name of the material property that will be set
 	 * @param material_property the new material property for the variable
+	 * 
+	 * The 1-dimensional property will be copied to a 3-dimensional value and set as 4-dimensional
+	 * with an additional value of 1 at the end.
 	 */
 	void setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, size_t texture_unit);
 
