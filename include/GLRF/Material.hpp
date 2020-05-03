@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <iterator>
 #include <map>
 #include <variant>
@@ -124,5 +125,5 @@ public:
 	 * 
 	 * @param textureUnitsBegin the first texture unit that is currently free
 	 */
-	void bindTextures(unsigned int textureUnitsBegin);
+	void bindTextures(GLuint textureUnitsBegin);
 };

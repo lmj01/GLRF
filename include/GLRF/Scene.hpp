@@ -39,25 +39,31 @@ public:
 	Scene();
 
 	/**
-	 * @brief Adds an object at the given position with the given rotation to the scene.
+	 * @brief Adds an object to the scene.
 	 * 
-	 * @param node the node of the object that will be added to the scene
+	 * @param object the object that will be added to the scene
 	 */
-	void addObject(SceneNode<SceneObject> node);
+	template <class T>
+	std::shared_ptr<SceneNode<SceneObject>> addObject(std::shared_ptr<T> object) {
+		static_assert(std::is_base_of<SceneObject, T>::value, "T must extend SceneObject");
+		std::shared_ptr<SceneNode<SceneObject>> node(new SceneNode<SceneObject>(object));
+		this->objectNodes.push_back(node);
+		return node;
+	}
 
 	/**
 	 * @brief Adds a point lightsource to the scene.
 	 * 
 	 * @param light the point lightsource that will be added to the scene
 	 */
-	void addObject(SceneNode<PointLight> light);
+	std::shared_ptr<SceneNode<PointLight>> addObject(std::shared_ptr<PointLight> light);
 
 	/**
 	 * @brief Adds a directional lightsource to the scene.
 	 * 
 	 * @param light the directional lightsource that will be added to the scene
 	 */
-	void addObject(SceneNode<DirectionalLight> light);
+	std::shared_ptr<SceneNode<DirectionalLight>> addObject(std::shared_ptr<DirectionalLight> light);
 
 	/**
 	 * @brief Adds a camera to the scene. The camera will not become active.
@@ -97,9 +103,9 @@ public:
 	 */
 	void processMouse(float xOffset, float yOffset);
 private:
-	std::vector<SceneNode<SceneObject>> objectNodes;
-	std::vector<SceneNode<PointLight>> pointLights;
-	std::vector<SceneNode<DirectionalLight>> directionalLights;
+	std::vector<std::shared_ptr<SceneNode<SceneObject>>> objectNodes;
+	std::vector<std::shared_ptr<SceneNode<PointLight>>> pointLights;
+	std::vector<std::shared_ptr<SceneNode<DirectionalLight>>> directionalLights;
 	std::vector<std::shared_ptr<Camera>> cameras;
 	std::shared_ptr<Camera> activeCamera;
 };

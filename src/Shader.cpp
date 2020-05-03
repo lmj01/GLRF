@@ -1,5 +1,9 @@
 #include <GLRF/Shader.hpp>
 
+#include <glm/gtx/string_cast.hpp>
+#define PRINT(text) std::cout << text << std::endl;
+#define PRINT_VAR(text, var) std::cout << text << " = " << var << std::endl;
+
 using namespace GLRF;
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource);
@@ -79,60 +83,72 @@ unsigned int Shader::getProgramID() {
 	return ID;
 }
 
-void Shader::setValue(const std::string & name, bool value) const {
+void Shader::setBool(const std::string & name, bool value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::setValue(const std::string & name, int value) const {
+void Shader::setInt(const std::string & name, GLint value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setValue(const std::string & name, unsigned int value) const {
+void Shader::setUInt(const std::string & name, GLuint value) const {
 	glUniform1ui(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setValue(const std::string & name, float value) const {
+void Shader::setFloat(const std::string & name, float value) const {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setValue(const std::string & name, glm::mat4 value) const {
+void Shader::setMat4(const std::string & name, glm::mat4 value) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::setValue(const std::string & name, glm::mat3 value) const {
+void Shader::setMat3(const std::string & name, glm::mat3 value) const {
 	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::setValue(const std::string & name, glm::vec4 value) const {
+void Shader::setVec4(const std::string & name, glm::vec4 value) const {
 	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
-void Shader::setValue(const std::string & name, glm::vec3 value) const {
+void Shader::setVec3(const std::string & name, glm::vec3 value) const {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
+void Shader::setVec2(const std::string& name, glm::vec2 value) const {
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, GLuint texture_unit) {
+	setVec4(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, GLuint texture_unit) {
+	setVec3(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, GLuint texture_unit) {
+	setVec2(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
+}
+
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, GLuint texture_unit) {
+	setFloat(name + period + value_default, material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
+}
+
 void Shader::setMaterial(const std::string & name, Material material) {
-	setValue(name + period + "albedo", material.albedo.value_default);
-	setValue(name + period + "roughness", material.roughness.value_default);
-	setValue(name + period + "metallic", material.metallic.value_default);
-	setValue(name + period + "ao", material.ao.value_default);
-	setValue(name + period + "height", material.height.value_default);
-	setValue(name + period + "useTextureAlbedo", material.albedo.texture.has_value());
-	setValue(name + period + "useTextureNormal", material.normal.texture.has_value());
-	setValue(name + period + "useTextureRoughness", material.roughness.texture.has_value());
-	setValue(name + period + "useTextureMetallic", material.metallic.texture.has_value());
-	setValue(name + period + "useTextureAo", material.ao.texture.has_value());
-	setValue(name + period + "useTextureHeight", material.height.texture.has_value());
-
-	setValue(name + period + "height_scale", material.height_scale);
-
 	material.bindTextures(0);
-	setValue(name + period + "textureAlbedo", 0);
-	setValue(name + period + "textureNormal", 1);
-	setValue(name + period + "textureRoughness", 2);
-	setValue(name + period + "textureMetallic", 3);
-	setValue(name + period + "textureAo", 4);
-	setValue(name + period + "textureHeight", 5);
+	setMaterialProperty(name + period + "albedo",		material.albedo,	0);
+	setMaterialProperty(name + period + "normal",		material.normal,	1);
+	setMaterialProperty(name + period + "roughness",	material.roughness, 2);
+	setMaterialProperty(name + period + "metallic",		material.metallic,	3);
+	setMaterialProperty(name + period + "ao",			material.ao,		4);
+	setMaterialProperty(name + period + "height",		material.height,	5);
+
+	setFloat(name + period + "height_scale", material.height_scale);
 }
 
 GLuint Shader::getFrameBuffer(unsigned int index) {

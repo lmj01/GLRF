@@ -34,10 +34,10 @@ void Texture::create(std::string library, std::string relativePath) {
 void Texture::load() {
 	std::string fullPath_string = this->library + this->relativePath;
 	const char * fullPath = (fullPath_string).data();
-	this->data = stbi_load(fullPath, &(this->width), &(this->height), &(this->nrChannels), STBI_rgb);
+	this->data = stbi_load(fullPath, &(this->width), &(this->height), &(this->nrChannels), STBI_rgb_alpha);
 
 	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, this->data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		this->successfullyLoaded = true;
 	} else {
