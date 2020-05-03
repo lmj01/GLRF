@@ -11,13 +11,15 @@ MaterialProperty<T>::MaterialProperty() {
 template<typename T>
 void MaterialProperty<T>::loadTexture(std::string library, std::string texture_name, std::string separator, std::string property_name, std::string fileType)
 {
-	this->texture = std::shared_ptr<Texture>(new Texture(library, texture_name + separator + property_name + period + fileType));
+	auto tmp = std::shared_ptr<Texture>(new Texture(library, texture_name + separator + property_name + period + fileType));
+	if (tmp->isSuccessfullyLoaded()) this->texture = tmp;
 }
 
 template<typename T>
 void MaterialProperty<T>::loadTexture(std::string texture_name, std::string separator, std::string property_name, std::string fileType)
 {
-	this->texture = std::shared_ptr<Texture>(new Texture(texture_name + separator + property_name + period + fileType));
+	auto tmp = std::shared_ptr<Texture>(new Texture(texture_name + separator + property_name + period + fileType));
+	if (tmp->isSuccessfullyLoaded()) this->texture = tmp;
 }
 
 Material::Material() {
@@ -56,7 +58,7 @@ void Material::loadTextures(std::string name, std::string separator, std::string
 	this->height.loadTexture(name, separator, "height", fileType);
 }
 
-void Material::bindTextures(unsigned int textureUnitsBegin)
+void Material::bindTextures(GLuint textureUnitsBegin)
 {
 	if (this->albedo.texture.has_value())		this->albedo.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin);
 	if (this->normal.texture.has_value())		this->normal.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 1);

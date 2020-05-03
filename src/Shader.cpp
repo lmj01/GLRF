@@ -1,5 +1,9 @@
 #include <GLRF/Shader.hpp>
 
+#include <glm/gtx/string_cast.hpp>
+#define PRINT(text) std::cout << text << std::endl;
+#define PRINT_VAR(text, var) std::cout << text << " = " << var << std::endl;
+
 using namespace GLRF;
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource);
@@ -83,11 +87,11 @@ void Shader::setBool(const std::string & name, bool value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::setInt(const std::string & name, int value) const {
+void Shader::setInt(const std::string & name, GLint value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setUInt(const std::string & name, unsigned int value) const {
+void Shader::setUInt(const std::string & name, GLuint value) const {
 	glUniform1ui(glGetUniformLocation(ID, name.c_str()), value);
 }
 
@@ -115,28 +119,24 @@ void Shader::setVec2(const std::string& name, glm::vec2 value) const {
 	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
-void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, size_t texture_unit) {
-	setVec4(name + period + value_default, material_property.value_default);
-	setBool(name + period + use_texture,	material_property.texture.has_value());
-	setUInt(name + period + texture,		static_cast<unsigned int>(texture_unit));
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec4> material_property, GLuint texture_unit) {
+	setVec4(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
 }
 
-void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, size_t texture_unit) {
-	setVec4(name + period + value_default, glm::vec4(material_property.value_default, 1.f));
-	setBool(name + period + use_texture, material_property.texture.has_value());
-	setUInt(name + period + texture, static_cast<unsigned int>(texture_unit));
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec3> material_property, GLuint texture_unit) {
+	setVec3(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
 }
 
-void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, size_t texture_unit) {
-	setVec4(name + period + value_default, glm::vec4(material_property.value_default, glm::vec2(1.f)));
-	setBool(name + period + use_texture, material_property.texture.has_value());
-	setUInt(name + period + texture, static_cast<unsigned int>(texture_unit));
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<glm::vec2> material_property, GLuint texture_unit) {
+	setVec2(name + period + value_default,	material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
 }
 
-void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, size_t texture_unit) {
-	setVec4(name + period + value_default, glm::vec4(glm::vec3(material_property.value_default), 1.f));
-	setBool(name + period + use_texture, material_property.texture.has_value());
-	setUInt(name + period + texture, static_cast<unsigned int>(texture_unit));
+void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float> material_property, GLuint texture_unit) {
+	setFloat(name + period + value_default, material_property.value_default);
+	setMaterialPropertyCommons(name, material_property, texture_unit);
 }
 
 void Shader::setMaterial(const std::string & name, Material material) {
