@@ -20,24 +20,25 @@ MeshData PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 di
 
 	glm::vec3 tangent = r;
 
-	for (unsigned int s = 0; s < steps; s++) {
-		for (unsigned int t = 0; t < steps; t++) {
+	unsigned int steps_vertices = steps + 1;
+	for (unsigned int s = 0; s < steps_vertices; s++) {
+		for (unsigned int t = 0; t < steps_vertices; t++) {
 			glm::vec3 p = start + next_row * static_cast<float>(s) + next_column * static_cast<float>(t);
 			glm::vec2 uv = glm::vec2((float) s, (float) t) * step_size_uv;
 			data.vertices.push_back(VertexFormat(p, normal, uv * uvScaling, tangent));
 		}
 	}
 
-	for (unsigned int s = 0; s < tesselation; s++) {
-		for (unsigned int t = 0; t < tesselation; t++) {
+	for (unsigned int s = 0; s < steps; s++) {
+		for (unsigned int t = 0; t < steps; t++) {
 			GLuint start_idx = steps * s + t;
 			data.indices.value().push_back(start_idx);
 			data.indices.value().push_back(start_idx + 1);
-			data.indices.value().push_back(start_idx + steps);
+			data.indices.value().push_back(start_idx + steps_vertices);
 
 			data.indices.value().push_back(start_idx + 1);
-			data.indices.value().push_back(start_idx + steps + 1);
-			data.indices.value().push_back(start_idx + steps);
+			data.indices.value().push_back(start_idx + steps_vertices + 1);
+			data.indices.value().push_back(start_idx + steps_vertices);
 		}
 	}
 
