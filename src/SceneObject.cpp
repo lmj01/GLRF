@@ -19,8 +19,8 @@ SceneMesh::SceneMesh(MeshData data, GLenum drawType, Material material) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexFormat) * this->data.vertices.size(), &this->data.vertices[0], drawType);
 
 	if (this->data.indices.has_value()) {
-		glBindBuffer(GL_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), &this->data.indices.value()[0], drawType);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), &this->data.indices.value()[0], drawType);
 	}
 
 	glEnableVertexAttribArray(0);
@@ -55,13 +55,13 @@ void SceneMesh::update(MeshData data, GLenum drawType) {
 	if (!this->data.indices.has_value() && data.indices.has_value()) {
 		// do not use indices -> use indices
 		this->data.indices = data.indices;
-		glBindBuffer(GL_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), &this->data.indices.value()[0], drawType);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), &this->data.indices.value()[0], drawType);
 	} else if (this->data.indices.has_value() && !data.indices.has_value()) {
 		// use indices -> do not use indices
 		this->data.indices = std::nullopt;
-		glBindBuffer(GL_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), NULL, drawType);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->data.indices.value().size(), NULL, drawType);
 	}
 }
 

@@ -5,12 +5,14 @@ using namespace GLRF;
 
 MeshData PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int  tesselation, float uvScaling) {
 	MeshData data;
-	unsigned int  steps = tesselation + 1;
+	unsigned int steps = tesselation + 1;
 	float step_size = tesselation ? side_length / steps : side_length;
 	float step_size_uv = 1.0f / (float)steps;
 	data.vertices = std::vector<VertexFormat>();
-	data.indices = std::nullopt;
-	data.vertices.reserve(static_cast<size_t>(steps) * static_cast<size_t>(steps) * static_cast<size_t>(6)); // 2 triangles per step in each dimension
+	data.indices = std::vector<GLuint>();
+	size_t steps_size_t = static_cast<size_t>(steps);
+	data.vertices.reserve(steps_size_t * steps_size_t); // #steps vertices per step in each dimension
+	data.indices.value().reserve(steps_size_t * steps_size_t * static_cast<size_t>(6)); // 2 triangles per step in each dimension
 	glm::vec3 r = glm::normalize(glm::cross(normal, direction));
 	glm::vec3 next_row = r * step_size;
 	glm::vec3 next_column = direction * step_size;
@@ -18,31 +20,25 @@ MeshData PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 di
 
 	glm::vec3 tangent = r;
 
-	glm::vec3 current_offset_row(0.0, 0.0, 0.0);
 	for (unsigned int s = 0; s < steps; s++) {
-		glm::vec3 current_offset_column(0.0, 0.0, 0.0);
 		for (unsigned int t = 0; t < steps; t++) {
-			glm::vec3 p1 = start + current_offset_row + current_offset_column;
-			glm::vec3 p2 = p1 + next_column;
-			glm::vec3 p3 = p1 + next_row;
-			glm::vec3 p4 = p3 + next_column;
-
-			glm::vec2 uv1 = glm::vec2((float) s, (float) t) * step_size_uv;
-			glm::vec2 uv2 = uv1 + glm::vec2(0.0f, step_size_uv);
-			glm::vec2 uv3 = uv1 + glm::vec2(step_size_uv, 0.0f);
-			glm::vec2 uv4 = uv3 + glm::vec2(0.0f, step_size_uv);
-
-			data.vertices.push_back(VertexFormat(p1, normal, uv1 * uvScaling, tangent));
-			data.vertices.push_back(VertexFormat(p2, normal, uv2 * uvScaling, tangent));
-			data.vertices.push_back(VertexFormat(p3, normal, uv3 * uvScaling, tangent));
-
-			data.vertices.push_back(VertexFormat(p3, normal, uv3 * uvScaling, tangent));
-			data.vertices.push_back(VertexFormat(p2, normal, uv2 * uvScaling, tangent));
-			data.vertices.push_back(VertexFormat(p4, normal, uv4 * uvScaling, tangent));
-
-			current_offset_column += next_column;
+			glm::vec3 p = start + next_row * static_cast<float>(s) + next_column * static_cast<float>(t);
+			glm::vec2 uv = glm::vec2((float) s, (float) t) * step_size_uv;
+			data.vertices.push_back(VertexFormat(p, normal, uv * uvScaling, tangent));
 		}
-		current_offset_row += next_row;
+	}
+
+	for (unsigned int s = 0; s < tesselation; s++) {
+		for (unsigned int t = 0; t < tesselation; t++) {
+			GLuint start_idx = steps * s + t;
+			data.indices.value().push_back(start_idx);
+			data.indices.value().push_back(start_idx + 1);
+			data.indices.value().push_back(start_idx + steps);
+
+			data.indices.value().push_back(start_idx + 1);
+			data.indices.value().push_back(start_idx + steps + 1);
+			data.indices.value().push_back(start_idx + steps);
+		}
 	}
 
 	return data;

@@ -93,7 +93,6 @@ public:
 	 */
 	void draw();
 private:
-	bool use_indices;
 	GLuint VBO, VAO, EBO;
 	GLenum drawType;
 	GLenum geometryType;
