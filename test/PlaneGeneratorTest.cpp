@@ -14,25 +14,30 @@ TEST (PlaneGeneration, SimplestParameters) {
     float side_length = 1;
     float uv_scaling = 1;
     unsigned int tesselation = 0;
-    std::vector<VertexFormat> result =
-        gen.create(c, n, d_1, side_length, tesselation, uv_scaling);
-    ASSERT_TRUE(result.size() == 6);
+    MeshData data = gen.create(c, n, d_1, side_length, tesselation, uv_scaling);
 
-    for (VertexFormat vertex : result) {
+    ASSERT_TRUE(data.vertices.size() == 4);
+    ASSERT_TRUE(data.indices.value().size() == 6);
+
+    for (VertexFormat vertex : data.vertices) {
         ASSERT_TRUE(vertex.normal == n);
     }
 
-    VertexFormat vertex = result.at(0);
+    VertexFormat vertex = data.vertices.at(0);
     ASSERT_TRUE(vertex.position == c - (d_1 + d_2) / 2.f);
     ASSERT_TRUE(vertex.uv == glm::vec2(0));
 
-    ASSERT_EQ(glm::length(result.at(1).position - result.at(0).position), 1);
-    ASSERT_EQ(glm::length(result.at(2).position - result.at(0).position), 1);
+    ASSERT_EQ(glm::length(data.vertices.at(data.indices.value().at(1)).position
+        - data.vertices.at(data.indices.value().at(0)).position), 1);
+    ASSERT_EQ(glm::length(data.vertices.at(data.indices.value().at(2)).position
+        - data.vertices.at(data.indices.value().at(0)).position), 1);
 
-    ASSERT_EQ(glm::length(result.at(1).position - result.at(5).position), 1);
-    ASSERT_EQ(glm::length(result.at(2).position - result.at(5).position), 1);
+    ASSERT_EQ(glm::length(data.vertices.at(data.indices.value().at(1)).position
+        - data.vertices.at(data.indices.value().at(4)).position), 1);
+    ASSERT_EQ(glm::length(data.vertices.at(data.indices.value().at(2)).position
+        - data.vertices.at(data.indices.value().at(4)).position), 1);
 
-    vertex = result.at(5);
+    vertex = data.vertices.at(3);
     ASSERT_TRUE(vertex.position == c + (d_1 + d_2) / 2.f);
     ASSERT_TRUE(vertex.uv == glm::vec2(1));
 }

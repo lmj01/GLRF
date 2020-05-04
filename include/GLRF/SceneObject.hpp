@@ -13,10 +13,16 @@
 #include <GLRF/IdManager.hpp>
 
 namespace GLRF {
+	struct MeshData;
 	class SceneObject;
 	class SceneMesh;
 	template <typename T> class SceneNode;
 }
+
+struct GLRF::MeshData {
+	std::vector<VertexFormat> vertices;
+	std::optional<std::vector<GLuint>> indices = std::nullopt;
+};
 
 /**
  * @brief A 3d object.
@@ -61,11 +67,10 @@ public:
 	 * @brief Construct a new SceneMesh object.
 	 * 
 	 * @param vertices the vertices that define the structure of the mesh
-	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered
-	 * @param geometryType the type of primitive that will be drawn (e.g. triangles) for the meshs vertices
+	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered - e.g. GL_STATIC_DRAW
 	 * @param material the material that defines the appearance of the mesh
 	 */
-	SceneMesh(std::vector<VertexFormat> vertices, GLenum drawType, GLenum geometryType, Material material = Material());
+	SceneMesh(MeshData data, GLenum drawType, Material material = Material());
 
 	/**
 	 * @brief Updates the vertex data and the draw type of the mesh.
@@ -73,14 +78,14 @@ public:
 	 * @param vertices the new vertices that will replace the old vertices
 	 * @param drawType the new value for the OpenGL draw type
 	 */
-	void update(std::vector<VertexFormat> vertices, GLenum drawType);
+	void update(MeshData data, GLenum drawType);
 
 	/**
 	 * @brief Updates the vertex data of the mesh.
 	 * 
 	 * @param vertices the new vertices that will replace the old vertices
 	 */
-	void update(std::vector<VertexFormat> vertices);
+	void update(MeshData data);
 
 	/**
 	 * @brief Draws the mesh with the current shader.
@@ -88,10 +93,10 @@ public:
 	 */
 	void draw();
 private:
-	GLuint VBO, VAO;
+	GLuint VBO, VAO, EBO;
 	GLenum drawType;
 	GLenum geometryType;
-	std::vector<VertexFormat> vertices;
+	MeshData data;
 };
 
 /**
