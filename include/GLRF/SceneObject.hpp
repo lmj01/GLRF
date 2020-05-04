@@ -21,7 +21,7 @@ namespace GLRF {
 
 struct GLRF::MeshData {
 	std::vector<VertexFormat> vertices;
-	std::optional<std::vector<GLuint>> indices;
+	std::optional<std::vector<GLuint>> indices = std::nullopt;
 };
 
 /**

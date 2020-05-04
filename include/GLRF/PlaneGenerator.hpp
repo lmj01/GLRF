@@ -4,6 +4,7 @@
 
 #include <GLRF/VertexFormat.hpp>
 #include <GLRF/VectorMath.hpp>
+#include <GLRF/SceneObject.hpp>
 
 namespace GLRF {
 	class PlaneGenerator;
@@ -26,5 +27,5 @@ public:
 	 * @param uvScaling a factor to modify the appearance through the use of textures (should be > 0, default is 1)
 	 * @return std::vector<VertexFormat> a vector containing all points (and their mappings) of the plane
 	 */
-	std::vector<VertexFormat> create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int tesselation, float uvScaling);
+	MeshData create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int tesselation, float uvScaling);
 };
