@@ -8,7 +8,7 @@ std::vector<VertexFormat> PlaneGenerator::create(glm::vec3 center, glm::vec3 nor
 	unsigned int  steps = tesselation + 1;
 	float step_size = tesselation ? side_length / steps : side_length;
 	float step_size_uv = 1.0f / (float)steps;
-	result.reserve(steps * steps * 6); // 2 triangles per step in each dimension
+	result.reserve(static_cast<size_t>(steps) * static_cast<size_t>(steps) * static_cast<size_t>(6)); // 2 triangles per step in each dimension
 	glm::vec3 r = glm::normalize(glm::cross(normal, direction));
 	glm::vec3 next_row = r * step_size;
 	glm::vec3 next_column = direction * step_size;
