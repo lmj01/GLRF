@@ -201,7 +201,7 @@ public:
 	 * @return glm::vec3 the model matrix
 	 */
 	glm::mat4 calculateModelMatrix() {
-		return glm::translate(this->rotation, this->position);
+		return glm::translate(glm::mat4(1.f), this->position) * this->rotation;
 	}
 private:
 	std::shared_ptr<T> object = nullptr;

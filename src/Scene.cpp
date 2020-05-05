@@ -41,6 +41,7 @@ void Scene::draw(Shader & shader) {
 	glm::mat4 view = this->activeCamera->getViewMatrix();
 	shader.setMat4("view", view);
 	shader.setVec3("camera_position", this->activeCamera->getPosition());
+	shader.setVec3("camera_view_dir", - this->activeCamera->getW());
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
 		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
