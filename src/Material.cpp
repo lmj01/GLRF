@@ -31,7 +31,7 @@ void MaterialProperty<T>::loadTexture(std::string texture_name, std::string sepa
 Material::Material() {
 	this->albedo = MaterialProperty<glm::vec3>(glm::vec3(1.f));
 	this->normal = MaterialProperty<glm::vec3>(glm::vec3(0.f, 0.f, 1.f));
-	this->roughness = MaterialProperty<float>(0.f);
+	this->roughness = MaterialProperty<float>(0.3f);
 	this->metallic = MaterialProperty<float>(0.f);
 	this->ao = MaterialProperty<float>(1.f);
 	this->height = MaterialProperty<float>(1.f);
