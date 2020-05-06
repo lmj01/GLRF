@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include <stdexcept>
 
 #include <glad/glad.h>
@@ -22,6 +23,26 @@ namespace GLRF {
 struct GLRF::MeshData {
 	std::vector<VertexFormat> vertices;
 	std::optional<std::vector<GLuint>> indices = std::nullopt;
+	void unionize(MeshData& other) {
+		size_t current_vertices_size = this->vertices.size();
+		size_t current_indices_size = this->indices.value().size();
+		size_t other_vertices_size = other.vertices.size();
+		size_t other_indices_size = other.indices.value().size();
+
+		bool this_has_indices = this->indices.has_value();
+		bool other_has_indices = other.indices.has_value();
+
+		if (this_has_indices == other_has_indices) {
+			this->vertices.reserve(current_vertices_size + other_vertices_size);
+			std::copy(other.vertices.begin(), other.vertices.end(), std::back_inserter(this->vertices));
+
+			if (this_has_indices && other_has_indices) {
+				this->indices.value().reserve(current_indices_size + other_indices_size);
+				std::transform(other.indices.value().begin(), other.indices.value().end(), std::back_inserter(this->indices.value()),
+					[current_vertices_size](GLuint x) -> GLuint { return x + current_vertices_size; });
+			}
+		}
+	}
 };
 
 /**

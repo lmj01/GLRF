@@ -42,6 +42,13 @@ public:
 	MaterialProperty();
 
 	/**
+	 * @brief Construct a new MaterialProperty object with the specified default value.
+	 * 
+	 * @param value_default the default value of the property
+	 */
+	MaterialProperty(T value_default);
+
+	/**
 	 * @brief Loads a texture into memory that will be used for this property.
 	 * 
 	 * @param library the path, where the texture is stored (relative to the executable) e.g. '../textures/')

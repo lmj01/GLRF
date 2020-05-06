@@ -25,11 +25,13 @@ void GLRF::calculateAndSetTangents(std::vector<VertexFormat> * vertices, GLenum 
 
 void GLRF::calculateAndSetTangents_GL_TRIANGLES(std::vector<VertexFormat> * vertices) {
 	for (unsigned int i = 0; i < vertices->size(); i += 3) {
-		glm::vec3 tangent = calculateTangent(vertices->at(i), vertices->at(i + 1), vertices->at(i + 2));
+		glm::vec3 tangent = calculateTangent(vertices->at(i),
+			vertices->at(static_cast<unsigned long long>(i) + 1),
+			vertices->at(static_cast<unsigned long long>(i) + 2));
 
-		vertices->at(i).tangent = tangent;
-		vertices->at(i + 1).tangent = tangent;
-		vertices->at(i + 2).tangent = tangent;
+		vertices->at(static_cast<unsigned long long>(i)).tangent = tangent;
+		vertices->at(static_cast<unsigned long long>(i) + 1).tangent = tangent;
+		vertices->at(static_cast<unsigned long long>(i) + 2).tangent = tangent;
 	}
 }
 
