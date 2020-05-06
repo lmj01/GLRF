@@ -162,7 +162,7 @@ public:
 	 * @param name the name of the material that will be set
 	 * @param material the new material for the variable
 	 */
-	void setMaterial(const std::string &name, Material material);
+	void setMaterial(const std::string &name, std::shared_ptr<Material> material);
 
 	/**
 	 * @brief Get the FrameBuffer object at the specified index.

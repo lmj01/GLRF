@@ -64,16 +64,16 @@ public:
 	 * 
 	 * @return Material the material of the object
 	 */
-	virtual Material getMaterial() { return this->material; }
+	virtual std::shared_ptr<Material> getMaterial() { return this->material; }
 
 	/**
 	 * @brief Sets the Material object.
 	 * 
 	 * @param material the new material for the object
 	 */
-	virtual void setMaterial(Material material) { this->material = material; }
+	virtual void setMaterial(std::shared_ptr<Material> material) { this->material = material; }
 private:
-	Material material;
+	std::shared_ptr<Material> material;
 };
 
 /**
@@ -91,7 +91,7 @@ public:
 	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered - e.g. GL_STATIC_DRAW
 	 * @param material the material that defines the appearance of the mesh
 	 */
-	SceneMesh(MeshData data, GLenum drawType, Material material = Material());
+	SceneMesh(MeshData data, GLenum drawType, std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material()));
 
 	/**
 	 * @brief Updates the vertex data and the draw type of the mesh.

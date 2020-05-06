@@ -139,16 +139,16 @@ void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float
 	setMaterialPropertyCommons(name, material_property, texture_unit);
 }
 
-void Shader::setMaterial(const std::string & name, Material material) {
-	material.bindTextures(0);
-	setMaterialProperty(name + period + "albedo",		material.albedo,	0);
-	setMaterialProperty(name + period + "normal",		material.normal,	1);
-	setMaterialProperty(name + period + "roughness",	material.roughness, 2);
-	setMaterialProperty(name + period + "metallic",		material.metallic,	3);
-	setMaterialProperty(name + period + "ao",			material.ao,		4);
-	setMaterialProperty(name + period + "height",		material.height,	5);
+void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> material) {
+	material->bindTextures(0);
+	setMaterialProperty(name + period + "albedo",		material->albedo,		0);
+	setMaterialProperty(name + period + "normal",		material->normal,		1);
+	setMaterialProperty(name + period + "roughness",	material->roughness,	2);
+	setMaterialProperty(name + period + "metallic",		material->metallic,		3);
+	setMaterialProperty(name + period + "ao",			material->ao,			4);
+	setMaterialProperty(name + period + "height",		material->height,		5);
 
-	setFloat(name + period + "height_scale", material.height_scale);
+	setFloat(name + period + "height_scale", material->height_scale);
 }
 
 GLuint Shader::getFrameBuffer(unsigned int index) {

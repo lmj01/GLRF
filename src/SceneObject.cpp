@@ -2,7 +2,7 @@
 
 using namespace GLRF;
 
-SceneMesh::SceneMesh(MeshData data, GLenum drawType, Material material) {
+SceneMesh::SceneMesh(MeshData data, GLenum drawType, std::shared_ptr<Material> material) {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
