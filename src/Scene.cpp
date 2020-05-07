@@ -51,7 +51,9 @@ void Scene::draw(Shader & shader) {
 	shader.setUInt("pointLight_count", static_cast<unsigned int>(this->pointLights.size()));
 
 	if (this->directionalLights.size() > 0) {
-		shader.setVec3("directionalLight_direction", this->directionalLights[0]->getObject()->getDirection());
+		glm::vec3 light_dir = glm::vec3(this->directionalLights[0]->calculateModelMatrix()
+			* glm::vec4(this->directionalLights[0]->getObject()->getDirection(), 0.f));
+		shader.setVec3("directionalLight_direction", light_dir);
 		shader.setFloat("directionalLight_power", this->directionalLights[0]->getObject()->getPower());
 		shader.setBool("useDirectionalLight", true);
 	} else {
