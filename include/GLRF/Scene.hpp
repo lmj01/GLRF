@@ -86,7 +86,7 @@ public:
 	 * 
 	 * @param shader the shader to draw the scenes objects with
 	 */
-	void draw(Shader & shader);
+	void draw(ShaderConfiguration * configuration);
 
 	/**
 	 * @brief Processes keyboard inputs for the scene.

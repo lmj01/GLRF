@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <map>
+#include <set>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -14,7 +16,9 @@
 namespace GLRF {
 	struct ScreenResolution;
 	struct ShaderOptions;
+	class ShaderConfiguration;
 	class Shader;
+	class ShaderManager;
 }
 
 /**
@@ -46,6 +50,36 @@ struct GLRF::ShaderOptions {
 	bool useMultipleFrameBuffers = false;
 	unsigned int texColorBufferAmount = 1;
 	ScreenResolution screenResolution;
+};
+
+class GLRF::ShaderConfiguration {
+public:
+	ShaderConfiguration();
+	~ShaderConfiguration();
+
+	void loadIntoShader(Shader * shader) const;
+
+	void setBool(const std::string& name, bool value);
+	void setInt(const std::string& name, GLint value);
+	void setUInt(const std::string& name, GLuint value);
+	void setFloat(const std::string& name, float value);
+	void setMat4(const std::string& name, glm::mat4 value);
+	void setMat3(const std::string& name, glm::mat3 value);
+	void setVec4(const std::string& name, glm::vec4 value);
+	void setVec3(const std::string& name, glm::vec3 value);
+	void setVec2(const std::string& name, glm::vec2 value);
+	void setMaterial(const std::string& name, std::shared_ptr<Material> material);
+private:
+	std::map<std::string, bool>			v_bool;
+	std::map<std::string, int>			v_int;
+	std::map<std::string, unsigned int> v_uint;
+	std::map<std::string, float>		v_float;
+	std::map<std::string, glm::mat4>	v_mat4;
+	std::map<std::string, glm::mat3>	v_mat3;
+	std::map<std::string, glm::vec4>	v_vec4;
+	std::map<std::string, glm::vec3>	v_vec3;
+	std::map<std::string, glm::vec2>	v_vec2;
+	std::map<std::string, std::shared_ptr<Material>> v_material;
 };
 
 /**
@@ -239,4 +273,32 @@ private:
 		setBool(name + period + use_texture, material_property.texture.has_value());
 		setInt(name + period + texture, texture_unit);
 	}
+};
+
+class GLRF::ShaderManager
+{
+public:
+	static ShaderManager& getInstance() {
+		static ShaderManager instance;
+		return instance;
+	}
+
+	~ShaderManager();
+
+	void registerShader(Shader * shader);
+
+	void useShader(GLuint ID);
+
+	void configureShader(ShaderConfiguration * configuration, GLuint ID);
+
+	void clearDrawConfigurations();
+
+	Shader * getShader(GLuint ID);
+private:
+	std::map<GLuint, Shader *> registered_shaders;
+	std::set<GLuint> configured_shaders;
+
+	ShaderManager();
+	ShaderManager(const ShaderManager&);
+	ShaderManager& operator = (const ShaderManager&);
 };

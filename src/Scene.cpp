@@ -37,37 +37,48 @@ void Scene::setActiveCamera(std::shared_ptr<Camera> camera) {
 	this->activeCamera = camera;
 }
 
-void Scene::draw(Shader & shader) {
+void Scene::draw(ShaderConfiguration * configuration) {
+	ShaderManager & shader_manager = ShaderManager::getInstance();
+	shader_manager.clearDrawConfigurations();
+
 	glm::mat4 view = this->activeCamera->getViewMatrix();
-	shader.setMat4("view", view);
-	shader.setVec3("camera_position", this->activeCamera->getPosition());
-	shader.setVec3("camera_view_dir", - this->activeCamera->getW());
+	configuration->setMat4("view", view);
+	configuration->setVec3("camera_position", this->activeCamera->getPosition());
+	configuration->setVec3("camera_view_dir", - this->activeCamera->getW());
 
 	for (unsigned int i = 0; i < this->pointLights.size(); i++) {
-		shader.setVec3("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
-		shader.setVec3("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getObject()->getColor());
-		shader.setFloat("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getObject()->getPower());
+		configuration->setVec3("pointLight_position[" + std::to_string(i) + "]", pointLights[i]->getPosition());
+		configuration->setVec3("pointLight_color[" + std::to_string(i) + "]", this->pointLights[i]->getObject()->getColor());
+		configuration->setFloat("pointLight_power[" + std::to_string(i) + "]", this->pointLights[i]->getObject()->getPower());
 	}
-	shader.setUInt("pointLight_count", static_cast<unsigned int>(this->pointLights.size()));
+	configuration->setUInt("pointLight_count", static_cast<unsigned int>(this->pointLights.size()));
 
 	if (this->directionalLights.size() > 0) {
 		glm::vec3 light_dir = glm::vec3(this->directionalLights[0]->calculateModelMatrix()
 			* glm::vec4(this->directionalLights[0]->getObject()->getDirection(), 0.f));
-		shader.setVec3("directionalLight_direction", light_dir);
-		shader.setFloat("directionalLight_power", this->directionalLights[0]->getObject()->getPower());
-		shader.setBool("useDirectionalLight", true);
+		configuration->setVec3("directionalLight_direction", light_dir);
+		configuration->setFloat("directionalLight_power", this->directionalLights[0]->getObject()->getPower());
+		configuration->setBool("useDirectionalLight", true);
 	} else {
-		shader.setBool("useDirectionalLight", false);
+		configuration->setBool("useDirectionalLight", false);
 	}
 
 	for (unsigned int i = 0; i < this->objectNodes.size(); i++) {
+		auto obj = this->objectNodes[i]->getObject();
+		auto shader = shader_manager.getShader(obj->getShaderID());
+
+		// check if object-unspecific values have been loaded into the internal shader
+		// if not, do so now
+		obj->configureShader(configuration);
+
+		// load object-specific values into the internal shader
 		glm::mat4 modelMat = this->objectNodes[i]->calculateModelMatrix();
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-		shader.setMat4("model", modelMat);
-		shader.setMat3("model_normal", modelNormalMat);
-		shader.setMaterial("material", this->objectNodes[i]->getObject()->getMaterial());
+		shader->setMat4("model", modelMat);
+		shader->setMat3("model_normal", modelNormalMat);
+		shader->setMaterial("material", obj->getMaterial());
 
-		this->objectNodes[i]->getObject()->draw();
+		obj->draw();
 	}
 }
 

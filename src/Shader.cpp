@@ -8,6 +8,111 @@ using namespace GLRF;
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource);
 
+ShaderConfiguration::ShaderConfiguration()
+{
+	
+}
+
+ShaderConfiguration::~ShaderConfiguration()
+{
+
+}
+
+void ShaderConfiguration::loadIntoShader(Shader * shader) const
+{
+	for (auto pair : this->v_bool)
+	{
+		shader->setBool(pair.first, pair.second);
+	}
+	for (auto pair : this->v_int)
+	{
+		shader->setInt(pair.first, pair.second);
+	}
+	for (auto pair : this->v_uint)
+	{
+		shader->setUInt(pair.first, pair.second);
+	}
+	for (auto pair : this->v_float)
+	{
+		shader->setFloat(pair.first, pair.second);
+	}
+	for (auto pair : this->v_mat4)
+	{
+		shader->setMat4(pair.first, pair.second);
+	}
+	for (auto pair : this->v_mat3)
+	{
+		shader->setMat3(pair.first, pair.second);
+	}
+	for (auto pair : this->v_vec4)
+	{
+		shader->setVec4(pair.first, pair.second);
+	}
+	for (auto pair : this->v_vec3)
+	{
+		shader->setVec3(pair.first, pair.second);
+	}
+	for (auto pair : this->v_vec2)
+	{
+		shader->setVec2(pair.first, pair.second);
+	}
+	for (auto pair : this->v_material)
+	{
+		shader->setMaterial(pair.first, pair.second);
+	}
+}
+
+void ShaderConfiguration::setBool(const std::string& name, bool value)
+{
+	this->v_bool.insert({ name, value });
+}
+
+void ShaderConfiguration::setInt(const std::string& name, GLint value)
+{
+	this->v_int.insert({ name, value });
+}
+
+void ShaderConfiguration::setUInt(const std::string & name, GLuint value)
+{
+	this->v_uint.insert({ name, value });
+}
+
+void ShaderConfiguration::setFloat(const std::string & name, float value)
+{
+	this->v_float.insert({ name, value });
+}
+
+void ShaderConfiguration::setMat4(const std::string & name, glm::mat4 value)
+{
+	this->v_mat4.insert({ name, value });
+}
+
+void ShaderConfiguration::setMat3(const std::string & name, glm::mat3 value)
+{
+	this->v_mat3.insert({ name, value });
+}
+
+void ShaderConfiguration::setVec4(const std::string & name, glm::vec4 value)
+{
+	this->v_vec4.insert({ name, value });
+}
+
+void ShaderConfiguration::setVec3(const std::string & name, glm::vec3 value)
+{
+	this->v_vec3.insert({ name, value });
+}
+
+void ShaderConfiguration::setVec2(const std::string & name, glm::vec2 value)
+{
+	this->v_vec2.insert({ name, value });
+}
+
+void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<Material> material)
+{
+	this->v_material.insert({ name, material });
+}
+
+
 Shader::Shader(const std::string shaderLib, const std::string vertexPath, const std::string fragmentPath, ShaderOptions shaderOptions) {
 	// 1. retrieve the vertex/fragment source code from filePath
 	std::string vertexLibPath = shaderLib + vertexPath;
@@ -73,6 +178,9 @@ Shader::Shader(const std::string shaderLib, const std::string vertexPath, const 
 	this->shaderOptions = shaderOptions;
 	if (this->shaderOptions.useMultipleFrameBuffers) this->shaderOptions.useFrameBuffer = true;
 	if (shaderOptions.useFrameBuffer) setUpFrameBuffer();
+
+	// ======= REGISTER SHADER ======= //
+	ShaderManager::getInstance().registerShader(this);
 }
 
 void Shader::use() {
@@ -225,4 +333,47 @@ unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {
 	}
 
 	return shader;
+}
+
+ShaderManager::ShaderManager()
+{
+
+}
+
+ShaderManager::~ShaderManager()
+{
+
+}
+
+void ShaderManager::registerShader(Shader * shader)
+{
+	this->registered_shaders.insert_or_assign(shader->ID, shader);
+}
+
+void ShaderManager::useShader(GLuint ID)
+{
+	getShader(ID)->use();
+}
+
+void ShaderManager::configureShader(ShaderConfiguration * configuration, GLuint ID)
+{
+	if (this->configured_shaders.find(ID) == this->configured_shaders.end())
+	{
+		auto it = this->registered_shaders.find(ID);
+		if (it == this->registered_shaders.end())
+		{
+			throw std::invalid_argument("shader was used but never registered");
+		}
+		configuration->loadIntoShader(it->second);
+	}
+}
+
+void ShaderManager::clearDrawConfigurations()
+{
+	this->configured_shaders.clear();
+}
+
+Shader * ShaderManager::getShader(GLuint ID)
+{
+	return this->registered_shaders.find(ID)->second;
 }

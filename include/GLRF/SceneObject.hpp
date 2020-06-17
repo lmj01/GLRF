@@ -12,6 +12,7 @@
 #include <GLRF/VertexFormat.hpp>
 #include <GLRF/Material.hpp>
 #include <GLRF/IdManager.hpp>
+#include <GLRF/Shader.hpp>
 
 namespace GLRF {
 	struct MeshData;
@@ -53,6 +54,25 @@ struct GLRF::MeshData {
  */
 class GLRF::SceneObject {
 public:
+	void setShaderID(GLuint ID)
+	{
+		this->ID = ID;
+	}
+
+	GLuint getShaderID()
+	{
+		return this->ID;
+	}
+
+
+	void configureShader(ShaderConfiguration * configuration)
+	{
+		GLuint shader_id = this->getShaderID();
+		ShaderManager& shader_manager = ShaderManager::getInstance();
+		shader_manager.configureShader(configuration, shader_id);
+		shader_manager.useShader(shader_id);
+	}
+
 	/**
 	 * @brief Draws the object with the current shader.
 	 * 
@@ -72,8 +92,10 @@ public:
 	 * @param material the new material for the object
 	 */
 	virtual void setMaterial(std::shared_ptr<Material> material) { this->material = material; }
+
 private:
 	std::shared_ptr<Material> material;
+	GLuint ID = 0;
 };
 
 /**
@@ -113,6 +135,7 @@ public:
 	 * 
 	 */
 	void draw();
+
 private:
 	GLuint VBO, VAO, EBO;
 	GLenum drawType;
