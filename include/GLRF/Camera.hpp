@@ -1,10 +1,16 @@
 #pragma once
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+#include <cmath>
+
 #include <glad/glad.h>
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <GLRF/VectorMath.hpp>
+#include <GLRF/MathUtil.hpp>
 
 namespace GLRF {
 	class Camera;
@@ -83,12 +89,54 @@ public:
 	 * @return glm::vec3 the camera-relative direction pointing upwards
 	 */
 	glm::vec3 getV();
+
+	/**
+	 * @brief Sets the limit for the pitch of the camera.
+	 * Negative values default the limit to pi/2.
+	 * Values get clamped at pi/2.
+	 * 
+	 * @param limit the angle in radians
+	 */
+	void setPitchLimit(float limit);
+
+	/**
+	 * @brief Sets the limit for the yaw of the camera.
+	 * Negative values deactivate the limit.
+	 *
+	 * @param limit the angle in radians
+	 */
+	void setYawLimit(float limit);
 private:
-	glm::vec3 position, upVector, w;
+	glm::vec3 position, up_vector, w, ref_x, ref_z;
 	float pitch = 0.f;
 	float yaw = 0.f;
-	const float sensitivity_factor_rotation = 0.05f;
-	const float sensitivity_factor_translation = 0.1f;
-	float sensitivity_rotation;
-	float sensitivity_translation;
+	float pitch_limit;
+	float yaw_limit;
+	static const float LIMIT_EPSILON;
+	static const float LIMIT_PITCH_MAX;
+	static const float SENSITIVITY_ROTATION;
+	static const float SENSITIVITY_TRANSLATION;
+
+	/**
+	 * @brief Sets the pitch of the camera to the given value and returns the previous pitch angle.
+	 * If a limit has been defined, clamp to limit range.
+	 *
+	 * @param pitch the pitch angle in radians
+	 * @return previous_pitch the previous value of the pitch angle in radians
+	 */
+	float setPitch(float pitch);
+
+	/**
+	 * @brief Sets the yaw of the camera to the given value and returns the previous yaw angle.
+	 * If a limit has been defined, clamp to limit range.
+	 *
+	 * @param yaw the yaw angle in radians
+	 * @return previous_yaw the previous value of the yaw angle in radians
+	 */
+	float setYaw(float yaw);
+
+	/**
+	 * @brief Builds a new w-vector from the current pitch and yaw angles.
+	 */
+	void buildW();
 };
