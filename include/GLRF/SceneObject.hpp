@@ -21,7 +21,11 @@ namespace GLRF {
 	template <typename T> class SceneNode;
 }
 
-struct GLRF::MeshData {
+class GLRF::MeshData {
+public:
+	MeshData();
+	~MeshData();
+
 	std::vector<VertexFormat> vertices;
 	std::optional<std::vector<GLuint>> indices = std::nullopt;
 	void unionize(MeshData& other) {
@@ -44,6 +48,7 @@ struct GLRF::MeshData {
 			}
 		}
 	}
+private:
 };
 
 /**
@@ -113,7 +118,9 @@ public:
 	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered - e.g. GL_STATIC_DRAW
 	 * @param material the material that defines the appearance of the mesh
 	 */
-	SceneMesh(MeshData data, GLenum drawType, std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material()));
+	SceneMesh(std::shared_ptr<MeshData> data, GLenum drawType, std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material()));
+
+	~SceneMesh();
 
 	/**
 	 * @brief Updates the vertex data and the draw type of the mesh.
@@ -121,14 +128,14 @@ public:
 	 * @param vertices the new vertices that will replace the old vertices
 	 * @param drawType the new value for the OpenGL draw type
 	 */
-	void update(MeshData data, GLenum drawType);
+	void update(std::shared_ptr<MeshData> data, GLenum drawType);
 
 	/**
 	 * @brief Updates the vertex data of the mesh.
 	 * 
 	 * @param vertices the new vertices that will replace the old vertices
 	 */
-	void update(MeshData data);
+	void update(std::shared_ptr<MeshData> data);
 
 	/**
 	 * @brief Draws the mesh with the current shader.
@@ -140,7 +147,7 @@ private:
 	GLuint VBO, VAO, EBO;
 	GLenum drawType;
 	GLenum geometryType;
-	MeshData data;
+	std::shared_ptr<MeshData> data;
 };
 
 /**
