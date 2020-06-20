@@ -12,30 +12,14 @@
 #include <iostream>
 
 #include <GLRF/Material.hpp>
+#include <GLRF/FrameBuffer.hpp>
 
 namespace GLRF {
-	struct ScreenResolution;
 	struct ShaderOptions;
 	class ShaderConfiguration;
 	class Shader;
 	class ShaderManager;
 }
-
-/**
- * @brief A screen resolution consisting of width and height parameters.
- * 
- */
-struct GLRF::ScreenResolution {
-	unsigned int width = 800;
-	unsigned int height = 600;
-	ScreenResolution(unsigned int width, unsigned int height) {
-		this->width = width;
-		this->height = height;
-	}
-	ScreenResolution() {
-		ScreenResolution(800, 600);
-	}
-};
 
 /**
  * @brief Options for a Shader that specify its behaviour.
@@ -93,15 +77,17 @@ public:
 	/**
 	 * @brief Construct a new Shader object.
 	 * 
-	 * @param shaderLib the relative path to a collection of shaders
-	 * @param vertexPath the relative path to the GLSL vertex shader
-	 * @param fragmentPath the relative path to the GLSL fragment shader
-	 * @param shaderOptions the options that modify the behaviour of the shader
+	 * @param shader_lib the relative path to a collection of shaders
+	 * @param vertex_path the relative path to the GLSL vertex shader
+	 * @param geometry_path the relative path to the GLSL geometry shader
+	 * @param fragment_path the relative path to the GLSL fragment shader
+	 * @param shader_options the options that modify the behaviour of the shader
 	 * 
 	 * Creates a new Shader from the specified library path and sub-paths to the vertex and fragment shader files.
 	 * Takes shader options as input to configure itself.
 	 */
-	Shader(const std::string shaderLib, const std::string vertexPath, const std::string fragmentPath, ShaderOptions shaderOptions);
+	Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
+		const std::string fragment_path, ShaderOptions shader_options);
 
 	/**
 	 * @brief Returns the shader-program identifier.
@@ -197,15 +183,7 @@ public:
 	 * @param index the position of the FrameBuffer
 	 * @return GLuint the number that refers to the OpenGL unit associated with the FrameBuffer
 	 */
-	GLuint getFrameBuffer(unsigned int index);
-
-	/**
-	 * @brief Get the ColorBuffer object at the specified index.
-	 * 
-	 * @param index the position of the ColorBuffer
-	 * @return GLuint the number that refers to the OpenGL unit associated with the ColorBuffer
-	 */
-	GLuint getColorBuffer(unsigned int index);
+	std::shared_ptr<FrameBuffer> getFrameBuffer(unsigned int index);
 private:
 	static const char period = '.';
 	const std::string value_default = "value_default";
@@ -214,7 +192,7 @@ private:
 	static const unsigned int MAX_FRAMEBUFFERS = 16;
 	GLuint ID;
 	GLuint depthBuffer = 0;
-	std::vector<GLuint> frameBuffers, texColorBuffers;
+	std::vector<std::shared_ptr<FrameBuffer>> framebuffers;
 
 	void setUpFrameBuffer();
 

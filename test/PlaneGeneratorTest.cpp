@@ -17,6 +17,7 @@ TEST (PlaneGeneration, SimplestParameters) {
     auto data = gen.create(c, n, d_1, side_length, tesselation, uv_scaling);
 
     ASSERT_TRUE(data->vertices.size() == 4);
+    ASSERT_TRUE(data->indices.has_value());
     ASSERT_TRUE(data->indices.value().size() == 6);
 
     for (VertexFormat vertex : data->vertices) {
@@ -27,15 +28,11 @@ TEST (PlaneGeneration, SimplestParameters) {
     ASSERT_TRUE(vertex.position == c - (d_1 + d_2) / 2.f);
     ASSERT_TRUE(vertex.uv == glm::vec2(0));
 
-    ASSERT_EQ(glm::length(data->vertices.at(data->indices.value().at(1)).position
-        - data->vertices.at(data->indices.value().at(0)).position), 1);
-    ASSERT_EQ(glm::length(data->vertices.at(data->indices.value().at(2)).position
-        - data->vertices.at(data->indices.value().at(0)).position), 1);
-
-    ASSERT_EQ(glm::length(data->vertices.at(data->indices.value().at(1)).position
-        - data->vertices.at(data->indices.value().at(4)).position), 1);
-    ASSERT_EQ(glm::length(data->vertices.at(data->indices.value().at(2)).position
-        - data->vertices.at(data->indices.value().at(4)).position), 1);
+    glm::vec3 sum_vec = glm::vec3(0.f);
+    for (VertexFormat vertex : data->vertices) {
+        sum_vec += vertex.position - c;
+    }
+    ASSERT_TRUE(glm::length(sum_vec) < FLT_EPSILON);
 
     vertex = data->vertices.at(3);
     ASSERT_TRUE(vertex.position == c + (d_1 + d_2) / 2.f);

@@ -122,39 +122,43 @@ void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<
 }
 
 
-Shader::Shader(const std::string shaderLib, const std::string vertexPath, const std::string fragmentPath, ShaderOptions shaderOptions) {
-	// 1. retrieve the vertex/fragment source code from filePath
-	std::string vertexLibPath = shaderLib + vertexPath;
-	std::string fragmentLibPath = shaderLib + fragmentPath;
-	std::string vertexCode;
-	std::string fragmentCode;
-	std::ifstream vShaderFile;
-	std::ifstream fShaderFile;
+Shader::Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
+		const std::string fragment_path, ShaderOptions shader_options)
+{
+	bool has_geometry_shader = geometry_path.has_value();
+	// 1. retrieve the GLSL source code from paths
+	std::string vertex_lib_path = shader_lib + vertex_path;
+	//std::string geometry_lib_path = shader_lib + geometry_path.value();
+	std::string fragment_lib_path = shader_lib + fragment_path;
+	std::string vertex_code;
+	std::string fragment_code;
+	std::ifstream vertex_file;
+	std::ifstream fragment_file;
 	// ensure ifstream objects can throw exceptions:
-	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	vertex_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	fragment_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	try
 	{
 		// open files
-		vShaderFile.open(vertexLibPath);
-		fShaderFile.open(fragmentLibPath);
+		vertex_file.open(vertex_lib_path);
+		fragment_file.open(fragment_lib_path);
 		std::stringstream vShaderStream, fShaderStream;
 		// read file's buffer contents into streams
-		vShaderStream << vShaderFile.rdbuf();
-		fShaderStream << fShaderFile.rdbuf();
+		vShaderStream << vertex_file.rdbuf();
+		fShaderStream << fragment_file.rdbuf();
 		// close file handlers
-		vShaderFile.close();
-		fShaderFile.close();
+		vertex_file.close();
+		fragment_file.close();
 		// convert stream into string
-		vertexCode = vShaderStream.str();
-		fragmentCode = fShaderStream.str();
+		vertex_code = vShaderStream.str();
+		fragment_code = fShaderStream.str();
 	}
 	catch (std::ifstream::failure e)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	}
-	const char* vShaderCode = vertexCode.c_str();
-	const char* fShaderCode = fragmentCode.c_str();
+	const char* vShaderCode = vertex_code.c_str();
+	const char* fShaderCode = fragment_code.c_str();
 
 	// 2. compile shaders
 	unsigned int vertex, fragment;
@@ -264,62 +268,25 @@ void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> mat
 	setFloat(name + period + "height_scale", material->height_scale);
 }
 
-GLuint Shader::getFrameBuffer(unsigned int index) {
-	return this->frameBuffers[index];
-}
-
-GLuint Shader::getColorBuffer(unsigned int index) {
-	return this->texColorBuffers[index];
+std::shared_ptr<FrameBuffer> Shader::getFrameBuffer(unsigned int index) {
+	return this->framebuffers[index];
 }
 
 void Shader::setUpFrameBuffer() {
-	const bool useMultipleFrameBuffers = this->shaderOptions.useMultipleFrameBuffers;
 	const unsigned int bufferAmount = this->shaderOptions.texColorBufferAmount;
-	this->frameBuffers.resize(bufferAmount);
-	this->texColorBuffers.resize(bufferAmount);
-	glGenFramebuffers(useMultipleFrameBuffers ? bufferAmount : 1, &(this->frameBuffers[0]));
-	glGenTextures(bufferAmount, &(this->texColorBuffers[0]));
-	if (!useMultipleFrameBuffers) glBindFramebuffer(GL_FRAMEBUFFER, this->frameBuffers[0]);
+	this->framebuffers.reserve(bufferAmount);
 
-	const unsigned int screenWidth = this->shaderOptions.screenResolution.width;
-	const unsigned int screenHeight = this->shaderOptions.screenResolution.height;
-
-	std::vector<GLenum> attachments;
-	attachments.reserve(useMultipleFrameBuffers ? bufferAmount : 1);
-
-	GLenum internalformat = GL_RGB;
-	GLenum type = GL_UNSIGNED_BYTE;
+	FrameBufferConfiguration fb_config;
 	if (this->shaderOptions.isFrameBufferHDR) {
-		internalformat = GL_RGB16F;
-		type = GL_FLOAT;
+		fb_config.color_profile = GL_RGB16F;
+		fb_config.data_type = GL_FLOAT;
 	}
+	fb_config.use_render_buffer = this->shaderOptions.useDepthBuffer;
 
 	for (unsigned int i = 0; i < bufferAmount; i++) {
-		if (useMultipleFrameBuffers) glBindFramebuffer(GL_FRAMEBUFFER, this->frameBuffers[i]);
-		glBindTexture(GL_TEXTURE_2D, this->texColorBuffers[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, internalformat, screenWidth, screenHeight, 0, GL_RGB, type, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		
-		glFramebufferTexture2D(GL_FRAMEBUFFER, useMultipleFrameBuffers ? GL_COLOR_ATTACHMENT0 : GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, this->texColorBuffers[i], 0);
-		if (!useMultipleFrameBuffers) attachments.push_back(GL_COLOR_ATTACHMENT0 + i);
+		this->framebuffers.push_back(std::shared_ptr<FrameBuffer>(
+			new FrameBuffer(fb_config, shaderOptions.screenResolution)));
 	}
-
-	if (this->shaderOptions.useDepthBuffer) {
-		glGenRenderbuffers(1, &(this->depthBuffer));
-		glBindRenderbuffer(GL_RENDERBUFFER, this->depthBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, screenWidth, screenHeight);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->depthBuffer);
-
-		glDrawBuffers(bufferAmount, attachments.data());
-	}
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "Framebuffer not complete!" << std::endl;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {
