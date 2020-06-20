@@ -80,12 +80,12 @@ float Camera::setYaw(float yaw)
 
 void Camera::buildW()
 {
-	float cos_pitch = cos(this->pitch);
-	float sin_pitch = sin(this->pitch);
+	float cos_pitch = glm::cos(this->pitch);
+	float sin_pitch = glm::sin(this->pitch);
 
-	this->w = cos_pitch * cos(this->yaw) * this->ref_x
+	this->w = cos_pitch * glm::cos(this->yaw) * this->ref_x
 		+ sin_pitch * this->up_vector
-		+ cos_pitch * sin(this->yaw) * this->ref_z;
+		+ cos_pitch * glm::sin(this->yaw) * this->ref_z;
 }
 
 void Camera::setPitchLimit(float limit)

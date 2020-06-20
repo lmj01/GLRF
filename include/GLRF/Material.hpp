@@ -1,10 +1,10 @@
 #pragma once
-#include <memory>
+#include <glm/glm.hpp>
 #include <iterator>
 #include <map>
 #include <variant>
 #include <optional>
-#include <glm/glm.hpp>
+#include <memory>
 
 #include <GLRF/Texture.hpp>
 
