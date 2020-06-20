@@ -105,12 +105,6 @@ public:
 	Shader(const std::string shaderLib, const std::string vertexPath, const std::string fragmentPath, ShaderOptions shaderOptions);
 
 	/**
-	 * @brief Activates the shader for rendering.
-	 * 
-	 */
-	void use();
-
-	/**
 	 * @brief Returns the shader-program identifier.
 	 * 
 	 */
@@ -297,6 +291,7 @@ public:
 private:
 	std::map<GLuint, Shader *> registered_shaders;
 	std::set<GLuint> configured_shaders;
+	GLuint activeShaderID;
 
 	ShaderManager();
 	ShaderManager(const ShaderManager&);

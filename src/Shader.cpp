@@ -183,10 +183,6 @@ Shader::Shader(const std::string shaderLib, const std::string vertexPath, const 
 	ShaderManager::getInstance().registerShader(this);
 }
 
-void Shader::use() {
-	glUseProgram(ID);
-}
-
 unsigned int Shader::getProgramID() {
 	return ID;
 }
@@ -352,7 +348,11 @@ void ShaderManager::registerShader(Shader * shader)
 
 void ShaderManager::useShader(GLuint ID)
 {
-	getShader(ID)->use();
+	if (this->activeShaderID != ID)
+	{
+		glUseProgram(ID);
+		this->activeShaderID = ID;
+	}
 }
 
 void ShaderManager::configureShader(ShaderConfiguration * configuration, GLuint ID)
