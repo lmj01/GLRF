@@ -15,7 +15,16 @@ ShaderConfiguration::ShaderConfiguration()
 
 ShaderConfiguration::~ShaderConfiguration()
 {
-
+	this->v_bool.clear();
+	this->v_float.clear();
+	this->v_int.clear();
+	this->v_uint.clear();
+	this->v_mat4.clear();
+	this->v_mat3.clear();
+	this->v_vec4.clear();
+	this->v_vec3.clear();
+	this->v_vec2.clear();
+	this->v_material.clear();
 }
 
 void ShaderConfiguration::loadIntoShader(Shader * shader) const
@@ -183,8 +192,8 @@ Shader::Shader(const std::string shaderLib, const std::string vertexPath, const 
 	ShaderManager::getInstance().registerShader(this);
 }
 
-unsigned int Shader::getProgramID() {
-	return ID;
+unsigned int Shader::getID() {
+	return this->ID;
 }
 
 void Shader::setBool(const std::string & name, bool value) const {
@@ -343,7 +352,7 @@ ShaderManager::~ShaderManager()
 
 void ShaderManager::registerShader(Shader * shader)
 {
-	this->registered_shaders.insert_or_assign(shader->ID, shader);
+	this->registered_shaders.insert_or_assign(shader->getID(), shader);
 }
 
 void ShaderManager::useShader(GLuint ID)

@@ -88,7 +88,6 @@ private:
  */
 class GLRF::Shader {
 public:
-	GLuint ID;
 	ShaderOptions shaderOptions;
 
 	/**
@@ -108,7 +107,7 @@ public:
 	 * @brief Returns the shader-program identifier.
 	 * 
 	 */
-	unsigned int getProgramID();
+	unsigned int getID();
 
 	// === utility uniform functions ===
 
@@ -213,6 +212,7 @@ private:
 	const std::string use_texture = "use_texture";
 	const std::string texture = "texture";
 	static const unsigned int MAX_FRAMEBUFFERS = 16;
+	GLuint ID;
 	GLuint depthBuffer = 0;
 	std::vector<GLuint> frameBuffers, texColorBuffers;
 
@@ -291,7 +291,7 @@ public:
 private:
 	std::map<GLuint, Shader *> registered_shaders;
 	std::set<GLuint> configured_shaders;
-	GLuint activeShaderID;
+	GLuint activeShaderID = 0;
 
 	ShaderManager();
 	ShaderManager(const ShaderManager&);
