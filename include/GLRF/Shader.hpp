@@ -21,16 +21,6 @@ namespace GLRF {
 	class ShaderManager;
 }
 
-/**
- * @brief Options for a Shader that specify its behaviour.
- * 
- * Core aspects are screen resolution, buffers, HDR and post-processing effects.
- */
-struct GLRF::ShaderOptions {
-	bool isOneDimensionalFilterKernel = false;
-	ScreenResolution screenResolution;
-};
-
 class GLRF::ShaderConfiguration {
 public:
 	ShaderConfiguration();
@@ -67,8 +57,6 @@ private:
  */
 class GLRF::Shader {
 public:
-	ShaderOptions shaderOptions;
-
 	/**
 	 * @brief Construct a new Shader object.
 	 * 
@@ -82,7 +70,7 @@ public:
 	 * Takes shader options as input to configure itself.
 	 */
 	Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
-		const std::string fragment_path, ShaderOptions shader_options);
+		const std::string fragment_path);
 
 	/**
 	 * @brief Returns the shader-program identifier.

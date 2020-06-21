@@ -123,7 +123,7 @@ void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<
 
 
 Shader::Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
-		const std::string fragment_path, ShaderOptions shader_options)
+		const std::string fragment_path)
 {
 	bool has_geometry_shader = geometry_path.has_value();
 	// 1. retrieve the GLSL source code from paths
@@ -187,8 +187,6 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	// delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
-
-	this->shaderOptions = shader_options;
 
 	// ======= REGISTER SHADER ======= //
 	ShaderManager::getInstance().registerShader(this);
