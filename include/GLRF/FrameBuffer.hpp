@@ -43,8 +43,9 @@ public:
 
     void use();
     GLuint getID();
+    GLuint getColorBufferID();
 private:
     GLuint ID;
-    GLuint texture_ID;
+    GLuint texture_color_buffer_ID;
     std::optional<GLuint> RBO = std::nullopt;
 };

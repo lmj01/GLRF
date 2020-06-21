@@ -7,14 +7,14 @@ FrameBuffer::FrameBuffer(FrameBufferConfiguration & config, ScreenResolution & s
     glGenFramebuffers(1, &(this->ID));
     glBindFramebuffer(GL_FRAMEBUFFER, this->ID);
 
-    glGenTextures(1, &(this->texture_ID));
-    glBindTexture(GL_TEXTURE_2D, this->texture_ID);
+    glGenTextures(1, &(this->texture_color_buffer_ID));
+    glBindTexture(GL_TEXTURE_2D, this->texture_color_buffer_ID);
     glTexImage2D(GL_TEXTURE_2D, 0, config.color_profile, screen_res.width, screen_res.height, 0, config.color_type, config.data_type, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->texture_ID, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->texture_color_buffer_ID, 0);
 
     if (config.use_render_buffer)
     {
@@ -39,7 +39,7 @@ FrameBuffer::FrameBuffer(FrameBufferConfiguration & config, ScreenResolution & s
 FrameBuffer::~FrameBuffer()
 {
     glDeleteFramebuffers(1, &(this->ID));
-    glDeleteTextures(1, &(this->texture_ID));
+    glDeleteTextures(1, &(this->texture_color_buffer_ID));
     glDeleteRenderbuffers(1, &(this->RBO.value()));
 }
 
@@ -51,4 +51,9 @@ void FrameBuffer::use()
 GLuint FrameBuffer::getID()
 {
     return this->ID;
+}
+
+GLuint FrameBuffer::getColorBufferID()
+{
+    return this->texture_color_buffer_ID;
 }
