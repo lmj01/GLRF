@@ -1,6 +1,8 @@
 #pragma once
 #include <glad/glad.h>
 #include <stdexcept>
+#include <optional>
+#include <iostream>
 
 namespace GLRF {
     struct ScreenResolution;
@@ -27,6 +29,7 @@ struct GLRF::ScreenResolution {
 struct GLRF::FrameBufferConfiguration
 {
     GLenum color_profile = GL_RGB;
+    GLenum color_type = GL_RGB;
     GLenum data_type = GL_UNSIGNED_BYTE;
     bool use_render_buffer = true;
 };
@@ -43,5 +46,5 @@ public:
 private:
     GLuint ID;
     GLuint texture_ID;
-    GLuint RBO;
+    std::optional<GLuint> RBO = std::nullopt;
 };

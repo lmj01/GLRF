@@ -188,9 +188,9 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
 
-	this->shaderOptions = shaderOptions;
-	if (this->shaderOptions.useMultipleFrameBuffers) this->shaderOptions.useFrameBuffer = true;
-	if (shaderOptions.useFrameBuffer) setUpFrameBuffer();
+	this->shaderOptions = shader_options;
+	if (shader_options.useMultipleFrameBuffers) shader_options.useFrameBuffer = true;
+	if (shader_options.useFrameBuffer) setUpFrameBuffer();
 
 	// ======= REGISTER SHADER ======= //
 	ShaderManager::getInstance().registerShader(this);
