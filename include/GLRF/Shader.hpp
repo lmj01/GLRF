@@ -28,11 +28,6 @@ namespace GLRF {
  */
 struct GLRF::ShaderOptions {
 	bool isOneDimensionalFilterKernel = false;
-	bool useDepthBuffer = true;
-	bool useFrameBuffer = false;
-	bool isFrameBufferHDR = false;
-	bool useMultipleFrameBuffers = false;
-	unsigned int texColorBufferAmount = 1;
 	ScreenResolution screenResolution;
 };
 
@@ -177,24 +172,12 @@ public:
 	 */
 	void setMaterial(const std::string &name, std::shared_ptr<Material> material);
 
-	/**
-	 * @brief Get the FrameBuffer object at the specified index.
-	 * 
-	 * @param index the position of the FrameBuffer
-	 * @return GLuint the number that refers to the OpenGL unit associated with the FrameBuffer
-	 */
-	std::shared_ptr<FrameBuffer> getFrameBuffer(unsigned int index);
 private:
 	static const char period = '.';
 	const std::string value_default = "value_default";
 	const std::string use_texture = "use_texture";
 	const std::string texture = "texture";
-	static const unsigned int MAX_FRAMEBUFFERS = 16;
 	GLuint ID;
-	GLuint depthBuffer = 0;
-	std::vector<std::shared_ptr<FrameBuffer>> framebuffers;
-
-	void setUpFrameBuffer();
 
 	/**
 	 * @brief Sets the specified material property for the specified, named variable in this Shader.

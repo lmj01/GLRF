@@ -189,8 +189,6 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	glDeleteShader(fragment);
 
 	this->shaderOptions = shader_options;
-	if (shader_options.useMultipleFrameBuffers) shader_options.useFrameBuffer = true;
-	if (shader_options.useFrameBuffer) setUpFrameBuffer();
 
 	// ======= REGISTER SHADER ======= //
 	ShaderManager::getInstance().registerShader(this);
@@ -266,27 +264,6 @@ void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> mat
 	setMaterialProperty(name + period + "height",		material->height,		5);
 
 	setFloat(name + period + "height_scale", material->height_scale);
-}
-
-std::shared_ptr<FrameBuffer> Shader::getFrameBuffer(unsigned int index) {
-	return this->framebuffers[index];
-}
-
-void Shader::setUpFrameBuffer() {
-	const unsigned int bufferAmount = this->shaderOptions.texColorBufferAmount;
-	this->framebuffers.reserve(bufferAmount);
-
-	FrameBufferConfiguration fb_config;
-	if (this->shaderOptions.isFrameBufferHDR) {
-		fb_config.color_profile = GL_RGB16F;
-		fb_config.data_type = GL_FLOAT;
-	}
-	fb_config.use_render_buffer = this->shaderOptions.useDepthBuffer;
-
-	for (unsigned int i = 0; i < bufferAmount; i++) {
-		this->framebuffers.push_back(std::shared_ptr<FrameBuffer>(
-			new FrameBuffer(fb_config, shaderOptions.screenResolution)));
-	}
 }
 
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {

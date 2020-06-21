@@ -16,7 +16,7 @@ FrameBuffer::FrameBuffer(FrameBufferConfiguration & config, ScreenResolution & s
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->texture_color_buffer_ID, 0);
 
-    if (config.use_render_buffer)
+    if (config.use_depth_buffer)
     {
         GLuint RBO;
         glGenRenderbuffers(1, &RBO);

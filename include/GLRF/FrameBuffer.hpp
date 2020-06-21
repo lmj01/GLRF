@@ -31,7 +31,7 @@ struct GLRF::FrameBufferConfiguration
     GLenum color_profile = GL_RGB;
     GLenum color_type = GL_RGB;
     GLenum data_type = GL_UNSIGNED_BYTE;
-    bool use_render_buffer = true;
+    bool use_depth_buffer = true;
 };
 
 
