@@ -40,7 +40,7 @@ FrameBuffer::~FrameBuffer()
 {
     glDeleteFramebuffers(1, &(this->ID));
     glDeleteTextures(1, &(this->texture_color_buffer_ID));
-    glDeleteRenderbuffers(1, &(this->RBO.value()));
+    if (this->RBO.has_value()) glDeleteRenderbuffers(1, &(this->RBO.value()));
 }
 
 void FrameBuffer::use()
