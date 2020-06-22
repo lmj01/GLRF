@@ -277,6 +277,7 @@ unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {
 	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::" << *shaderSource << "::COMPILATION_FAILED\n" << infoLog << std::endl;
+		exit(1);
 	}
 
 	return shader;
