@@ -37,7 +37,7 @@ void Scene::setActiveCamera(std::shared_ptr<Camera> camera) {
 	this->activeCamera = camera;
 }
 
-void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuffer&> & map_shader_fbs) {
+void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuffer*> & map_shader_fbs) {
 	ShaderManager & shader_manager = ShaderManager::getInstance();
 	shader_manager.clearDrawConfigurations();
 
@@ -68,9 +68,15 @@ void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuff
 		GLuint shader_id = obj->getShaderID();
 		auto it = map_shader_fbs.find(shader_id);
 		if (it == map_shader_fbs.end()) continue;
-		it->second.use();
+
+		auto fb = it->second;
+		fb->use();
 
 		auto shader = shader_manager.getShader(shader_id);
+		std::cout << "[Scene] FRAMEBUFFER::" << fb->getDebugName()
+			<< " - SHADER::" << shader->getDebugName()
+			<< " - OBJECT::" << obj->getDebugName()
+			<< " - " << glGetError() << std::endl;
 
 		// check if object-unspecific values have been loaded into the internal shader
 		// if not, do so now
@@ -82,7 +88,7 @@ void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuff
 		shader->setMat4("model", modelMat);
 		shader->setMat3("model_normal", modelNormalMat);
 		shader->setMaterial("material", obj->getMaterial());
-
+		
 		obj->draw();
 	}
 }

@@ -160,12 +160,16 @@ public:
 	 */
 	void setMaterial(const std::string &name, std::shared_ptr<Material> material);
 
+	void setDebugName(const std::string name);
+	std::string getDebugName();
+
 private:
 	static const char period = '.';
 	const std::string value_default = "value_default";
 	const std::string use_texture = "use_texture";
 	const std::string texture = "texture";
 	GLuint ID;
+	std::string debug_name;
 
 	/**
 	 * @brief Sets the specified material property for the specified, named variable in this Shader.

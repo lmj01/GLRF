@@ -46,8 +46,11 @@ public:
     void use();
     GLuint getID();
     GLuint getColorBufferID(size_t idx);
+    void setDebugName(const std::string name);
+    std::string getDebugName();
 private:
     GLuint ID;
     std::vector<GLuint> texture_color_buffer_IDs;
     std::optional<GLuint> RBO = std::nullopt;
+    std::string debug_name;
 };

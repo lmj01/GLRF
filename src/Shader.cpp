@@ -329,3 +329,13 @@ Shader * ShaderManager::getShader(GLuint ID)
 {
 	return this->registered_shaders.find(ID)->second;
 }
+
+void Shader::setDebugName(const std::string name)
+{
+	this->debug_name = name;
+}
+
+std::string Shader::getDebugName()
+{
+	return this->debug_name;
+}

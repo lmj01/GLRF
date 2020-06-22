@@ -60,7 +60,13 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::use()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, this->ID);
+    GLint id;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &id);
+    if (id != this->ID)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, this->ID);
+    }
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &id);
 }
 
 GLuint FrameBuffer::getID()
@@ -71,4 +77,14 @@ GLuint FrameBuffer::getID()
 GLuint FrameBuffer::getColorBufferID(size_t idx)
 {
     return this->texture_color_buffer_IDs[idx];
+}
+
+void FrameBuffer::setDebugName(const std::string name)
+{
+    this->debug_name = name;
+}
+
+std::string FrameBuffer::getDebugName()
+{
+    return this->debug_name;
 }
