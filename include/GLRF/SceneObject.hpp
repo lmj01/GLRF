@@ -59,6 +59,16 @@ private:
  */
 class GLRF::SceneObject {
 public:
+	void setDebugName(const std::string name)
+	{
+		this->debug_name = name;
+	}
+
+	std::string getDebugName()
+	{
+		return this->debug_name;
+	}
+
 	void setShaderID(GLuint ID)
 	{
 		this->ID = ID;
@@ -74,8 +84,8 @@ public:
 	{
 		GLuint shader_id = this->getShaderID();
 		ShaderManager& shader_manager = ShaderManager::getInstance();
-		shader_manager.configureShader(configuration, shader_id);
 		shader_manager.useShader(shader_id);
+		shader_manager.configureShader(configuration, shader_id);
 	}
 
 	/**
@@ -101,6 +111,7 @@ public:
 private:
 	std::shared_ptr<Material> material;
 	GLuint ID = 0;
+	std::string debug_name = "MISSING_NAME";
 };
 
 /**

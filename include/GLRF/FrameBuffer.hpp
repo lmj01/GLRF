@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <optional>
 #include <iostream>
+#include <vector>
 
 namespace GLRF {
     struct ScreenResolution;
@@ -32,6 +33,7 @@ struct GLRF::FrameBufferConfiguration
     GLenum color_type = GL_RGB;
     GLenum data_type = GL_UNSIGNED_BYTE;
     bool use_depth_buffer = true;
+    GLuint num_color_buffers = 1;
 };
 
 
@@ -43,9 +45,9 @@ public:
 
     void use();
     GLuint getID();
-    GLuint getColorBufferID();
+    GLuint getColorBufferID(size_t idx);
 private:
     GLuint ID;
-    GLuint texture_color_buffer_ID;
+    std::vector<GLuint> texture_color_buffer_IDs;
     std::optional<GLuint> RBO = std::nullopt;
 };

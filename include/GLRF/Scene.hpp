@@ -86,7 +86,7 @@ public:
 	 * 
 	 * @param shader the shader to draw the scenes objects with
 	 */
-	void draw(ShaderConfiguration * configuration);
+	void draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuffer&> & map_shader_fbs);
 
 	/**
 	 * @brief Processes keyboard inputs for the scene.
