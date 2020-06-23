@@ -92,11 +92,18 @@ void SceneMesh::update(std::shared_ptr<MeshData> data, GLenum draw_type, GLenum 
 	this->data = data;
 	this->draw_type = draw_type;
 	this->geometry_type = geometry_type;
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexFormat) * this->data->vertices.size(), NULL, draw_type);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexFormat) * this->data->vertices.size(), &this->data->vertices[0], draw_type);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->data->indices.value().size(),
-		(data->indices.has_value()) ? &this->data->indices.value()[0] : NULL, draw_type);
+		data->indices.has_value() ? &this->data->indices.value()[0] : NULL, draw_type);
+
+	glBindVertexArray(0);
 }
 
 void SceneMesh::update(std::shared_ptr<MeshData> data)
