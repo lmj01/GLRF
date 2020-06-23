@@ -73,10 +73,16 @@ void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuff
 		fb->use();
 
 		auto shader = shader_manager.getShader(shader_id);
-		std::cout << "[Scene] FRAMEBUFFER::" << fb->getDebugName()
-			<< " - SHADER::" << shader->getDebugName()
-			<< " - OBJECT::" << obj->getDebugName()
-			<< " - " << glGetError() << std::endl;
+		{
+			GLenum gl_error = glGetError();
+			if (gl_error)
+			{
+				std::cout << "[Scene] FRAMEBUFFER::" << fb->getDebugName()
+					<< " - SHADER::" << shader->getDebugName()
+					<< " - OBJECT::" << obj->getDebugName()
+					<< " - " << glGetError() << std::endl;
+			}
+		}
 
 		// check if object-unspecific values have been loaded into the internal shader
 		// if not, do so now
