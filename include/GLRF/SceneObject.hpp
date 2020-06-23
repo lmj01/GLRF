@@ -129,8 +129,8 @@ public:
 	 * @param drawType the OpenGL draw type that specifies how the mesh will be rendered - e.g. GL_STATIC_DRAW
 	 * @param material the material that defines the appearance of the mesh
 	 */
-	SceneMesh(std::shared_ptr<MeshData> data, GLenum drawType, std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material()));
-
+	SceneMesh(std::shared_ptr<MeshData> data, GLenum drawType, GLenum geometry_type = GL_TRIANGLES,
+		std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material()));
 	~SceneMesh();
 
 	/**
@@ -139,7 +139,7 @@ public:
 	 * @param vertices the new vertices that will replace the old vertices
 	 * @param drawType the new value for the OpenGL draw type
 	 */
-	void update(std::shared_ptr<MeshData> data, GLenum drawType);
+	void update(std::shared_ptr<MeshData> data, GLenum draw_type, GLenum geometry_type);
 
 	/**
 	 * @brief Updates the vertex data of the mesh.
@@ -156,8 +156,8 @@ public:
 
 private:
 	GLuint VBO, VAO, EBO;
-	GLenum drawType;
-	GLenum geometryType;
+	GLenum draw_type;
+	GLenum geometry_type;
 	std::shared_ptr<MeshData> data;
 };
 
