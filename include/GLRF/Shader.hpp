@@ -220,6 +220,8 @@ private:
 		setBool(name + period + use_texture, material_property.texture.has_value());
 		setInt(name + period + texture, texture_unit);
 	}
+
+	void loadShaderFile(const std::string shader_path, std::string * out);
 };
 
 class GLRF::ShaderManager

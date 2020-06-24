@@ -125,71 +125,84 @@ void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<
 Shader::Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
 		const std::string fragment_path)
 {
-	bool has_geometry_shader = geometry_path.has_value();
+	const bool has_geometry_shader = geometry_path.has_value();
+
 	// 1. retrieve the GLSL source code from paths
 	std::string vertex_lib_path = shader_lib + vertex_path;
-	//std::string geometry_lib_path = shader_lib + geometry_path.value();
+	std::string vertex_code_str;
+	loadShaderFile(vertex_lib_path, &vertex_code_str);
+	const char* vertex_code = vertex_code_str.c_str();
+
+	std::string geometry_lib_path;
+	std::string geometry_code_str;
+	const char* geometry_code;
+	if (has_geometry_shader)
+	{
+		geometry_lib_path = shader_lib + geometry_path.value();
+		loadShaderFile(geometry_lib_path, &geometry_code_str);
+		geometry_code = geometry_code_str.c_str();
+	}
+
 	std::string fragment_lib_path = shader_lib + fragment_path;
-	std::string vertex_code;
-	std::string fragment_code;
-	std::ifstream vertex_file;
-	std::ifstream fragment_file;
-	// ensure ifstream objects can throw exceptions:
-	vertex_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	fragment_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	try
-	{
-		// open files
-		vertex_file.open(vertex_lib_path);
-		fragment_file.open(fragment_lib_path);
-		std::stringstream vShaderStream, fShaderStream;
-		// read file's buffer contents into streams
-		vShaderStream << vertex_file.rdbuf();
-		fShaderStream << fragment_file.rdbuf();
-		// close file handlers
-		vertex_file.close();
-		fragment_file.close();
-		// convert stream into string
-		vertex_code = vShaderStream.str();
-		fragment_code = fShaderStream.str();
-	}
-	catch (std::ifstream::failure e)
-	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-	}
-	const char* vShaderCode = vertex_code.c_str();
-	const char* fShaderCode = fragment_code.c_str();
+	std::string fragment_code_str;
+	loadShaderFile(fragment_lib_path, &fragment_code_str);
+	const char* fragment_code = fragment_code_str.c_str();
 
 	// 2. compile shaders
-	unsigned int vertex, fragment;
+	GLuint vertex_id, geometry_id, fragment_id;
 	int success;
 	char infoLog[512];
 
-	// vertex Shader
-	vertex = createShader(GL_VERTEX_SHADER, vShaderCode);
-
-	// similiar for Fragment Shader
-	fragment = createShader(GL_FRAGMENT_SHADER, fShaderCode);
+	vertex_id = createShader(GL_VERTEX_SHADER, vertex_code);
+	if (has_geometry_shader) geometry_id = createShader(GL_GEOMETRY_SHADER, geometry_code);
+	fragment_id = createShader(GL_FRAGMENT_SHADER, fragment_code);
 
 	// shader Program
 	ID = glCreateProgram();
-	glAttachShader(ID, vertex);
-	glAttachShader(ID, fragment);
+	glAttachShader(ID, vertex_id);
+	if (has_geometry_shader) glAttachShader(ID, geometry_id);
+	glAttachShader(ID, fragment_id);
 	glLinkProgram(ID);
+
 	// print linking errors if any
 	glGetProgramiv(ID, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		glGetProgramInfoLog(ID, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		exit(1);
 	}
 
 	// delete the shaders as they're linked into our program now and no longer necessery
-	glDeleteShader(vertex);
-	glDeleteShader(fragment);
+	glDeleteShader(vertex_id);
+	if (has_geometry_shader) glDeleteShader(geometry_id);
+	glDeleteShader(fragment_id);
 
 	// ======= REGISTER SHADER ======= //
 	ShaderManager::getInstance().registerShader(this);
+}
+
+void Shader::loadShaderFile(const std::string shader_path, std::string* out)
+{
+	std::ifstream file;
+	// ensure ifstream objects can throw exceptions:
+	file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	try
+	{
+		// open file
+		file.open(shader_path);
+		std::stringstream stream;
+		// read file's buffer contents into streams
+		stream << file.rdbuf();
+		// close file handlers
+		file.close();
+		// convert stream into string
+		*out = stream.str();
+	}
+	catch (std::ifstream::failure e)
+	{
+		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+	}
 }
 
 unsigned int Shader::getID() {
