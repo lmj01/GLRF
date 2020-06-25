@@ -171,6 +171,8 @@ private:
 	GLuint ID;
 	std::string debug_name;
 
+	unsigned int createShader(GLenum shader_type, const GLchar* shader_source, std::string shader_name);
+
 	/**
 	 * @brief Sets the specified material property for the specified, named variable in this Shader.
 	 *

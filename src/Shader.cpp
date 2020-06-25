@@ -153,9 +153,9 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	int success;
 	char infoLog[512];
 
-	vertex_id = createShader(GL_VERTEX_SHADER, vertex_code);
-	if (has_geometry_shader) geometry_id = createShader(GL_GEOMETRY_SHADER, geometry_code);
-	fragment_id = createShader(GL_FRAGMENT_SHADER, fragment_code);
+	vertex_id = createShader(GL_VERTEX_SHADER, vertex_code, "VERTEX");
+	if (has_geometry_shader) geometry_id = createShader(GL_GEOMETRY_SHADER, geometry_code, "GEOMETRY");
+	fragment_id = createShader(GL_FRAGMENT_SHADER, fragment_code, "FRAGMENT");
 
 	// shader Program
 	ID = glCreateProgram();
@@ -277,10 +277,10 @@ void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> mat
 	setFloat(name + period + "height_scale", material->height_scale);
 }
 
-unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {
+unsigned int Shader::createShader(GLenum shader_type, const GLchar * shader_source, std::string shader_name) {
 	unsigned int shader;
-	shader = glCreateShader(shaderType);
-	glShaderSource(shader, 1, &shaderSource, NULL);
+	shader = glCreateShader(shader_type);
+	glShaderSource(shader, 1, &shader_source, NULL);
 	glCompileShader(shader);
 
 	int  success;
@@ -289,7 +289,7 @@ unsigned int createShader(GLenum shaderType, const GLchar * shaderSource) {
 	if (!success)
 	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::" << *shaderSource << "::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::" << shader_name << "::COMPILATION_FAILED\n" << infoLog << std::endl;
 		exit(1);
 	}
 
