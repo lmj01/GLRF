@@ -3,8 +3,9 @@
 
 using namespace GLRF;
 
-std::shared_ptr<MeshData> PlaneGenerator::create(glm::vec3 center, glm::vec3 normal, glm::vec3 direction, float side_length, unsigned int  tesselation, float uvScaling) {
-	std::shared_ptr<MeshData> data = std::shared_ptr<MeshData>(new MeshData());
+std::shared_ptr<MeshData<VertexFormat>> PlaneGenerator::create(glm::vec3 center, glm::vec3 normal,
+	glm::vec3 direction, float side_length, unsigned int  tesselation, float uvScaling) {
+	std::shared_ptr<MeshData<VertexFormat>> data = std::shared_ptr<MeshData<VertexFormat>>(new MeshData<VertexFormat>());
 	unsigned int steps = tesselation + 1;
 	float step_size = side_length / steps;
 	float step_size_uv = 1.0f / (float)steps;
