@@ -1,15 +1,17 @@
 #pragma once
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 namespace GLRF {
-	struct VertexFormat;
+	class VertexFormat;
 }
 
 /**
  * @brief The format of a vertex with all related information
  * 
  */
-struct GLRF::VertexFormat {
+class GLRF::VertexFormat {
+public:
 	glm::vec3 position;
 	glm::vec3 normal;
 	glm::vec2 uv;
@@ -24,4 +26,7 @@ struct GLRF::VertexFormat {
 	 * @param tangent the tangent vector at the vertex
 	 */
 	VertexFormat(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &uv, const glm::vec3 &tangent);
+	~VertexFormat();
+
+	static void registerFormat();
 };
