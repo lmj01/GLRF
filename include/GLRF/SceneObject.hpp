@@ -200,9 +200,10 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, sizeof(T) * this->data->vertices.size(), NULL, draw_type);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(T) * this->data->vertices.size(), &this->data->vertices[0], draw_type);
 
+		bool has_indices = data->indices.has_value();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->data->indices.value().size(),
-			data->indices.has_value() ? &this->data->indices.value()[0] : NULL, draw_type);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, has_indices ? sizeof(GLuint) * this->data->indices.value().size() : 0,
+			has_indices ? &this->data->indices.value()[0] : NULL, draw_type);
 
 		glBindVertexArray(0);
 	}
