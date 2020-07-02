@@ -320,9 +320,9 @@ void ShaderManager::useShader(GLuint ID)
 	}
 }
 
-void ShaderManager::configureShader(ShaderConfiguration * configuration, GLuint ID)
+void ShaderManager::configureShader(const ShaderConfiguration * configuration, GLuint ID, bool force)
 {
-	if (this->configured_shaders.find(ID) == this->configured_shaders.end())
+	if (force || this->configured_shaders.find(ID) == this->configured_shaders.end())
 	{
 		auto it = this->registered_shaders.find(ID);
 		if (it == this->registered_shaders.end())

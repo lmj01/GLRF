@@ -240,7 +240,7 @@ public:
 
 	void useShader(GLuint ID);
 
-	void configureShader(ShaderConfiguration * configuration, GLuint ID);
+	void configureShader(const ShaderConfiguration * configuration, GLuint ID, bool force);
 
 	void clearDrawConfigurations();
 

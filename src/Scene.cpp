@@ -72,30 +72,15 @@ void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuff
 		auto fb = it->second;
 		fb->use();
 
-		auto shader = shader_manager.getShader(shader_id);
-		{
-			GLenum gl_error = glGetError();
-			if (gl_error)
-			{
-				std::cout << "[Scene] FRAMEBUFFER::" << fb->getDebugName()
-					<< " - SHADER::" << shader->getDebugName()
-					<< " - OBJECT::" << obj->getDebugName()
-					<< " - " << glGetError() << std::endl;
-			}
-		}
-
-		// check if object-unspecific values have been loaded into the internal shader
-		// if not, do so now
-		obj->configureShader(configuration);
-
 		// load object-specific values into the internal shader
+		ShaderConfiguration object_configuration;
 		glm::mat4 modelMat = this->objectNodes[i]->calculateModelMatrix();
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
-		shader->setMat4("model", modelMat);
-		shader->setMat3("model_normal", modelNormalMat);
-		shader->setMaterial("material", obj->getMaterial());
+		object_configuration.setMat4("model", modelMat);
+		object_configuration.setMat3("model_normal", modelNormalMat);
+		object_configuration.setMaterial("material", obj->getMaterial());
 		
-		obj->draw();
+		obj->draw(configuration, &object_configuration);
 	}
 }
 

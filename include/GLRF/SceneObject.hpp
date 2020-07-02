@@ -95,19 +95,20 @@ public:
 	}
 
 
-	void configureShader(ShaderConfiguration * configuration)
+	void configureShader(ShaderConfiguration* scene_configuration, ShaderConfiguration* object_configuration)
 	{
 		GLuint shader_id = this->getShaderID();
 		ShaderManager& shader_manager = ShaderManager::getInstance();
 		shader_manager.useShader(shader_id);
-		shader_manager.configureShader(configuration, shader_id);
+		shader_manager.configureShader(scene_configuration, shader_id, false);
+		shader_manager.configureShader(object_configuration, shader_id, true);
 	}
 
 	/**
 	 * @brief Draws the object with the current shader.
 	 * 
 	 */
-	virtual void draw() = 0;
+	virtual void draw(ShaderConfiguration* scene_configuration, ShaderConfiguration* object_configuration) = 0;
 
 	/**
 	 * @brief Returns the Material object.
@@ -220,8 +221,10 @@ public:
 	 * @brief Draws the mesh with the current shader.
 	 * 
 	 */
-	void draw()
+	void draw(ShaderConfiguration* scene_configuration, ShaderConfiguration* object_configuration)
 	{
+		configureShader(scene_configuration, object_configuration);
+
 		glBindVertexArray(VAO);
 
 		switch (this->geometry_type)
