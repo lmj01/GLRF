@@ -224,6 +224,7 @@ public:
 	 */
 	void draw(ShaderConfiguration* scene_configuration, ShaderConfiguration* object_configuration)
 	{
+		object_configuration->setMaterial("material", getMaterial());
 		configureShader(scene_configuration, object_configuration);
 
 		glBindVertexArray(VAO);

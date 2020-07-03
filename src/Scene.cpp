@@ -78,7 +78,6 @@ void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuff
 		glm::mat3 modelNormalMat = glm::mat3(glm::transpose(glm::inverse(modelMat)));
 		object_configuration.setMat4("model", modelMat);
 		object_configuration.setMat3("model_normal", modelNormalMat);
-		object_configuration.setMaterial("material", obj->getMaterial());
 		
 		obj->draw(configuration, &object_configuration);
 	}
