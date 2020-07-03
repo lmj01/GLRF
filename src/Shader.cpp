@@ -73,52 +73,52 @@ void ShaderConfiguration::loadIntoShader(Shader * shader) const
 
 void ShaderConfiguration::setBool(const std::string& name, bool value)
 {
-	this->v_bool.insert({ name, value });
+	this->v_bool.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setInt(const std::string& name, GLint value)
 {
-	this->v_int.insert({ name, value });
+	this->v_int.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setUInt(const std::string & name, GLuint value)
 {
-	this->v_uint.insert({ name, value });
+	this->v_uint.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setFloat(const std::string & name, float value)
 {
-	this->v_float.insert({ name, value });
+	this->v_float.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setMat4(const std::string & name, glm::mat4 value)
 {
-	this->v_mat4.insert({ name, value });
+	this->v_mat4.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setMat3(const std::string & name, glm::mat3 value)
 {
-	this->v_mat3.insert({ name, value });
+	this->v_mat3.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setVec4(const std::string & name, glm::vec4 value)
 {
-	this->v_vec4.insert({ name, value });
+	this->v_vec4.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setVec3(const std::string & name, glm::vec3 value)
 {
-	this->v_vec3.insert({ name, value });
+	this->v_vec3.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setVec2(const std::string & name, glm::vec2 value)
 {
-	this->v_vec2.insert({ name, value });
+	this->v_vec2.insert_or_assign(name, value);
 }
 
 void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<Material> material)
 {
-	this->v_material.insert({ name, material });
+	this->v_material.insert_or_assign(name, material);
 }
 
 
