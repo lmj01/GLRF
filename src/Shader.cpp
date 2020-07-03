@@ -273,6 +273,7 @@ void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> mat
 	setMaterialProperty(name + period + "metallic",		material->metallic,		3);
 	setMaterialProperty(name + period + "ao",			material->ao,			4);
 	setMaterialProperty(name + period + "height",		material->height,		5);
+	setMaterialProperty(name + period + "opacity",		material->opacity,		6);
 
 	setFloat(name + period + "height_scale", material->height_scale);
 }

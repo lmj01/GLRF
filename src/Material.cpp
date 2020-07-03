@@ -35,6 +35,8 @@ Material::Material() {
 	this->metallic = MaterialProperty<float>(0.f);
 	this->ao = MaterialProperty<float>(1.f);
 	this->height = MaterialProperty<float>(1.f);
+	this->opacity = MaterialProperty<float>(1.f);
+
 	this->height_scale = 1.0f;
 }
 
@@ -46,6 +48,7 @@ void Material::loadTextures(std::string library, std::string name, std::string s
 	this->metallic.loadTexture(library, name, separator, "metallic", fileType);
 	this->ao.loadTexture(library, name, separator, "ao", fileType);
 	this->height.loadTexture(library, name, separator, "height", fileType);
+	this->opacity.loadTexture(library, name, separator, "opacity", fileType);
 }
 
 void Material::loadTextures(std::string name, std::string separator, std::string fileType)
@@ -56,6 +59,7 @@ void Material::loadTextures(std::string name, std::string separator, std::string
 	this->metallic.loadTexture(name, separator, "metallic", fileType);
 	this->ao.loadTexture(name, separator, "ao", fileType);
 	this->height.loadTexture(name, separator, "height", fileType);
+	this->opacity.loadTexture(name, separator, "opacity", fileType);
 }
 
 void Material::bindTextures(GLuint textureUnitsBegin)
@@ -66,4 +70,5 @@ void Material::bindTextures(GLuint textureUnitsBegin)
 	if (this->metallic.texture.has_value())		this->metallic.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 3);
 	if (this->ao.texture.has_value())			this->ao.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 4);
 	if (this->height.texture.has_value())		this->height.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 5);
+	if (this->opacity.texture.has_value())		this->opacity.texture.value()->bind(GL_TEXTURE0 + textureUnitsBegin + 6);
 }

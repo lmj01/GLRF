@@ -88,6 +88,7 @@ public:
 	MaterialProperty<float> metallic;
 	MaterialProperty<float> ao;
 	MaterialProperty<float> height;
+	MaterialProperty<float> opacity;
 
 	/**
 	 * @brief A scaling factor for the height property that is used for parallax-occlusion- and displacement-mapping.
