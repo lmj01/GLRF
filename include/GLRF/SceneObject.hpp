@@ -15,7 +15,7 @@
 #include <GLRF/Shader.hpp>
 
 namespace GLRF {
-	template <typename T> struct MeshData;
+	template <typename T> class MeshData;
 	class SceneObject;
 	template <typename T> class SceneMesh;
 	template <typename T> class SceneNode;
@@ -245,7 +245,7 @@ public:
 		}
 
 		if (data->indices.has_value()) {
-			glDrawElements(this->geometry_type, data->indices.value().size(), GL_UNSIGNED_INT, 0);
+			glDrawElements(this->geometry_type, static_cast<GLsizei>(data->indices.value().size()), GL_UNSIGNED_INT, 0);
 		}
 		else {
 			glDrawArrays(this->geometry_type, 0, static_cast<GLsizei>(data->vertices.size()));
