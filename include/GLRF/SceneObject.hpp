@@ -198,7 +198,7 @@ public:
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(T) * this->data->vertices.size(), NULL, draw_type);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(T) * this->data->vertices.size(), &this->data->vertices[0], draw_type);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(T) * this->data->vertices.size(), this->data->vertices.data(), draw_type);
 
 		bool has_indices = data->indices.has_value();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

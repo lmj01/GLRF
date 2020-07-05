@@ -121,6 +121,66 @@ void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<
 	this->v_material.insert_or_assign(name, material);
 }
 
+bool ShaderConfiguration::getBool(const std::string& name)
+{
+	auto it = this->v_bool.find(name);
+	return (it == this->v_bool.end()) ? false : it->second;
+}
+
+GLint ShaderConfiguration::getInt(const std::string& name)
+{
+	auto it = this->v_int.find(name);
+	return (it == this->v_int.end()) ? 0 : it->second;
+}
+
+GLuint ShaderConfiguration::getUInt(const std::string& name)
+{
+	auto it = this->v_uint.find(name);
+	return (it == this->v_uint.end()) ? 0 : it->second;
+}
+
+float ShaderConfiguration::getFloat(const std::string& name)
+{
+	auto it = this->v_float.find(name);
+	return (it == this->v_float.end()) ? 0.f : it->second;
+}
+
+
+glm::mat4 ShaderConfiguration::getMat4(const std::string& name)
+{
+	auto it = this->v_mat4.find(name);
+	return (it == this->v_mat4.end()) ? glm::mat4(1.f) : it->second;
+}
+
+glm::mat3 ShaderConfiguration::getMat3(const std::string& name)
+{
+	auto it = this->v_mat3.find(name);
+	return (it == this->v_mat3.end()) ? glm::mat3(1.f) : it->second;
+}
+
+glm::vec4 ShaderConfiguration::getVec4(const std::string& name)
+{
+	auto it = this->v_vec4.find(name);
+	return (it == this->v_vec4.end()) ? glm::vec4(0.f) : it->second;
+}
+
+glm::vec3 ShaderConfiguration::getVec3(const std::string& name)
+{
+	auto it = this->v_vec3.find(name);
+	return (it == this->v_vec3.end()) ? glm::vec3(0.f) : it->second;
+}
+
+glm::vec2 ShaderConfiguration::getVec2(const std::string& name)
+{
+	auto it = this->v_vec2.find(name);
+	return (it == this->v_vec2.end()) ? glm::vec2(0.f) : it->second;
+}
+
+std::shared_ptr<Material> ShaderConfiguration::getMaterial(const std::string& name)
+{
+	auto it = this->v_material.find(name);
+	return (it == this->v_material.end()) ? nullptr : it->second;
+}
 
 Shader::Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
 		const std::string fragment_path)

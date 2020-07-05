@@ -38,6 +38,17 @@ public:
 	void setVec3(const std::string& name, glm::vec3 value);
 	void setVec2(const std::string& name, glm::vec2 value);
 	void setMaterial(const std::string& name, std::shared_ptr<Material> material);
+
+	bool getBool(const std::string& name);
+	GLint getInt(const std::string& name);
+	GLuint getUInt(const std::string& name);
+	float getFloat(const std::string& name);
+	glm::mat4 getMat4(const std::string& name);
+	glm::mat3 getMat3(const std::string& name);
+	glm::vec4 getVec4(const std::string& name);
+	glm::vec3 getVec3(const std::string& name);
+	glm::vec2 getVec2(const std::string& name);
+	std::shared_ptr<Material> getMaterial(const std::string& name);
 private:
 	std::map<std::string, bool>			v_bool;
 	std::map<std::string, int>			v_int;
