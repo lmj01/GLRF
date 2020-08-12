@@ -106,12 +106,17 @@ public:
 	 * @param limit the angle in radians
 	 */
 	void setYawLimit(float limit);
+
+	void setSensitivityForRotation(float sensitivity);
+	void setSensitivityForTranslation(float sensitivity);
 private:
 	glm::vec3 position, up_vector, w, ref_x, ref_z;
 	float pitch = 0.f;
 	float yaw = 0.f;
 	float pitch_limit;
 	float yaw_limit;
+	float sensitivity_rotation_user = 1.f;
+	float sensitivity_translation_user = 1.f;
 	static const float LIMIT_EPSILON;
 	static const float LIMIT_PITCH_MAX;
 	static const float SENSITIVITY_ROTATION;

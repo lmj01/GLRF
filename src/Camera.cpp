@@ -22,8 +22,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up_vector, glm::vec3 target)
 
 void Camera::rotate(float yaw_offset, float pitch_offset, float sensitivity)
 {
-	yaw_offset *= sensitivity * SENSITIVITY_ROTATION;
-	pitch_offset *= sensitivity * SENSITIVITY_ROTATION;
+	yaw_offset *= sensitivity * SENSITIVITY_ROTATION * sensitivity_rotation_user;
+	pitch_offset *= sensitivity * SENSITIVITY_ROTATION * sensitivity_rotation_user;
 	setPitch(this->pitch - pitch_offset);
 	setYaw(this->yaw - yaw_offset);
 	buildW();
@@ -31,7 +31,7 @@ void Camera::rotate(float yaw_offset, float pitch_offset, float sensitivity)
 
 void Camera::translate(glm::vec3 direction, float sensitivity)
 {
-	this->position += direction * sensitivity * SENSITIVITY_TRANSLATION;
+	this->position += direction * sensitivity * SENSITIVITY_TRANSLATION * sensitivity_translation_user;
 }
 
 glm::mat4 Camera::getViewMatrix()
@@ -96,4 +96,12 @@ void Camera::setPitchLimit(float limit)
 void Camera::setYawLimit(float limit)
 {
 	this->yaw_limit = limit - LIMIT_EPSILON;
+}
+
+void Camera::setSensitivityForRotation(float sensitivity) {
+	this->sensitivity_rotation_user = sensitivity;
+}
+
+void Camera::setSensitivityForTranslation(float sensitivity) {
+	this->sensitivity_translation_user = sensitivity;
 }
