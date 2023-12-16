@@ -50,9 +50,9 @@ endif()
 if(NOT EXISTS "${SUBMODULE_DIR}")
 	message(FATAL_ERROR "No submodules were downloaded! Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${SUBMODULE_DIR}/glad/cmake/CMakeLists.txt")
-    message(FATAL_ERROR "Submodule 'glad' was not downloaded! Please update submodules and try again.")
-endif()
+# if(NOT EXISTS "${SUBMODULE_DIR}/glad/CMakeLists.txt")
+#     message(FATAL_ERROR "Submodule 'glad' was not downloaded! Please update submodules and try again.")
+# endif()
 if(NOT EXISTS "${SUBMODULE_DIR}/glfw/CMakeLists.txt")
     message(FATAL_ERROR "Submodule 'GLFW' was not downloaded! Please update submodules and try again.")
 endif()
@@ -66,26 +66,37 @@ message(STATUS "All submodules needed to build the project found and updated!")
 
 # Check if files from glad have not been created yet.
 # If they were created previously, skip this step.
-if(NOT EXISTS "${GLAD_DIR}/include/glad/glad.h")
-	# Try to find Python
-	find_package(Python)
-	if (Python_FOUND)
-		message(STATUS "Python found!")
-		message(STATUS "Generating files with 'glad'..")
-		# Create glad files (just like in https://github.com/Dav1dde/glad/blob/master/README.md#usage)
-		execute_process(COMMAND pip install glad)
-		execute_process(COMMAND glad --profile core --out-path ${GLAD_DIR} --generator c --no-loader)
-		message(STATUS "Generated files with 'glad' in '${GLAD_DIR}'.")
-	else()
-		message(FATAL_ERROR "Package 'Python' could not be found!")
-	endif()
-else()
-	message(STATUS "Previous files of 'glad' are still available. Skipping recreation..")
-endif()
+# if(NOT EXISTS "${GLAD_DIR}/include/glad/glad.h")
+# 	# Try to find Python
+# 	find_package(Python)
+# 	if (Python_FOUND)
+# 		message(STATUS "Python found!")
+# 		message(STATUS "Generating files with 'glad'..")
+# 		# Create glad files (just like in https://github.com/Dav1dde/glad/blob/master/README.md#usage)
+# 		# execute_process(COMMAND setup.py install)
+# 		execute_process(COMMAND pip install glad)
+# 		execute_process(COMMAND glad --profile core --out-path ${GLAD_DIR} --generator c --no-loader)
+# 		message(STATUS "Generated files with 'glad' in '${GLAD_DIR}'.")
+# 	else()
+# 		message(FATAL_ERROR "Package 'Python' could not be found!")
+# 	endif()
+# else()
+# 	message(STATUS "Previous files of 'glad' are still available. Skipping recreation..")
+# endif()
 
 # ==== load libraries / dependencies ====
 # -- glad --
-add_subdirectory("${SUBMODULE_DIR}/glad/cmake")
+# add_subdirectory("${SUBMODULE_DIR}/glad/")
+
+# Path to glad directory
+set(GLAD_SOURCES_DIR "${SUBMODULE_DIR}/glad/")
+# Path to glad cmake files
+add_subdirectory("${GLAD_SOURCES_DIR}/cmake" glad_cmake)
+
+# Specify glad settings
+glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
+
+
 
 # Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
 # [recommendation] --> Include the two variables in your target, in order to link glad correctly.
@@ -131,6 +142,7 @@ target_include_directories(${PROJECT_NAME}
 
 # Link library to all dependencies
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
+# target_link_libraries(${PROJECT_NAME} glad_gl_core_33)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
 
