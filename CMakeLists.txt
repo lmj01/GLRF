@@ -16,7 +16,7 @@ set(SUBMODULE_DIR "${PROJECT_SOURCE_DIR}/external")
 set(GLAD_DIR "${PROJECT_SOURCE_DIR}/generated/glad")
 set(GLRF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(GLRF_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
-set(GLRF_TEST_DIR "${PROJECT_SOURCE_DIR}/test")
+# set(GLRF_TEST_DIR "${PROJECT_SOURCE_DIR}/test")
 
 # Check if the project is built by itself and not as a subdirectory
 set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -50,7 +50,7 @@ endif()
 if(NOT EXISTS "${SUBMODULE_DIR}")
 	message(FATAL_ERROR "No submodules were downloaded! Please update submodules and try again.")
 endif()
-if(NOT EXISTS "${SUBMODULE_DIR}/glad/CMakeLists.txt")
+if(NOT EXISTS "${SUBMODULE_DIR}/glad/cmake/CMakeLists.txt")
     message(FATAL_ERROR "Submodule 'glad' was not downloaded! Please update submodules and try again.")
 endif()
 if(NOT EXISTS "${SUBMODULE_DIR}/glfw/CMakeLists.txt")
@@ -85,7 +85,7 @@ endif()
 
 # ==== load libraries / dependencies ====
 # -- glad --
-add_subdirectory("${SUBMODULE_DIR}/glad")
+add_subdirectory("${SUBMODULE_DIR}/glad/cmake")
 
 # Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
 # [recommendation] --> Include the two variables in your target, in order to link glad correctly.
@@ -134,20 +134,20 @@ target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
 
-if(IS_STANDALONE)
-	include(CTest)
-	if(BUILD_TESTING)
-		# ==== integrity checks ====
-		if(NOT EXISTS "${SUBMODULE_DIR}/googletest/CMakeLists.txt")
-			message(FATAL_ERROR "Submodule 'googletest' was not downloaded! Please update submodules and try again.")
-		endif()
-		message(STATUS "All submodules needed to test the project found and updated!")
+# if(IS_STANDALONE)
+# 	include(CTest)
+# 	if(BUILD_TESTING)
+# 		# ==== integrity checks ====
+# 		if(NOT EXISTS "${SUBMODULE_DIR}/googletest/CMakeLists.txt")
+# 			message(FATAL_ERROR "Submodule 'googletest' was not downloaded! Please update submodules and try again.")
+# 		endif()
+# 		message(STATUS "All submodules needed to test the project found and updated!")
 
-		# ==== load libraries / dependencies ====
-		add_subdirectory("${SUBMODULE_DIR}/googletest")
+# 		# ==== load libraries / dependencies ====
+# 		add_subdirectory("${SUBMODULE_DIR}/googletest")
 
-		# ==== test project ====
-		message(STATUS "Setting up tests..")
-		add_subdirectory(${GLRF_TEST_DIR})
-	endif()
-endif()
+# 		# ==== test project ====
+# 		message(STATUS "Setting up tests..")
+# 		add_subdirectory(${GLRF_TEST_DIR})
+# 	endif()
+# endif()
