@@ -89,21 +89,36 @@ message(STATUS "All submodules needed to build the project found and updated!")
 # add_subdirectory("${SUBMODULE_DIR}/glad/")
 
 # Path to glad directory
-set(GLAD_SOURCES_DIR "${SUBMODULE_DIR}/glad/")
+# set(GLAD_SOURCES_DIR "${SUBMODULE_DIR}/glad/")
+set(GLAD_SOURCES_DIR "${PROJECT_SOURCE_DIR}/external/glad/")
 # Path to glad cmake files
 add_subdirectory("${GLAD_SOURCES_DIR}/cmake" glad_cmake)
 
 # Specify glad settings
-glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
-
+glad_add_library(glad_gl_core REPRODUCIBLE LOCATION "${GLAD_DIR}" MX API gl:core=3.3)
 
 
 # Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
 # [recommendation] --> Include the two variables in your target, in order to link glad correctly.
-if(NOT IS_STANDALONE)
-	set(GLAD_SOURCES "${GLAD_DIR}/src" PARENT_SCOPE)
-	set(GLAD_HEADERS "${GLAD_DIR}/include" PARENT_SCOPE)
-endif()
+# if(NOT IS_STANDALONE)
+# 	set(GLAD_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/src" PARENT_SCOPE)
+# 	set(GLAD_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/include" PARENT_SCOPE)
+# 	message(STATUS "glad info0" "${GLAD_SOURCES}" "${GLAD_HEADERS}")
+# else ()
+# 	set(GLAD_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/src")
+# 	set(GLAD_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/include")
+# 	message(STATUS "glad info1" "${GLAD_SOURCES}" "${GLAD_HEADERS}")
+# 	message(STATUS "glad info2" "${CMAKE_CURRENT_BINARY_DIR}")
+# 	message(STATUS "glad info3" "${PROJECT_BINARY_DIR}")
+# endif()
+
+set(GLAD_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/src")
+set(GLAD_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/include")
+message(STATUS "glad info1" "${GLAD_SOURCES}" "${GLAD_HEADERS}")
+
+# -- glad --
+# add_subdirectory("${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_mx_33/include")
+
 
 # -- GLFW --
 # Disable targets that are not needed
@@ -142,7 +157,6 @@ target_include_directories(${PROJECT_NAME}
 
 # Link library to all dependencies
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
-# target_link_libraries(${PROJECT_NAME} glad_gl_core_33)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
 
