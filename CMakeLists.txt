@@ -13,10 +13,10 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
 
 # Setting of directory variables for convenience
 set(SUBMODULE_DIR "${PROJECT_SOURCE_DIR}/external")
-set(GLAD_DIR "${PROJECT_SOURCE_DIR}/external/glad")
 set(GLRF_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(GLRF_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 # set(GLRF_TEST_DIR "${PROJECT_SOURCE_DIR}/test")
+set(GLAD_INCLUDE_DIR "${SUBMODULE_DIR}/glad/include")
 
 # Check if the project is built by itself and not as a subdirectory
 set(IS_STANDALONE "${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR}")
@@ -64,9 +64,9 @@ message(STATUS "All submodules needed to build the project found and updated!")
 
 # Set variables GLAD_SOURCES and GLAD_HEADERS, containing all generated files from glad.
 # [recommendation] --> Include the two variables in your target, in order to link glad correctly.
-set(GLAD_SOURCES "${GLAD_DIR}/src" PARENT_SCOPE)
-set(GLAD_HEADERS "${GLAD_DIR}/include" PARENT_SCOPE)
-message(STATUS "glad info0" "${GLAD_SOURCES}" "${GLAD_HEADERS}")
+# -- GLAD --
+# Disable targets that are not needed
+add_subdirectory("${SUBMODULE_DIR}/glad")
 
 # -- GLFW --
 # Disable targets that are not needed
@@ -101,10 +101,11 @@ target_include_directories(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
 	PRIVATE
 		${SUBMODULE_DIR}/stb
+		${SUBMODULE_DIR}/glad/include
 )
 
 # Link library to all dependencies
-# target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
+target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glad>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glfw>)
 target_link_libraries(${PROJECT_NAME} $<BUILD_INTERFACE:glm>)
 
