@@ -2,8 +2,8 @@
 
 using namespace GLRF;
 
-Mouse::Mouse() {
-    Mouse(0.0, 0.0);
+Mouse::Mouse():pos(glm::vec2(0, 0)), pos_old(pos) {
+    // Mouse(0.0, 0.0);
 }
 
 Mouse::Mouse(double x, double y) {
