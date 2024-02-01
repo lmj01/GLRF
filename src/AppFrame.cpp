@@ -21,6 +21,7 @@ glm::vec2 Mouse::getPosition() {
 }
 
 void Mouse::setPosition(double x, double y) {
+    this->pos_old = this->pos;
     this->pos = glm::vec2(x, y);
 }
 
