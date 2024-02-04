@@ -182,9 +182,14 @@ std::shared_ptr<Material> ShaderConfiguration::getMaterial(const std::string& na
 	return (it == this->v_material.end()) ? nullptr : it->second;
 }
 
-Shader::Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
+Shader::Shader(const std::string shader_lib, const std::string vertex_path, 
+	std::optional<const std::string> tessellation_control_path,
+	std::optional<const std::string> tessellation_evaluation_path,
+	std::optional<const std::string> geometry_path,
 		const std::string fragment_path)
 {
+	const bool has_tessellation_control_shader = tessellation_control_path.has_value();
+	const bool has_tessellation_evaluation_shader = tessellation_evaluation_path.has_value();
 	const bool has_geometry_shader = geometry_path.has_value();
 
 	// 1. retrieve the GLSL source code from paths
@@ -193,6 +198,24 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	loadShaderFile(vertex_lib_path, &vertex_code_str);
 	const char* vertex_code = vertex_code_str.c_str();
 
+	std::string tessellation_control_lib_path;
+	std::string tessellation_control_code_str;
+	const char* tessellation_control_code;
+	if (has_tessellation_control_shader)
+	{
+		tessellation_control_lib_path = shader_lib + tessellation_control_path.value();
+		loadShaderFile(tessellation_control_lib_path, &tessellation_control_code_str);
+		tessellation_control_code = tessellation_control_code_str.c_str();
+	}
+	std::string tessellation_evaluation_lib_path;
+	std::string tessellation_evaluation_code_str;
+	const char* tessellation_evaluation_code;
+	if (has_tessellation_evaluation_shader)
+	{
+		tessellation_evaluation_lib_path = shader_lib + tessellation_evaluation_path.value();
+		loadShaderFile(tessellation_evaluation_lib_path, &tessellation_evaluation_code_str);
+		tessellation_evaluation_code = tessellation_evaluation_code_str.c_str();
+	}
 	std::string geometry_lib_path;
 	std::string geometry_code_str;
 	const char* geometry_code;
@@ -209,17 +232,21 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	const char* fragment_code = fragment_code_str.c_str();
 
 	// 2. compile shaders
-	GLuint vertex_id, geometry_id, fragment_id;
+	GLuint vertex_id, tess_control_id, tess_eval_id, geometry_id, fragment_id;
 	int success;
 	char infoLog[512];
 
 	vertex_id = createShader(GL_VERTEX_SHADER, vertex_code, "VERTEX");
+	if (has_tessellation_control_shader) tess_control_id = createShader(GL_TESS_CONTROL_SHADER, tessellation_control_code, "TESS_CONTROL");
+	if (has_tessellation_evaluation_shader) tess_eval_id = createShader(GL_TESS_EVALUATION_SHADER, tessellation_evaluation_code, "TESS_EVALUATION");
 	if (has_geometry_shader) geometry_id = createShader(GL_GEOMETRY_SHADER, geometry_code, "GEOMETRY");
 	fragment_id = createShader(GL_FRAGMENT_SHADER, fragment_code, "FRAGMENT");
 
 	// shader Program
 	ID = glCreateProgram();
 	glAttachShader(ID, vertex_id);
+	if (has_tessellation_control_shader) glAttachShader(ID, tess_control_id);
+	if (has_tessellation_evaluation_shader) glAttachShader(ID, tess_eval_id);
 	if (has_geometry_shader) glAttachShader(ID, geometry_id);
 	glAttachShader(ID, fragment_id);
 	glLinkProgram(ID);
@@ -234,7 +261,9 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path, std:
 	}
 
 	// delete the shaders as they're linked into our program now and no longer necessery
-	glDeleteShader(vertex_id);
+	glDeleteShader(vertex_id);	
+	if (has_tessellation_control_shader) glDeleteShader(tess_control_id);
+	if (has_tessellation_evaluation_shader) glDeleteShader(tess_eval_id);
 	if (has_geometry_shader) glDeleteShader(geometry_id);
 	glDeleteShader(fragment_id);
 

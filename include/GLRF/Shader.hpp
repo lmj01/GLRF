@@ -73,6 +73,8 @@ public:
 	 * 
 	 * @param shader_lib the relative path to a collection of shaders
 	 * @param vertex_path the relative path to the GLSL vertex shader
+	 * @param tessellation_control_path the relative path to the GLSL tessellation control shader
+	 * @param tessellation_evaluation_path the relative path to the GLSL tessellation evaluation shader
 	 * @param geometry_path the relative path to the GLSL geometry shader
 	 * @param fragment_path the relative path to the GLSL fragment shader
 	 * @param shader_options the options that modify the behaviour of the shader
@@ -80,7 +82,10 @@ public:
 	 * Creates a new Shader from the specified library path and sub-paths to the vertex and fragment shader files.
 	 * Takes shader options as input to configure itself.
 	 */
-	Shader(const std::string shader_lib, const std::string vertex_path, std::optional<const std::string> geometry_path,
+	Shader(const std::string shader_lib, const std::string vertex_path,
+		std::optional<const std::string> tessellation_control_path,
+		std::optional<const std::string> tessellation_evaluation_path,
+		std::optional<const std::string> geometry_path,
 		const std::string fragment_path);
 
 	/**
