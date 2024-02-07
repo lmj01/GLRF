@@ -240,6 +240,9 @@ public:
 		case GL_LINE_STRIP_ADJACENCY:
 			glLineWidth(3.f);
 			break;
+		case GL_PATCHES:
+			glPatchParameteri(GL_PATCH_VERTICES, object_configuration->getPatchVertices());
+			break;
 		default:
 			break;
 		}

@@ -38,6 +38,7 @@ public:
 	void setVec3(const std::string& name, glm::vec3 value);
 	void setVec2(const std::string& name, glm::vec2 value);
 	void setMaterial(const std::string& name, std::shared_ptr<Material> material);
+	void setPatchVertices(GLint patchVertices);
 
 	bool getBool(const std::string& name);
 	GLint getInt(const std::string& name);
@@ -49,6 +50,7 @@ public:
 	glm::vec3 getVec3(const std::string& name);
 	glm::vec2 getVec2(const std::string& name);
 	std::shared_ptr<Material> getMaterial(const std::string& name);
+	GLint getPatchVertices();
 private:
 	std::map<std::string, bool>			v_bool;
 	std::map<std::string, int>			v_int;
@@ -60,6 +62,7 @@ private:
 	std::map<std::string, glm::vec3>	v_vec3;
 	std::map<std::string, glm::vec2>	v_vec2;
 	std::map<std::string, std::shared_ptr<Material>> v_material;
+	GLint v_patchVertices;
 };
 
 /**

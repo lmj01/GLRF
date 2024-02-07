@@ -37,6 +37,11 @@ void Scene::setActiveCamera(std::shared_ptr<Camera> camera) {
 	this->activeCamera = camera;
 }
 
+/**
+ * https://computergraphics.stackexchange.com/questions/5323/dynamic-array-in-glsl
+ * 设置多个点光源时的疑惑
+ * https://github.com/Shane-oo/OpenGL-Course/blob/c776cb704c3ff35a5f5a46044bc91a1ae1c51f15/src/OpenGL-MacApp/Resources/Shaders/shader.frag.glsl
+*/
 void Scene::draw(ShaderConfiguration * configuration, std::map<GLuint, FrameBuffer*> & map_shader_fbs) {
 	ShaderManager & shader_manager = ShaderManager::getInstance();
 	shader_manager.clearDrawConfigurations();

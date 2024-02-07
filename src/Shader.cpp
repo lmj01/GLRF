@@ -121,6 +121,11 @@ void ShaderConfiguration::setMaterial(const std::string & name, std::shared_ptr<
 	this->v_material.insert_or_assign(name, material);
 }
 
+void ShaderConfiguration::setPatchVertices(GLint patchVertices)
+{
+	this->v_patchVertices = patchVertices;
+}
+
 bool ShaderConfiguration::getBool(const std::string& name)
 {
 	auto it = this->v_bool.find(name);
@@ -180,6 +185,11 @@ std::shared_ptr<Material> ShaderConfiguration::getMaterial(const std::string& na
 {
 	auto it = this->v_material.find(name);
 	return (it == this->v_material.end()) ? nullptr : it->second;
+}
+
+GLint ShaderConfiguration::getPatchVertices()
+{
+	return v_patchVertices;
 }
 
 Shader::Shader(const std::string shader_lib, const std::string vertex_path, 
