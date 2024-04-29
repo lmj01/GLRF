@@ -6,6 +6,7 @@
 
 using namespace GLRF;
 
+
 unsigned int createShader(GLenum shaderType, const GLchar * shaderSource);
 
 ShaderConfiguration::ShaderConfiguration()
@@ -196,7 +197,7 @@ Shader::Shader(const std::string shader_lib, const std::string vertex_path,
 	std::optional<const std::string> tessellation_control_path,
 	std::optional<const std::string> tessellation_evaluation_path,
 	std::optional<const std::string> geometry_path,
-		const std::string fragment_path)
+	const std::string fragment_path, enum ShaderRenderingMode mode) : shader_render_mode(mode)
 {
 	const bool has_tessellation_control_shader = tessellation_control_path.has_value();
 	const bool has_tessellation_evaluation_shader = tessellation_evaluation_path.has_value();
@@ -366,15 +367,17 @@ void Shader::setMaterialProperty(const std::string& name, MaterialProperty<float
 
 void Shader::setMaterial(const std::string & name, std::shared_ptr<Material> material) {
 	material->bindTextures(0);
-	setMaterialProperty(name + period + "albedo",		material->albedo,		0);
-	setMaterialProperty(name + period + "normal",		material->normal,		1);
-	setMaterialProperty(name + period + "roughness",	material->roughness,	2);
-	setMaterialProperty(name + period + "metallic",		material->metallic,		3);
-	setMaterialProperty(name + period + "ao",			material->ao,			4);
-	setMaterialProperty(name + period + "height",		material->height,		5);
-	setMaterialProperty(name + period + "opacity",		material->opacity,		6);
+	if (shader_render_mode == ShaderRenderingMode::PBR) {
+		setMaterialProperty(name + period + "albedo",		material->albedo,		0);
+		setMaterialProperty(name + period + "normal",		material->normal,		1);
+		setMaterialProperty(name + period + "roughness",	material->roughness,	2);
+		setMaterialProperty(name + period + "metallic",		material->metallic,		3);
+		setMaterialProperty(name + period + "ao",			material->ao,			4);
+		setMaterialProperty(name + period + "height",		material->height,		5);
+		setMaterialProperty(name + period + "opacity",		material->opacity,		6);
 
-	setFloat(name + period + "height_scale", material->height_scale);
+		setFloat(name + period + "height_scale", material->height_scale);
+	}
 }
 
 unsigned int Shader::createShader(GLenum shader_type, const GLchar * shader_source, std::string shader_name) {

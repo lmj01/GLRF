@@ -15,6 +15,15 @@
 #include <GLRF/FrameBuffer.hpp>
 
 namespace GLRF {
+	/**
+	 * 增加支持不同的渲染模型作为参数传入
+	*/
+	enum class ShaderRenderingMode: std::uint32_t {
+		None, 	// 没有内置参数
+		Phong,		// 内存Phong 
+		PBR,		// 内置PBR材质
+		Total	
+	};
 	struct ShaderOptions;
 	class ShaderConfiguration;
 	class Shader;
@@ -89,7 +98,8 @@ public:
 		std::optional<const std::string> tessellation_control_path,
 		std::optional<const std::string> tessellation_evaluation_path,
 		std::optional<const std::string> geometry_path,
-		const std::string fragment_path);
+		const std::string fragment_path,
+		enum ShaderRenderingMode mode = ShaderRenderingMode::PBR);
 
 	/**
 	 * @brief Returns the shader-program identifier.
@@ -187,6 +197,7 @@ private:
 	const std::string value_default = "value_default";
 	const std::string use_texture = "use_texture";
 	const std::string texture = "texture";
+	ShaderRenderingMode shader_render_mode;
 	GLuint ID;
 	std::string debug_name;
 
