@@ -241,7 +241,7 @@ public:
 			glLineWidth(3.f);
 			break;
 		case GL_PATCHES:
-			glPatchParameteri(GL_PATCH_VERTICES, object_configuration->getPatchVertices());
+			glPatchParameteri(GL_PATCH_VERTICES, scene_configuration->getPatchVertices());
 			break;
 		default:
 			break;
